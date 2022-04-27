@@ -121,11 +121,8 @@ case $UBOOT_MIRROR in
 	gitee)
 		MAINLINE_UBOOT_SOURCE='https://gitee.com/mirrors/u-boot.git'
 		;;
-	github)
-		MAINLINE_UBOOT_SOURCE='https://github.com/u-boot/u-boot'
-		;;
 	*)
-		MAINLINE_UBOOT_SOURCE='https://source.denx.de/u-boot/u-boot.git'
+		MAINLINE_UBOOT_SOURCE='https://github.com/u-boot/u-boot'
 		;;
 esac
 
