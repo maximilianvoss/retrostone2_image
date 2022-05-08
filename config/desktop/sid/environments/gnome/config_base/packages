@@ -30,8 +30,8 @@ gnome-settings-daemon
 gnome-settings-daemon-common
 gnome-shell
 gnome-shell-common
+gnome-terminal
 gvfs-backends
-hunspell-en-us
 inputattach
 libasound2
 libasound2-plugins
@@ -125,7 +125,6 @@ xdg-desktop-portal
 xdg-user-dirs
 xdg-user-dirs-gtk
 xfonts-base
-xinit
 xinput
 xorg
 xorg-docs-core

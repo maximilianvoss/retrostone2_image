@@ -905,6 +905,14 @@ addtorepo()
 
 	for release in "${distributions[@]}"; do
 
+		ADDING_PACKAGES="false"
+		if [[ -d "config/distributions/${release}/" ]]; then
+			[[ -n "$(cat config/distributions/${release}/support | grep "csc\|supported" 2>/dev/null)" ]] && ADDING_PACKAGES="true"
+		else
+			display_alert "Skipping adding packages (not supported)" "$release" "wrn"
+			continue
+		fi
+
 		local forceoverwrite=""
 
 		# let's drop from publish if exits
@@ -935,7 +943,7 @@ addtorepo()
 
 		# adding main
 		if find "${DEB_STORAGE}"/ -maxdepth 1 -type f -name "*.deb" 2>/dev/null | grep -q .; then
-			adding_packages "$release" "" "main"
+			[[ "${ADDING_PACKAGES}" == true ]] && adding_packages "$release" "" "main"
 		else
 			aptly repo add -config="${SCRIPTPATH}config/${REPO_CONFIG}" "${release}" "${SCRIPTPATH}config/templates/example.deb" >/dev/null
 		fi
@@ -944,7 +952,7 @@ addtorepo()
 
 		# adding main distribution packages
 		if find "${DEB_STORAGE}/${release}" -maxdepth 1 -type f -name "*.deb" 2>/dev/null | grep -q .; then
-			adding_packages "${release}-utils" "/${release}" "release packages"
+			[[ "${ADDING_PACKAGES}" == true ]] && adding_packages "${release}-utils" "/${release}" "release packages"
 		else
 			# workaround - add dummy package to not trigger error
 			aptly repo add -config="${SCRIPTPATH}config/${REPO_CONFIG}" "${release}" "${SCRIPTPATH}config/templates/example.deb" >/dev/null
@@ -952,7 +960,7 @@ addtorepo()
 
 		# adding release-specific utils
 		if find "${DEB_STORAGE}/extra/${release}-utils" -maxdepth 1 -type f -name "*.deb" 2>/dev/null | grep -q .; then
-			adding_packages "${release}-utils" "/extra/${release}-utils" "release utils"
+			[[ "${ADDING_PACKAGES}" == true ]] && adding_packages "${release}-utils" "/extra/${release}-utils" "release utils"
 		else
 			aptly repo add -config="${SCRIPTPATH}config/${REPO_CONFIG}" "${release}-utils" "${SCRIPTPATH}config/templates/example.deb" >/dev/null
 		fi
@@ -960,7 +968,7 @@ addtorepo()
 
 		# adding desktop
 		if find "${DEB_STORAGE}/extra/${release}-desktop" -maxdepth 1 -type f -name "*.deb" 2>/dev/null | grep -q .; then
-			adding_packages "${release}-desktop" "/extra/${release}-desktop" "desktop"
+			[[ "${ADDING_PACKAGES}" == true ]] && adding_packages "${release}-desktop" "/extra/${release}-desktop" "desktop"
 		else
 			# workaround - add dummy package to not trigger error
 			aptly repo add -config="${SCRIPTPATH}config/${REPO_CONFIG}" "${release}-desktop" "${SCRIPTPATH}config/templates/example.deb" >/dev/null
@@ -1376,7 +1384,7 @@ prepare_host()
 	dialog dirmngr dosfstools dwarves f2fs-tools fakeroot flex gawk           \
 	gcc-arm-linux-gnueabi gcc-aarch64-linux-gnu gdisk gpg                     \
 	imagemagick jq kmod libbison-dev libc6-dev-armhf-cross libcrypto++-dev    \
-	libelf-dev libfdt-dev libfile-fcntllock-perl                              \
+	libelf-dev libfdt-dev libfile-fcntllock-perl parallel                     \
 	libfl-dev liblz4-tool libncurses-dev libpython2.7-dev libssl-dev          \
 	libusb-1.0-0-dev linux-base locales lzop ncurses-base ncurses-term        \
 	nfs-kernel-server ntpdate p7zip-full parted patchutils pigz pixz          \
@@ -1600,6 +1608,18 @@ function webseed ()
 	# Hardcoded to EU mirrors since
 	local CCODE=$(curl -s redirect.armbian.com/geoip | jq '.continent.code' -r)
 	WEBSEED=($(curl -s https://redirect.armbian.com/mirrors | jq -r '.'${CCODE}' | .[] | values'))
+	# remove dead mirrors to suppress download errors
+	FILE=".control"
+	while read -r line
+	do
+		REMOVE=$(echo $line | egrep -o 'https?://[^ ]+/')
+        WEBSEED=( "${WEBSEED[@]/$REMOVE}" )
+	done < <(
+	for k in ${WEBSEED[@]}
+	do
+	echo "$k$FILE"
+	done | parallel --halt soon,fail=10 --jobs 32 wget -q --spider --timeout=15 --tries=4 --retry-connrefused {} 2>&1 >/dev/null)
+
 	# aria2 simply split chunks based on sources count not depending on download speed
 	# when selecting china mirrors, use only China mirror, others are very slow there
 	if [[ $DOWNLOAD_MIRROR == china ]]; then
