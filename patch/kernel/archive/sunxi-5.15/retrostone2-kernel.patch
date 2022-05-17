@@ -471,11 +471,11 @@ index 9ad8e445b..9b0b830f5 100644
  				pins = "PF0", "PF1", "PF2",
 diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
 index ee6900eb3..8b8d81e8e 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -2927,27 +2927,28 @@ static const struct panel_desc kyo_tcg121xglp = {
+--- drivers/gpu/drm/panel/panel-simple.c.orig	2022-05-17 16:07:40.020206786 +0200
++++ drivers/gpu/drm/panel/panel-simple.c.new	2022-05-17 16:18:18.029783000 +0200
+@@ -2937,26 +2937,28 @@
  };
- 
+
  static const struct drm_display_mode lemaker_bl035_rgb_002_mode = {
 -	.clock = 7000,
 -	.hdisplay = 320,
@@ -486,24 +486,23 @@ index ee6900eb3..8b8d81e8e 100644
 -	.vsync_start = 240 + 4,
 -	.vsync_end = 240 + 4 + 3,
 -	.vtotal = 240 + 4 + 3 + 15,
--	.vrefresh = 60,
 +	.clock = 33000,
-+        .hdisplay = 640,
-+        .hsync_start = 640 + 16,
-+        .hsync_end = 640 + 16 + 30,
-+        .htotal = 640 + 16 + 30 + 114,
-+        .vdisplay = 480,
-+        .vsync_start = 480 + 10,
-+        .vsync_end = 480 + 10 + 3,
-+        .vtotal = 480 + 10 + 3 + 32,
-+        .vrefresh = 60,
-+        .flags = DRM_MODE_FLAG_NVSYNC | DRM_MODE_FLAG_NHSYNC,
++	.hdisplay = 640,
++	.hsync_start = 640 + 16,
++	.hsync_end = 640 + 16 + 30,
++	.htotal = 640 + 16 + 30 + 114,
++	.vdisplay = 480,
++	.vsync_start = 480 + 10,
++	.vsync_end = 480 + 10 + 3,
++	.vtotal = 480 + 10 + 3 + 32,
++   .vrefresh = 60,
++   .flags = DRM_MODE_FLAG_NVSYNC | DRM_MODE_FLAG_NHSYNC,
  };
- 
+
  static const struct panel_desc lemaker_bl035_rgb_002 = {
  	.modes = &lemaker_bl035_rgb_002_mode,
  	.num_modes = 1,
-+	.bpc = 8,
++   .bpc = 8,
  	.size = {
  		.width = 70,
  		.height = 52,
