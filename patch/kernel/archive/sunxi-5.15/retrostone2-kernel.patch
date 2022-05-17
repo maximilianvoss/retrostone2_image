@@ -473,7 +473,7 @@ diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-
 index ee6900eb3..8b8d81e8e 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -2937,26 +2937,28 @@
+@@ -2937,26 +2937,27 @@
  };
 
  static const struct drm_display_mode lemaker_bl035_rgb_002_mode = {
@@ -495,13 +495,13 @@ index ee6900eb3..8b8d81e8e 100644
 +	.vsync_start = 480 + 10,
 +	.vsync_end = 480 + 10 + 3,
 +	.vtotal = 480 + 10 + 3 + 32,
-+   .flags = DRM_MODE_FLAG_NVSYNC | DRM_MODE_FLAG_NHSYNC,
++	.flags = DRM_MODE_FLAG_NVSYNC | DRM_MODE_FLAG_NHSYNC,
  };
 
  static const struct panel_desc lemaker_bl035_rgb_002 = {
  	.modes = &lemaker_bl035_rgb_002_mode,
  	.num_modes = 1,
-+   .bpc = 8,
++	.bpc = 8,
  	.size = {
  		.width = 70,
  		.height = 52,
