@@ -495,7 +495,6 @@ index ee6900eb3..8b8d81e8e 100644
 +	.vsync_start = 480 + 10,
 +	.vsync_end = 480 + 10 + 3,
 +	.vtotal = 480 + 10 + 3 + 32,
-+   .vrefresh = 60,
 +   .flags = DRM_MODE_FLAG_NVSYNC | DRM_MODE_FLAG_NHSYNC,
  };
 
