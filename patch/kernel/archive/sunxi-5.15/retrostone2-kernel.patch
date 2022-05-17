@@ -471,8 +471,8 @@ index 9ad8e445b..9b0b830f5 100644
  				pins = "PF0", "PF1", "PF2",
 diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
 index ee6900eb3..8b8d81e8e 100644
---- drivers/gpu/drm/panel/panel-simple.c.orig	2022-05-17 16:07:40.020206786 +0200
-+++ drivers/gpu/drm/panel/panel-simple.c.new	2022-05-17 16:18:18.029783000 +0200
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
 @@ -2937,26 +2937,28 @@
  };
 
