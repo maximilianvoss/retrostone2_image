@@ -473,7 +473,7 @@ diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-
 index ee6900eb3..8b8d81e8e 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -1748,27 +1748,28 @@ static const struct panel_desc kyo_tcg121xglp = {
+@@ -2927,27 +2927,28 @@ static const struct panel_desc kyo_tcg121xglp = {
  };
  
  static const struct drm_display_mode lemaker_bl035_rgb_002_mode = {
