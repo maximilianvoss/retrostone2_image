@@ -24,7 +24,15 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
 
 
 ```bash
- ./compile.sh BOARD=retrostone2 USE_GITHUB_UBOOT_MIRROR=yes BUILD_DESKTOP=yes KERNEL_ONLY=no KERNEL_CONFIGURE=no RELEASE=jammy BUILD_DESKTOP=xfce DISABLE_IPV6=true
+ ./compile.sh \
+ BOARD=retrostone2 \
+ USE_GITHUB_UBOOT_MIRROR=yes \
+ KERNEL_ONLY=no \
+ KERNEL_CONFIGURE=no \
+ RELEASE=jammy \
+ BUILD_DESKTOP=xfce \
+ DISABLE_IPV6=true \
+ CARD_DEVICE="/dev/sdb"
 ```
 
 
