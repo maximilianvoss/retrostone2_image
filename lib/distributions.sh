@@ -322,7 +322,7 @@ PRE_INSTALL_KERNEL_DEBS
 			VER=$(dpkg-deb -f "${SDCARD}"/var/cache/apt/archives/linux-image-${BRANCH}-${LINUXFAMILY}*_${ARCH}.deb Source)
 			VER="${VER/-$LINUXFAMILY/}"
 			VER="${VER/linux-/}"
-			if [[ "${ARCH}" != "amd64" ]]; then # amd64 does not have dtb package, see packages/armbian/builddeb:355
+			if [[ "${ARCH}" != "amd64" && "${LINUXFAMILY}" != "media"  ]]; then # amd64 does not have dtb package, see packages/armbian/builddeb:355
 				install_deb_chroot "linux-dtb-${BRANCH}-${LINUXFAMILY}" "remote"
 			fi
 			[[ $INSTALL_HEADERS == yes ]] && install_deb_chroot "linux-headers-${BRANCH}-${LINUXFAMILY}" "remote"
@@ -633,6 +633,17 @@ install_distribution_specific()
 			# rc.local is not existing but one might need it
 			install_rclocal
 
+			# configure language and locales
+			display_alert "Configuring locales" "$DEST_LANG" "info"
+			if [[ -f $SDCARD/etc/locale.gen ]]; then
+				[ -n "$DEST_LANG" ] && sed -i "s/^# $DEST_LANG/$DEST_LANG/" $SDCARD/etc/locale.gen
+				sed -i '/ C.UTF-8/s/^# //g' $SDCARD/etc/locale.gen
+				sed -i '/en_US.UTF-8/s/^# //g' $SDCARD/etc/locale.gen
+			fi
+			eval 'LC_ALL=C LANG=C chroot $SDCARD /bin/bash -c "locale-gen"' ${OUTPUT_VERYSILENT:+' >/dev/null 2>/dev/null'}
+			[ -n "$DEST_LANG" ] && eval 'LC_ALL=C LANG=C chroot $SDCARD /bin/bash -c "update-locale --reset LANG=$DEST_LANG"' \
+				${OUTPUT_VERYSILENT:+' >/dev/null 2>/dev/null'}
+
 		;;
 
 	bullseye)
@@ -645,7 +656,16 @@ install_distribution_specific()
 			[[ $(grep -L "VERSION_ID=" "${SDCARD}"/etc/os-release) ]] && echo 'VERSION_ID="11"' >> "${SDCARD}"/etc/os-release
 			[[ $(grep -L "VERSION=" "${SDCARD}"/etc/os-release) ]] && echo 'VERSION="11 (bullseye)"' >> "${SDCARD}"/etc/os-release
 
-
+			# configure language and locales
+			display_alert "Configuring locales" "$DEST_LANG" "info"
+			if [[ -f $SDCARD/etc/locale.gen ]]; then
+				[ -n "$DEST_LANG" ] && sed -i "s/^# $DEST_LANG/$DEST_LANG/" $SDCARD/etc/locale.gen
+				sed -i '/ C.UTF-8/s/^# //g' $SDCARD/etc/locale.gen
+				sed -i '/en_US.UTF-8/s/^# //g' $SDCARD/etc/locale.gen
+			fi
+			eval 'LC_ALL=C LANG=C chroot $SDCARD /bin/bash -c "locale-gen"' ${OUTPUT_VERYSILENT:+' >/dev/null 2>/dev/null'}
+			[ -n "$DEST_LANG" ] && eval 'LC_ALL=C LANG=C chroot $SDCARD /bin/bash -c "update-locale --reset LANG=$DEST_LANG"' \
+				${OUTPUT_VERYSILENT:+' >/dev/null 2>/dev/null'}
 		;;
 
 	focal|jammy)
@@ -694,6 +714,12 @@ install_distribution_specific()
 
 			# disable conflicting services
 			chroot "${SDCARD}" /bin/bash -c "systemctl --no-reload mask ondemand.service >/dev/null 2>&1"
+
+			# configure language and locales
+			display_alert "Configuring locales" "$DEST_LANG" "info"
+			eval 'LC_ALL=C LANG=C chroot $SDCARD /bin/bash -c "locale-gen en_US.UTF-8 $DEST_LANG"' ${OUTPUT_VERYSILENT:+' >/dev/null 2>&1'}
+			[ -n "$DEST_LANG" ] && eval 'LC_ALL=C LANG=C chroot $SDCARD /bin/bash -c "update-locale --reset LANG=$DEST_LANG"' \
+				${OUTPUT_VERYSILENT:+' >/dev/null 2>&1'}
 
 		;;
 
