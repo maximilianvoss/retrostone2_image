@@ -33,6 +33,7 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
  BUILD_DESKTOP=xfce \
  DISABLE_IPV6=true \
  MAINLINE_MIRROR=google \
+ CLEAN_LEVEL=extras \
  CARD_DEVICE="/dev/sdb"
 ```
 
