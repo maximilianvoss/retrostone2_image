@@ -168,6 +168,10 @@ copy_all_packages_files_for()
 customize_image()
 {
 
+  if [[ -f customization/customize-image.sh ]]; then
+    cp customization/customize-image.sh $USERPATCHES_PATH/customize-image.sh
+  fi
+
 	# for users that need to prepare files at host
 	[[ -f $USERPATCHES_PATH/customize-image-host.sh ]] && source "$USERPATCHES_PATH"/customize-image-host.sh
 
