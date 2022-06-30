@@ -1,5 +1,5 @@
 #!/bin/bash
-# HELLO WORLD
+#
 # arguments: $RELEASE $LINUXFAMILY $BOARD $BUILD_DESKTOP
 #
 # This is the image customization script
@@ -18,6 +18,7 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
+  InstallRomFetcher
 	case $RELEASE in
 		stretch)
 			# your code here
@@ -37,6 +38,21 @@ Main() {
 			;;
 	esac
 } # Main
+
+InstallRomFetcher() {
+  apt-get update
+  apt-get --yes --force-yes --allow-unauthenticated install git libsdl2-ttf-dev libsdl2-image-dev libsdl2-dev libcurl4-openssl-dev libsqlite3-dev libcurl4-openssl-dev cmake gcc
+  mkdir /tmp/romfetcher
+  cd /tmp/romfetcher
+  (git clone https://github.com/maximilianvoss/csafestring.git && cd csafestring && cmake -G "Unix Makefiles" && make && sudo make install)
+  (git clone https://github.com/maximilianvoss/casserts.git && cd casserts && cmake -G "Unix Makefiles" && make && sudo make install)
+  (git clone https://github.com/maximilianvoss/clogger.git && cd clogger && cmake -G "Unix Makefiles" && make && sudo make install)
+  (git clone https://github.com/maximilianvoss/chttp.git && cd chttp && cmake -G "Unix Makefiles" && make && sudo make install)
+  (git clone https://github.com/maximilianvoss/acll.git && cd acll && cmake -G "Unix Makefiles" && make && sudo make install)
+  (git clone https://github.com/lexbor/lexbor.git && cd lexbor && cmake -G "Unix Makefiles" && make && sudo make install)
+  (git clone https://github.com/maximilianvoss/romlibrary.git; cd romlibrary; cmake -G "Unix Makefiles"; make; sudo make install)
+  (git clone https://github.com/maximilianvoss/romfetcher.git; cd romfetcher; cmake -G "Unix Makefiles"; make; sudo make install)
+}
 
 InstallOpenMediaVault() {
 	# use this routine to create a Debian based fully functional OpenMediaVault
