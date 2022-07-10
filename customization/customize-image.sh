@@ -18,7 +18,7 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
-  InstallRomFetcher
+  #InstallRomFetcher
 	case $RELEASE in
 		stretch)
 			# your code here
@@ -52,6 +52,7 @@ InstallRomFetcher() {
   (git clone https://github.com/lexbor/lexbor.git && cd lexbor && cmake -G "Unix Makefiles" && make && sudo make install)
   (git clone https://github.com/maximilianvoss/romlibrary.git; cd romlibrary; cmake -G "Unix Makefiles"; make; sudo make install)
   (git clone https://github.com/maximilianvoss/romfetcher.git; cd romfetcher; cmake -G "Unix Makefiles"; make; sudo make install)
+  #rm -rf /tmp/romfetcher
 }
 
 InstallOpenMediaVault() {
