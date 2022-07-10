@@ -578,7 +578,7 @@ unset LOG_OUTPUT_FILE
 
 DEBIAN_MIRROR='deb.debian.org/debian'
 DEBIAN_SECURTY='security.debian.org/'
-UBUNTU_MIRROR='ports.ubuntu.com/'
+UBUNTU_MIRROR='ftp.tu-chemnitz.de/pub/linux/ubuntu-ports/'
 
 if [[ $DOWNLOAD_MIRROR == "china" ]] ; then
 	DEBIAN_MIRROR='mirrors.tuna.tsinghua.edu.cn/debian'
