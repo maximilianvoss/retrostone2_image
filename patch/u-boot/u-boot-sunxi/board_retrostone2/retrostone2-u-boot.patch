@@ -330,7 +330,7 @@ new file mode 100644
 index 0000000..4302b2c
 --- /dev/null
 +++ b/configs/A20-Retrostone2_defconfig
-@@ -0,0 +1,41 @@
+@@ -0,0 +1,40 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_SUNXI=y
 +CONFIG_SPL=y
@@ -369,6 +369,5 @@ index 0000000..4302b2c
 +CONFIG_SYS_I2C_LEGACY=y
 +CONFIG_ENV_IS_IN_EXT4=y
 +CONFIG_SYS_I2C_SUN6I_P2WI=y
-+CONFIG_SYS_I2C_SUN8I_RSB=y
 +CONFIG_SYS_I2C_MVTWSI=y
 +#CONFIG_ENV_IS_IN_MMC=y
