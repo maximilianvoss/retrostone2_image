@@ -19,7 +19,8 @@ BUILD_DESKTOP=$4
 
 Main() {
   InstallSDL2
-  #InstallRomFetcher
+  InstallEmulationStation
+  InstallRomFetcher
 	case $RELEASE in
 		stretch)
 			# your code here
@@ -62,9 +63,19 @@ EOF
   ./configure --prefix=/usr && make && make install
 }
 
+InstallEmulationStation)() {
+  apt-get --yes --force-yes --allow-unauthenticated install libboost-system-dev libboost-filesystem-dev libboost-date-time-dev libboost-locale-dev libfreeimage-dev libfreetype6-dev libeigen3-dev libcurl4-openssl-dev libasound2-dev cmake
+  git clone https://github.com/Aloshi/EmulationStation /tmp/emulationstation
+  cd /tmp/emulationstation
+  mkdir build
+  cd build
+  cmake ..
+  make -j2
+  make install
+}
+
 InstallRomFetcher() {
-  apt-get update
-  apt-get --yes --force-yes --allow-unauthenticated install git libsdl2-ttf-dev libsdl2-image-dev libsdl2-dev libcurl4-openssl-dev libsqlite3-dev libcurl4-openssl-dev cmake gcc
+  apt-get --yes --force-yes --allow-unauthenticated install libcurl4-openssl-dev libsqlite3-dev libcurl4-openssl-dev cmake
   mkdir /tmp/romfetcher
   cd /tmp/romfetcher
   (git clone https://github.com/maximilianvoss/csafestring.git && cd csafestring && cmake -G "Unix Makefiles" && make && sudo make install)
@@ -75,7 +86,8 @@ InstallRomFetcher() {
   (git clone https://github.com/lexbor/lexbor.git && cd lexbor && cmake -G "Unix Makefiles" && make && sudo make install)
   (git clone https://github.com/maximilianvoss/romlibrary.git; cd romlibrary; cmake -G "Unix Makefiles"; make; sudo make install)
   (git clone https://github.com/maximilianvoss/romfetcher.git; cd romfetcher; cmake -G "Unix Makefiles"; make; sudo make install)
-  #rm -rf /tmp/romfetcher
+  cd /
+  rm -rf /tmp/romfetcher
 }
 
 InstallOpenMediaVault() {
