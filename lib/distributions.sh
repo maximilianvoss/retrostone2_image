@@ -407,7 +407,7 @@ POST_INSTALL_KERNEL_DEBS
 
 	# Retrostone2 actions
 	if [[ $BOARD == retrostone2 ]]; then
-	  install_deb_chroot "libsdl2 --no-install-recommends" "remote"
+		install_deb_chroot "${DEB_STORAGE}/libsdl2_${REVISION}_all.deb"
   fi
 
 	# freeze armbian packages
