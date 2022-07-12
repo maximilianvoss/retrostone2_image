@@ -10,4 +10,3 @@ index aa9d35780..2698d5632 100644
  #endif
  #if defined(__ANDROID__)
      "05000000c82d000006500000ffff3f00,8BitDo M30 Gamepad,a:b0,b:b1,back:b4,guide:b17,leftshoulder:b9,lefttrigger:a5,leftx:a0,lefty:a1,rightshoulder:b10,righttrigger:a4,start:b6,x:b2,y:b3,hint:SDL_GAMECONTROLLER_USE_BUTTON_LABELS:=1,",
-EOF
