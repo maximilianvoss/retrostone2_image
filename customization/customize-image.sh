@@ -18,6 +18,7 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
+  InstallSDL2
   #InstallRomFetcher
 	case $RELEASE in
 		stretch)
@@ -38,6 +39,12 @@ Main() {
 			;;
 	esac
 } # Main
+
+InstallSDL2() {
+  git clone https://github.com/libsdl-org/SDL /tmp/sdl
+  cd /tmp/sdl
+  ./configure --prefix=/usr && make && make install
+}
 
 InstallRomFetcher() {
   apt-get update
