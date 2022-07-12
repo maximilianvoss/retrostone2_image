@@ -18,9 +18,9 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
-  #InstallSDL2
-  #InstallEmulationStation
-  #InstallRomFetcher
+  InstallSDL2
+  InstallRomFetcher
+  InstallEmulationStation
 	case $RELEASE in
 		stretch)
 			# your code here
