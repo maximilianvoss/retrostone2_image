@@ -11,7 +11,7 @@ compile_sdl2()
 
 	fetch_from_repo "$GITHUB_SOURCE/libsdl-org/SDL" "libsdl2" "branch:main"
 
-	mkdir -p "${tmp_dir}/${libsdl2_dir}"/
+	mkdir -p "${tmp_dir}/${libsdl2_dir}"/DEBIAN
 
 	cat <<-END > "${tmp_dir}/${libsdl2_dir}"/DEBIAN/control
 	Package: libsdl2
