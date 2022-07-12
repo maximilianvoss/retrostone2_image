@@ -18,9 +18,9 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
-  InstallSDL2
-  InstallEmulationStation
-  InstallRomFetcher
+  #InstallSDL2
+  #InstallEmulationStation
+  #InstallRomFetcher
 	case $RELEASE in
 		stretch)
 			# your code here
@@ -63,7 +63,7 @@ EOF
   ./configure --prefix=/usr && make && make install
 }
 
-InstallEmulationStation)() {
+InstallEmulationStation() {
   apt-get --yes --force-yes --allow-unauthenticated install libboost-system-dev libboost-filesystem-dev libboost-date-time-dev libboost-locale-dev libfreeimage-dev libfreetype6-dev libeigen3-dev libcurl4-openssl-dev libasound2-dev cmake
   git clone https://github.com/Aloshi/EmulationStation /tmp/emulationstation
   cd /tmp/emulationstation
