@@ -43,6 +43,22 @@ Main() {
 InstallSDL2() {
   git clone https://github.com/libsdl-org/SDL /tmp/sdl
   cd /tmp/sdl
+
+  patch -p1 <<EOF
+#diff --git a/src/joystick/SDL_gamecontrollerdb.h b/src/joystick/SDL_gamecontrollerdb.h
+#index aa9d35780..2698d5632 100644
+--- a/src/joystick/SDL_gamecontrollerdb.h
++++ b/src/joystick/SDL_gamecontrollerdb.h
+@@ -815,6 +815,7 @@ static const char *s_ControllerMappings [] =
+     "050000006964726f69643a636f6e0000,idroid:con,a:b1,b:b2,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,leftshoulder:b4,leftstick:b10,lefttrigger:b6,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b11,righttrigger:b7,rightx:a2,righty:a3,start:b9,x:b0,y:b3,",
+     "03000000b50700001503000010010000,impact,a:b2,b:b3,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,leftshoulder:b4,leftstick:b10,lefttrigger:b5,leftx:a0,lefty:a1,rightshoulder:b6,rightstick:b11,righttrigger:b7,rightx:a3,righty:a2,start:b9,x:b0,y:b1,",
+     "030000009b2800000300000001010000,raphnet.net 4nes4snes v1.5,a:b0,b:b4,back:b2,leftshoulder:b6,leftx:a0,lefty:a1,rightshoulder:b7,start:b3,x:b1,y:b5,",
++    "00000000526574726f53746f6e653200,RetroStone2,a:b0,b:b1,x:b2,y:b3,dpdown:b11,dpleft:b12,dpright:b13,dpup:b10,leftshoulder:b4,lefttrigger:b6,rightshoulder:b5,righttrigger:b7,start:b9,back:b8,leftx:a0,lefty:a1,platform:Linux",
+ #endif
+ #if defined(__ANDROID__)
+     "05000000c82d000006500000ffff3f00,8BitDo M30 Gamepad,a:b0,b:b1,back:b4,guide:b17,leftshoulder:b9,lefttrigger:a5,leftx:a0,lefty:a1,rightshoulder:b10,righttrigger:a4,start:b6,x:b2,y:b3,hint:SDL_GAMECONTROLLER_USE_BUTTON_LABELS:=1,",
+EOF
+
   ./configure --prefix=/usr && make && make install
 }
 
