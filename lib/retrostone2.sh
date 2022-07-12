@@ -11,7 +11,7 @@ compile_sdl2()
 
 	fetch_from_repo "$GITHUB_SOURCE/libsdl-org/SDL" "libsdl2" "branch:main"
 
-	mkdir -p "${tmp_dir}/${libsdl2_dir}"/{DEBIAN,usr/bin/,usr/sbin/}
+	mkdir -p "${tmp_dir}/${libsdl2_dir}"/
 
 	cat <<-END > "${tmp_dir}/${libsdl2_dir}"/DEBIAN/control
 	Package: libsdl2
@@ -29,7 +29,7 @@ compile_sdl2()
 
 	pushd "${SRC}"/cache/sources/libsdl2
 	process_patch_file "${SRC}/patch/misc/retrostone2-sdl2.patch" "applying"
-	./configure --prefix="${tmp_dir}/${libsdl2_dir}"/usr/bin/
+	./configure --prefix="${tmp_dir}/${libsdl2_dir}"/usr
 	make
 	make install
   popd
