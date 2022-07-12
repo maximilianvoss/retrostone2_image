@@ -34,6 +34,7 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
  DISABLE_IPV6=true \
  MAINLINE_MIRROR=google \
  CLEAN_LEVEL=extras \
+ NO_APT_CACHER=yes \
  CARD_DEVICE="/dev/sdb"
 ```
 
