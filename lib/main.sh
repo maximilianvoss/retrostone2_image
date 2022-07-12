@@ -80,6 +80,8 @@ source "${SRC}"/lib/makeboarddeb.sh                         # board support pack
 source "${SRC}"/lib/general.sh                              # general functions
 # shellcheck source=chroot-buildpackages.sh
 source "${SRC}"/lib/chroot-buildpackages.sh                 # chroot packages building
+# do some Retrostone2 specific stuff
+source "${SRC}"/lib/retrostone2.sh                          # Retrostone2 dependency building
 
 
 # set log path
@@ -501,6 +503,13 @@ fi
 if [[ ! -f ${DEB_STORAGE}/armbian-zsh_${REVISION}_all.deb ]]; then
 
         [[ "${REPOSITORY_INSTALL}" != *armbian-zsh* ]] && compile_armbian-zsh
+
+fi
+
+# Compile armbian-zsh if packed .deb does not exist or use the one from repository
+if [[ ! -f ${DEB_STORAGE}/libsdl2_${REVISION}_all.deb ]]; then
+
+        [[ "${REPOSITORY_INSTALL}" != *libsdl2* ]] && compile_sdl2
 
 fi
 

@@ -18,9 +18,9 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
-  InstallSDL2
-  InstallRomFetcher
-  InstallEmulationStation
+#  InstallSDL2
+#  InstallRomFetcher
+#  InstallEmulationStation
 	case $RELEASE in
 		stretch)
 			# your code here
@@ -46,8 +46,8 @@ InstallSDL2() {
   cd /tmp/sdl
 
   patch -p1 <<EOF
-#diff --git a/src/joystick/SDL_gamecontrollerdb.h b/src/joystick/SDL_gamecontrollerdb.h
-#index aa9d35780..2698d5632 100644
+diff --git a/src/joystick/SDL_gamecontrollerdb.h b/src/joystick/SDL_gamecontrollerdb.h
+index aa9d35780..2698d5632 100644
 --- a/src/joystick/SDL_gamecontrollerdb.h
 +++ b/src/joystick/SDL_gamecontrollerdb.h
 @@ -815,6 +815,7 @@ static const char *s_ControllerMappings [] =
