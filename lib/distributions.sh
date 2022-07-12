@@ -405,6 +405,11 @@ POST_INSTALL_KERNEL_DEBS
 		install_deb_chroot "wireguard-tools --no-install-recommends" "remote"
 	fi
 
+	# Retrostone2 actions
+	if [[ $BOARD == retrostone2 ]]; then
+	  install_deb_chroot "libsdl2 --no-install-recommends" "remote"
+  fi
+
 	# freeze armbian packages
 	if [[ $BSPFREEZE == yes ]]; then
 		display_alert "Freezing Armbian packages" "$BOARD" "info"
