@@ -96,11 +96,13 @@ libxtst6
 libxxf86dga1
 libyelp0
 lightdm
+lightdm-settings
 linux-sound-base
 mutter
 mutter-common
 nautilus
 nautilus-data
+network-manager-openvpn-gnome
 openprinting-ppds
 p11-kit
 p11-kit-modules
