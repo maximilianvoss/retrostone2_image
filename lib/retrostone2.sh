@@ -37,7 +37,8 @@ compile_sdl2()
 	pushd "${SRC}"/cache/sources/libsdl2
 	process_patch_file "${SRC}/patch/misc/retrostone2-sdl2.patch" "applying"
 	./configure --prefix="${tmp_dir}/${libsdl2_dir}"/usr
-	export make CC=${toolchain}
+
+	make CROSS_COMPILE="$CCACHE $KERNEL_COMPILER"
 	make install
   popd
 
