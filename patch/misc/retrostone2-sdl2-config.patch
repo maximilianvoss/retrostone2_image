@@ -1,7 +1,7 @@
 diff --git a/usr/include/SDL2/SDL_config.h b/usr/include/SDL2/SDL_config.h
 index aa9d35780..2698d5632 100644
---- /usr/include/SDL2/SDL_config.h
-+++ /usr/include/SDL2/SDL_config.h
+--- ./usr/include/SDL2/SDL_config.h
++++ ./usr/include/SDL2/SDL_config.h
 @@ -226,7 +226,7 @@
  #define HAVE_INOTIFY_INIT1 1
  #define HAVE_INOTIFY 1
