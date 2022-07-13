@@ -31,7 +31,9 @@ compile_sdl2()
   toolchain=$(find_toolchain "$KERNEL_COMPILER" "$KERNEL_USE_GCC")
   [[ -z $toolchain ]] && exit_with_error "Could not find required toolchain" "${KERNEL_COMPILER}gcc $KERNEL_USE_GCC"
 
-  echo ToolChain ${toolchain}
+  echo ToolChain: ${toolchain}
+  echo Kernel Compiler: ${KERNEL_COMPILER}
+  echo Kernel Use Gcc: ${}KERNEL_USE_GCC}
 
 
 	pushd "${SRC}"/cache/sources/libsdl2
