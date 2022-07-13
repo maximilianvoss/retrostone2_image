@@ -1,0 +1,11 @@
+--- /usr/include/SDL2/SDL_config.h.old	2022-07-13 21:56:43.214918319 +0000
++++ /usr/include/SDL2/SDL_config.h	2022-07-13 21:54:18.855375109 +0000
+@@ -226,7 +226,7 @@
+ #define HAVE_INOTIFY_INIT1 1
+ #define HAVE_INOTIFY 1
+ /* #undef HAVE_IBUS_IBUS_H */
+-#define HAVE_IMMINTRIN_H 1
++/* #define HAVE_IMMINTRIN_H 1 */
+ /* #undef HAVE_LIBUDEV_H */
+ /* #undef HAVE_LIBSAMPLERATE_H */
+ /* #undef HAVE_LIBDECOR_H */

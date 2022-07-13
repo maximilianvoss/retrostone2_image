@@ -34,6 +34,10 @@ compile_sdl2()
 	make install
   popd
 
+  pushd ${tmp_dir}
+  process_patch_file "${SRC}/patch/misc/retrostone2-sdl2-config.patch" "applying"
+  popd
+
 	fakeroot dpkg-deb -b -Z${DEB_COMPRESS} "${tmp_dir}/${libsdl2_dir}" >/dev/null
 	rsync --remove-source-files -rq "${tmp_dir}/${libsdl2_dir}.deb" "${DEB_STORAGE}/"
 	rm -rf "${tmp_dir}"
