@@ -27,10 +27,17 @@ compile_sdl2()
 	Description: LibSDL
 	END
 
+  local toolchain
+  toolchain=$(find_toolchain "$KERNEL_COMPILER" "$KERNEL_USE_GCC")
+  [[ -z $toolchain ]] && exit_with_error "Could not find required toolchain" "${KERNEL_COMPILER}gcc $KERNEL_USE_GCC"
+
+  echo ToolChain ${toolchain}
+
+
 	pushd "${SRC}"/cache/sources/libsdl2
 	process_patch_file "${SRC}/patch/misc/retrostone2-sdl2.patch" "applying"
 	./configure --prefix="${tmp_dir}/${libsdl2_dir}"/usr
-	make
+	export make CC=${toolchain}
 	make install
   popd
 
