@@ -39,8 +39,8 @@ compile_sdl2()
 	rm -rf "${tmp_dir}"
 }
 
-compile_romfetcher()  {
-
+compile_romfetcher()
+{
 #    apt-get --yes --force-yes --allow-unauthenticated install libsdl2-ttf-dev libsdl2-image-dev libsdl2-dev libcurl4-openssl-dev libsqlite3-dev libcurl4-openssl-dev
 #    mkdir /tmp/romfetcher
 #    cd /tmp/romfetcher
