@@ -41,12 +41,6 @@ ghostscript-x
 gist
 gnome-font-viewer
 gnome-screenshot
-gnome-user-docs-de
-gnome-user-docs-es
-gnome-user-docs-it
-gnome-user-docs-pt
-gnome-user-docs-ru
-gnome-user-docs-sl
 gnome-system-monitor
 gstreamer1.0-packagekit
 gstreamer1.0-plugins-base-apps
@@ -61,14 +55,7 @@ inputattach
 inxi
 kerneloops
 keyutils
-language-pack-gnome-de
 language-pack-gnome-en
-language-pack-gnome-es
-language-pack-gnome-fr
-language-pack-gnome-it
-language-pack-gnome-pt
-language-pack-gnome-ru
-language-pack-gnome-sl
 laptop-detect
 libatk-adaptor
 libfont-afm-perl
