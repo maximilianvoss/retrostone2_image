@@ -33,7 +33,7 @@ compile_sdl2()
 
   echo ToolChain: ${toolchain}
   echo Kernel Compiler: ${KERNEL_COMPILER}
-  echo Kernel Use Gcc: ${}KERNEL_USE_GCC}
+  echo Kernel Use Gcc: ${KERNEL_USE_GCC}
 
 
 	pushd "${SRC}"/cache/sources/libsdl2
