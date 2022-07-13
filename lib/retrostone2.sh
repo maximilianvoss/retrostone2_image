@@ -33,7 +33,7 @@ compile_sdl2()
 
 	pushd "${SRC}"/cache/sources/libsdl2
 	process_patch_file "${SRC}/patch/misc/retrostone2-sdl2.patch" "applying"
-  ./configure --prefix="${tmp_dir}/${libsdl2_dir}"/usr CC=${KERNEL_COMPILER}gcc CXX=${KERNEL_COMPILER}g++  AR=${KERNEL_COMPILER}gcc-ar RANLIB=${KERNEL_COMPILER}gcc-ranlib --host=x86_64-arm-linux-gnueabihf
+  ./configure --prefix="${tmp_dir}/${libsdl2_dir}"/usr CC=${toolchain}/${KERNEL_COMPILER}gcc CXX=${toolchain}/${KERNEL_COMPILER}g++  AR=${toolchain}/${KERNEL_COMPILER}gcc-ar RANLIB=${toolchain}/${KERNEL_COMPILER}gcc-ranlib --host=x86_64-arm-linux-gnueabihf
 	make
 	make install
   popd
