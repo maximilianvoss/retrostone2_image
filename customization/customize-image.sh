@@ -18,7 +18,7 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
-#  InstallEmulationStation
+  InstallEmulationStation
 	case $RELEASE in
 		stretch)
 			# your code here
