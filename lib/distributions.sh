@@ -408,7 +408,7 @@ POST_INSTALL_KERNEL_DEBS
 	# Retrostone2 Action START
 	if [[ $BOARD == retrostone2 ]]; then
 		install_deb_chroot "${DEB_STORAGE}/libsdl2_${REVISION}_all.deb"
-		install_deb_chroot "${DEB_STORAGE}/romfetcher_${REVISION}_all.deb"
+#		install_deb_chroot "${DEB_STORAGE}/romfetcher_${REVISION}_all.deb"
   fi
   # Retrostone2 Action END
 

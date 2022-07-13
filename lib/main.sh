@@ -510,9 +510,9 @@ fi
 if [[ ! -f ${DEB_STORAGE}/libsdl2_${REVISION}_all.deb ]]; then
         [[ "${REPOSITORY_INSTALL}" != *libsdl2* ]] && compile_sdl2
 fi
-if [[ ! -f ${DEB_STORAGE}/romfetcher_${REVISION}_all.deb ]]; then
-        [[ "${REPOSITORY_INSTALL}" != *romfetcher* ]] && compile_romfetcher
-fi
+#if [[ ! -f ${DEB_STORAGE}/romfetcher_${REVISION}_all.deb ]]; then
+#        [[ "${REPOSITORY_INSTALL}" != *romfetcher* ]] && compile_romfetcher
+#fi
 
 # Retrostone2 Action END
 
