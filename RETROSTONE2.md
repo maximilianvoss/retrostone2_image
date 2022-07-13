@@ -30,7 +30,8 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
  KERNEL_ONLY=no \
  KERNEL_CONFIGURE=no \
  RELEASE=jammy \
- BUILD_DESKTOP=xfce \
+ BUILD_DESKTOP=yes \
+ DESKTOP_ENVIRONMENT=emulationstation \
  DISABLE_IPV6=true \
  MAINLINE_MIRROR=google \
  CLEAN_LEVEL=images \
