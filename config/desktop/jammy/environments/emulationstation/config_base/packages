@@ -137,4 +137,5 @@ fonts-droid-fallback
 libvlc-dev
 libvlccore-dev
 vlc-bin
-freeimage
+libfreeimage-dev
+libfreeimage3
