@@ -44,7 +44,7 @@ InstallEmulationStation() {
   tmp_dir=$(mktemp -d)
   chmod 700 ${tmp_dir}
 
-  git clone https://github.com/RetroPie/EmulationStation.git ${tmp_dir}
+  git clone --recursive https://github.com/RetroPie/EmulationStation.git ${tmp_dir}
   pushd ${tmp_dir}
   mkdir build
   cd build
