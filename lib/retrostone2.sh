@@ -54,4 +54,5 @@ compile_romfetcher()
 #    (git clone https://github.com/maximilianvoss/romfetcher.git; cd romfetcher; cmake -G "Unix Makefiles"; make; sudo make install)
 #    cd /
 #    rm -rf /tmp/romfetcher
+  echo "hello world"
 }
