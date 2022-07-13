@@ -31,20 +31,14 @@ compile_sdl2()
   toolchain=$(find_toolchain "$KERNEL_COMPILER" "$KERNEL_USE_GCC")
   [[ -z $toolchain ]] && exit_with_error "Could not find required toolchain" "${KERNEL_COMPILER}gcc $KERNEL_USE_GCC"
 
-  echo ToolChain: ${toolchain}
-  echo Kernel Compiler: ${KERNEL_COMPILER}
-  echo Kernel Use Gcc: ${KERNEL_USE_GCC}
-
-
 	pushd "${SRC}"/cache/sources/libsdl2
 	process_patch_file "${SRC}/patch/misc/retrostone2-sdl2.patch" "applying"
-	./configure --prefix="${tmp_dir}/${libsdl2_dir}"/usr
-
-	make -d CC=${KERNEL_COMPILER}gcc CXX=${KERNEL_COMPILER}g++ AR=${KERNEL_COMPILER}gcc-ar RANLIB=${KERNEL_COMPILER}gcc-ranlib
+  ./configure --prefix="${tmp_dir}/${libsdl2_dir}"/usr CC=${KERNEL_COMPILER}gcc CXX=${KERNEL_COMPILER}g++  AR=${KERNEL_COMPILER}gcc-ar RANLIB=${KERNEL_COMPILER}gcc-ranlib --host=x86_64-arm-linux-gnueabihf
+	make
 	make install
   popd
 
-  pushd ${tmp_dir}
+  pushd ${libsdl2_dir}
   process_patch_file "${SRC}/patch/misc/retrostone2-sdl2-config.patch" "applying"
   popd
 
