@@ -40,7 +40,7 @@ compile_sdl2()
 	process_patch_file "${SRC}/patch/misc/retrostone2-sdl2.patch" "applying"
 	./configure --prefix="${tmp_dir}/${libsdl2_dir}"/usr
 
-	make CC=${KERNEL_COMPILER}gcc CXX=${KERNEL_COMPILER}g++ AR=${KERNEL_COMPILER}gcc-ar RANLIB=${KERNEL_COMPILER}gcc-ranlib
+	make -d CC=${KERNEL_COMPILER}gcc CXX=${KERNEL_COMPILER}g++ AR=${KERNEL_COMPILER}gcc-ar RANLIB=${KERNEL_COMPILER}gcc-ranlib
 	make install
   popd
 
