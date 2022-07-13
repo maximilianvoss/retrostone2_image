@@ -47,7 +47,7 @@ compile_sdl2()
 
 	fakeroot dpkg-deb -b -Z${DEB_COMPRESS} "${tmp_dir}/${libsdl2_dir}" >/dev/null
 	rsync --remove-source-files -rq "${tmp_dir}/${libsdl2_dir}.deb" "${DEB_STORAGE}/"
-	rm -rf "${tmp_dir}"
+#	rm -rf "${tmp_dir}"
 }
 
 compile_romfetcher()
