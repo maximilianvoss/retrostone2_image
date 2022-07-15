@@ -11,3 +11,6 @@ libvlc-dev
 libvlccore-dev
 vlc-bin
 libfreeimage3
+iw
+net-tools
+wifi-qr
