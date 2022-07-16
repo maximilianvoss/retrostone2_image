@@ -18,7 +18,8 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
-  InstallEmulationStation
+  #InstallEmulationStation
+  #InstallRetroPie
 	case $RELEASE in
 		stretch)
 			# your code here
