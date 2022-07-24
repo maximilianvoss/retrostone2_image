@@ -1,0 +1,2 @@
+# test data is not documentation
+libsdl2-dev: package-contains-documentation-outside-usr-share-doc usr/lib/*/installed-tests/*
