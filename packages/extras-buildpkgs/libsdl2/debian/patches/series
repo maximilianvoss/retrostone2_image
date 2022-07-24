@@ -1,4 +1,1 @@
-Add-a-make-install-target-for-the-tests.patch
-no-libdir.patch
-test-Don-t-install-bundled-copy-of-unifont.patch
-Avoid-depending-on-libwayland-1.20-unnecessarily.patch
+retrostone2-sdl2.patch
