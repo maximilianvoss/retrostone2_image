@@ -89,14 +89,6 @@ override_dh_auto_build-arch: build-library build-tests
 override_dh_auto_build-indep: build-library
 build-library:
 	dh_auto_build -- V=1
-build-tests:
-	dh_auto_build \
-		--buildsystem=autoconf \
-		--sourcedirectory=$(CURDIR)/test \
-		--builddirectory=$(CURDIR)/debian/build-tests \
-		-- \
-		V=1
-
 
 override_dh_auto_clean-indep:
 	dh_auto_clean
