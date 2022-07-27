@@ -74,7 +74,8 @@ override_dh_auto_build-indep: build-library
 build-library:
 	dh_auto_build -- V=1
 build-tests:
-	ls
+	mkdir -p $(CURDIR)/debian/build-tests
+	touch $(CURDIR)/debian/biuld-tests/sampletest
 
 override_dh_auto_clean-indep:
 	dh_auto_clean
