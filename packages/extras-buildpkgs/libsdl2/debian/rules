@@ -49,22 +49,6 @@ confflags += ac_cv_header_libunwind_h=no
 
 override_dh_auto_configure:
 	dh_auto_configure -- $(confflags)
-	# test/configure.ac uses AC_PATH_X, so we need to pass in
-	# --x-includes and --x-libraries to avoid it wanting to use
-	# xmkmf to discover the right values.
-	# test/configure.ac doesn't respect CPPFLAGS or LDFLAGS.
-	dh_auto_configure \
-		--buildsystem=autoconf \
-		--sourcedirectory=$(CURDIR)/test \
-		--builddirectory=$(CURDIR)/debian/build-tests \
-		-- \
-		--x-includes=/usr/include \
-		--x-libraries=/usr/lib/$(DEB_HOST_MULTIARCH) \
-		SDL_CFLAGS=-I$(CURDIR)/include \
-		SDL_LIBS="-L$(CURDIR)/build/.libs -lSDL2" \
-		ac_cv_lib_SDL2_ttf_TTF_Init=no \
-		CFLAGS="$(CPPFLAGS) $(CFLAGS) $(LDFLAGS)" \
-		$(NULL)
 
 override_dh_auto_build-indep:
 	GZIP="-9n" tar \
@@ -85,13 +69,12 @@ override_dh_auto_build-indep:
 override_dh_installexamples-indep:
 	dh_installexamples -i --doc-main-package=libsdl2-doc
 
-override_dh_auto_build-arch: build-library build-tests
+override_dh_auto_build-arch: build-library
 override_dh_auto_build-indep: build-library
 build-library:
 	dh_auto_build -- V=1
 build-tests:
 	ls
-
 
 override_dh_auto_clean-indep:
 	dh_auto_clean
@@ -101,13 +84,6 @@ override_dh_auto_clean-indep:
 
 override_dh_auto_install-arch:
 	dh_auto_install -- V=1
-	dh_auto_install \
-		--buildsystem=autoconf \
-		--sourcedirectory=$(CURDIR)/test \
-		--builddirectory=$(CURDIR)/debian/build-tests \
-		-- \
-		installedtestsdir='/usr/lib/$(DEB_HOST_MULTIARCH)/installed-tests/SDL2' \
-		V=1
 
 override_dh_install:
 	mkdir -p debian/tmp/usr/include/$(DEB_HOST_MULTIARCH)/SDL2
