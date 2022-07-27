@@ -89,6 +89,9 @@ override_dh_auto_build-arch: build-library build-tests
 override_dh_auto_build-indep: build-library
 build-library:
 	dh_auto_build -- V=1
+build-tests:
+	ls
+
 
 override_dh_auto_clean-indep:
 	dh_auto_clean
