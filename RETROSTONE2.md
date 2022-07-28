@@ -36,6 +36,9 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
  MAINLINE_MIRROR=google \
  CLEAN_LEVEL=images \
  NO_APT_CACHER=yes \
+ EXTERNAL_NEW=compile \
+ DESKTOP_ENVIRONMENT_CONFIG_NAME=config_base \
+ DESKTOP_APPGROUPS_SELECTED=y \
  CARD_DEVICE="/dev/sdb"
 ```
 
