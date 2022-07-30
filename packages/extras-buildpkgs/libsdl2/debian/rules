@@ -51,7 +51,7 @@ override_dh_auto_configure:
 	dh_auto_configure -- $(confflags)
 
 override_dh_builddeb:
-    dh_builddeb -- -Zgzip
+	dh_builddeb -- -Zgzip -z9
 
 override_dh_auto_build-indep:
 	GZIP="-9n" tar \
