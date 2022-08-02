@@ -2,7 +2,7 @@ Source: csafestring
 Section: x11
 Priority: optional
 Maintainer: Maximilian Voss <maximilian@voss.rocks>
-Build-Depends: debhelper (>=10)
+Build-Depends: debhelper (>=10), cmake
 Standards-Version: 4.0.0
 Homepage: https://github.com/maximilianvoss/csafestring
 
