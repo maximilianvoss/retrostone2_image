@@ -4,4 +4,4 @@ override_dh_auto_configure:
     cmake -G "Unix Makefiles
 
 %:
-    dh $@
+	dh $@
