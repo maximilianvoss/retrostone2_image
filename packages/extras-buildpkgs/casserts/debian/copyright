@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: csafestring
+Upstream-Name: casserts
 Upstream-Contact: Maximilian Voss <maximilian@voss.rocks>
-Source: https://github.com/maximilianvoss/csafestring
+Source: https://github.com/maximilianvoss/casserts
 
 Files: *
 License: Apache2.0
