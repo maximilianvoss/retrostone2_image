@@ -5,3 +5,5 @@ override_dh_auto_configure:
 
 %:
 	dh $@
+
+soverride_dh_usrlocal:
