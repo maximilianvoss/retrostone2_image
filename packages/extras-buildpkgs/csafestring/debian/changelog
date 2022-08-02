@@ -1,18 +1,74 @@
-csafestring (csafestring~20210215140117.gbp3c2670) unstable; urgency=medium
+csafestring (1.8) unstable; urgency=low
 
-  ** SNAPSHOT build @3c26705aedff5ca8762ab3e4dccbfe94dbe74c0c **
+  * Merge pull request #3 from maximilianvoss/feature/fix-memory-functions
+  * * fix merge conflicts
+  * Merge branch 'master' into feature/fix-memory-functions
+  * fix memory functions
 
-  * Non-maintainer upload.
-  * * renaming example & test to ${CMAKE_PROJECT_NAME}_[example|test]
-  * * set target names correctly
-  * * add method to empty the entire buffer (set to '\0')
-  * * fix method footprint
-  * * surround cmake add_executable/library with target check
-  * In which our hero added some NULL Pointer checks
-  * In which our hero worked on the makefile
-  * In which our hero worked on the makefile
-  * In which our hero updated the cmake modules
-  * In which our hero added to option to PIC the code
-  * In which our hero updated the documentation
+ -- Maximilian Voss <maximilian.voss@gmail.com>  Mon, 23 Jan 2017 18:13:57 +0100
 
- -- Maximilian Voss <maximilian@voss.rocks>  Tue, 02 Aug 2022 14:39:08 +0200
+csafestring (1.7) unstable; urgency=low
+
+  * Merge pull request #2 from maximilianvoss/feature/experimental-autosizing
+  * * Add experimental build flags to travis
+  * * rearrange code * remove compiler options
+  * * make testcase experimental only
+  * * fix csafestring_t array in test case
+  * * fix test cases
+  * * tidy up code
+  * * first version of the hits
+  * * first version of the hits
+  * * fix semi colon
+  * * output allocation size
+  * * change of intial alloc methods
+  * * fix test case
+  * * fix header
+  * * fix header
+  * * first set of functions to improve initial allocation
+
+ -- Maximilian Voss <maximilian.voss@gmail.com>  Fri, 20 Jan 2017 17:15:56 +0100
+
+csafestring (1.6) unstable; urgency=low
+
+  * * small improvement while test execution, name test case.
+  * * fixed: when a not created csafestring_t object is destroyed a SIG FAULT was caused
+  * * fix method declaration
+  * * fix method declaration * fix whitespaces
+  * *Improve test Macros
+
+ -- Maximilian Voss <maximilian.voss@gmail.com>  Tue, 10 Jan 2017 22:09:48 +0100
+
+csafestring (1.5) unstable; urgency=low
+
+  * Feature/tidyupstructure (#1)
+
+ -- Maximilian Voss <maximilian.voss@gmail.com>  Tue, 10 Jan 2017 13:12:29 +0100
+
+csafestring (1.4) unstable; urgency=low
+
+  * * update compiler flags
+  * * modify cmake version to 2.8 to run on travis
+  * * update travis & readme
+  * * try travis
+  * * Adding method to append a char to a string: char *safe_strchrappend(csafestring_t *obj, const char chr); * change length calculation on safe_strcat
+
+ -- Maximilian Voss <maximilian.voss@gmail.com>  Tue, 10 Jan 2017 00:11:29 +0100
+
+csafestring (1.3) unstable; urgency=low
+
+  * * move include of string.h to the header file
+
+ -- Maximilian Voss <maximilian.voss@gmail.com>  Fri, 6 Jan 2017 23:37:33 +0100
+
+csafestring (1.2) unstable; urgency=low
+
+  * * Update .gitignore * Create Build Profile for Release & Debug. Debug will create a runnable, Release a library * Bugfix: realloc was not filling the rest of the memory up with \0. Rewrite this part where a calloc and a memmove was used * A small debug routine which checks if strings are concatinated correclty * Introduction of the safe_clone method to clone a string object
+
+ -- Maximilian Voss <maximilian.voss@gmail.com>  Thu, 29 Dec 2016 17:00:03 +0100
+
+csafestring (1.1) unstable; urgency=low
+
+  * * rename safestring_t to csafestring_t * Assigning a string while initializing the csafestring_t object
+  * Fix: Export destroy the safestring_t object and remove the resizeBuffer method from public
+
+ -- Maximilian Voss <maximilian.voss@gmail.com>  Fri, 23 Dec 2016 11:31:58 +0100
