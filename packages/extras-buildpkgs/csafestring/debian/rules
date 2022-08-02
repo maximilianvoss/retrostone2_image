@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 override_dh_auto_configure:
-	cmake -G "Unix Makefiles
+	cmake -G "Unix Makefiles"
 
 %:
 	dh $@
