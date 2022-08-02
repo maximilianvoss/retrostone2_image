@@ -1,4 +1,4 @@
-# hostapd
+# libsdl2
 local package_name="libsdl2"
 local package_repo="https://github.com/libsdl-org/SDL"
 local package_ref="tag:release-2.0.22"

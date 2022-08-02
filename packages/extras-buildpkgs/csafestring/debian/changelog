@@ -1,0 +1,18 @@
+csafestring (csafestring~20210215140117.gbp3c2670) unstable; urgency=medium
+
+  ** SNAPSHOT build @3c26705aedff5ca8762ab3e4dccbfe94dbe74c0c **
+
+  * Non-maintainer upload.
+  * * renaming example & test to ${CMAKE_PROJECT_NAME}_[example|test]
+  * * set target names correctly
+  * * add method to empty the entire buffer (set to '\0')
+  * * fix method footprint
+  * * surround cmake add_executable/library with target check
+  * In which our hero added some NULL Pointer checks
+  * In which our hero worked on the makefile
+  * In which our hero worked on the makefile
+  * In which our hero updated the cmake modules
+  * In which our hero added to option to PIC the code
+  * In which our hero updated the documentation
+
+ -- Maximilian Voss <maximilian@voss.rocks>  Tue, 02 Aug 2022 14:39:08 +0200
