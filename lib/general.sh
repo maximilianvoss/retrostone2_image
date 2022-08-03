@@ -1256,9 +1256,6 @@ install_pkg_deb ()
 		esac
 	done
 
-  # GIVE IT A TRY
-	apt-get -q update || echo "apt cannot update" >>$tmp_file
-
 	# This is necessary first when there is no apt cache.
 	if $need_upgrade; then
 		apt-get -q update || echo "apt cannot update" >>$tmp_file
@@ -1287,7 +1284,6 @@ install_pkg_deb ()
 	# Exclude bad package names and send a message to the log.
 	for_install=$(
 	for p in $list;do
-	  apt-get install -qq -y --no-install-recommends $p
 	  if $(dpkg-query -W -f '${db:Status-Abbrev}' $p |& awk '/ii/{exit 1}');then
 		apt-cache  show $p -o APT::Cache::AllVersions=no |& \
 		awk -v p=$p -v tmp_file=$tmp_file \
