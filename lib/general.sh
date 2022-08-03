@@ -1256,6 +1256,9 @@ install_pkg_deb ()
 		esac
 	done
 
+  # GIVE IT A TRY
+	apt-get -q update || echo "apt cannot update" >>$tmp_file
+
 	# This is necessary first when there is no apt cache.
 	if $need_upgrade; then
 		apt-get -q update || echo "apt cannot update" >>$tmp_file
