@@ -1287,6 +1287,7 @@ install_pkg_deb ()
 	# Exclude bad package names and send a message to the log.
 	for_install=$(
 	for p in $list;do
+	  apt-get install -qq -y --no-install-recommends $p
 	  if $(dpkg-query -W -f '${db:Status-Abbrev}' $p |& awk '/ii/{exit 1}');then
 		apt-cache  show $p -o APT::Cache::AllVersions=no |& \
 		awk -v p=$p -v tmp_file=$tmp_file \
