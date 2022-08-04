@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
 override_dh_auto_configure:
+    apt-get update
 	apt-get install -qq -y --no-install-recommends casserts
 	cmake -DCMAKE_INSTALL_PREFIX=/usr
 
