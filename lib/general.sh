@@ -1256,30 +1256,6 @@ install_pkg_deb ()
 		esac
 	done
 
-	# JUST A TEST
-  local conf="${SRC}"/config/aptly-temp.conf
-  rm -rf /tmp/aptly-temp/
-  mkdir -p /tmp/aptly-temp/
-  aptly -config="${conf}" repo create temp >> "${DEST}"/${LOG_SUBPATH}/install.log
-  # NOTE: this works recursively
-  aptly -config="${conf}" repo add temp "${DEB_STORAGE}/extra/${RELEASE}-desktop/" >> "${DEST}"/${LOG_SUBPATH}/install.log
-  aptly -config="${conf}" repo add temp "${DEB_STORAGE}/extra/${RELEASE}-utils/" >> "${DEST}"/${LOG_SUBPATH}/install.log
-  # -gpg-key="925644A6"
-  aptly -keyring="${SRC}/packages/extras-buildpkgs/buildpkg-public.gpg" -secret-keyring="${SRC}/packages/extras-buildpkgs/buildpkg.gpg" -batch=true -config="${conf}" \
-     -gpg-key="925644A6" -passphrase="testkey1234" -component=temp -distribution="${RELEASE}" publish repo temp >> "${DEST}"/${LOG_SUBPATH}/install.log
-  aptly -config="${conf}" -listen=":8189" serve &
-  local aptly_pid=$!
-  cp "${SRC}"/packages/extras-buildpkgs/buildpkg.key "${SDCARD}"/tmp/buildpkg.key
-  cat <<-'EOF' > "${SDCARD}"/etc/apt/preferences.d/90-armbian-temp.pref
-  Package: *
-  Pin: origin "localhost"
-  Pin-Priority: 550
-  EOF
-  cat <<-EOF > "${SDCARD}"/etc/apt/sources.list.d/armbian-temp.list
-  deb http://localhost:8189/ $RELEASE temp
-  EOF
-  # JUST A TEST
-
 	# This is necessary first when there is no apt cache.
 	if $need_upgrade; then
 		apt-get -q update || echo "apt cannot update" >>$tmp_file
@@ -1349,10 +1325,6 @@ install_pkg_deb ()
 
 	if $need_clean;then apt-get clean; fi
 	rm $tmp_file
-
-	# JUST A TEST
-	kill "${aptly_pid}"
-	# JUST A TEST
 }
 
 
