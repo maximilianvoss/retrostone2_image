@@ -384,6 +384,7 @@ create_build_script ()
 
 	# install the custom packages first
 	if [[ ! -z "$(ls /root/deps/*.deb 2>/dev/null)" ]]; then
+		display_alert "Installing build dependencies: " "$(ls /root/deps/*.deb)" "info"
 	  dpkg -i /root/deps/*.deb
 	fi
 
