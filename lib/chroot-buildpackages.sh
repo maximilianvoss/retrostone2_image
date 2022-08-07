@@ -297,9 +297,9 @@ chroot_build_packages()
 				if [[ -n $package_extra_builddeps ]]; then
 				  for dependency in $package_extra_builddeps; do
 				      if [[ -z $(find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb") ]]; then
-				          echo "was not able to find file: ${dependency}"
+				        display_alert "Package not found: " "${dependency}" "error"
 				      else
-				          echo "was able to find file: ${dependency}"
+				          display_alert "Package found: " "${dependency}" "info"
 				          find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb" -exec cp {} "${target_dir}"/root/deps/ \;
 				      fi
 				  done
@@ -383,7 +383,9 @@ create_build_script ()
 	[[ -d "/root/overlay/${package_name}/" ]] && rsync -aq /root/overlay/"${package_name}" /root/build/
 
 	# install the custom packages first
-	dpkg -i /root/deps/*.deb
+	if [[ ! -z "$(ls /root/deps/*.deb 2>/dev/null)" ]]; then
+	  dpkg -i /root/deps/*.deb
+	fi
 
 	package_builddeps="$package_builddeps"
 	if [ -z "\$package_builddeps" ]; then
