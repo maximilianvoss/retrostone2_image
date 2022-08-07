@@ -1,0 +1,12 @@
+Source: lexbor
+Section: x11
+Priority: optional
+Maintainer: Alexander Borisov <lex.borisov@gmail.com>
+Build-Depends: debhelper (>=10), cmake
+Standards-Version: 4.0.0
+Homepage: https://github.com/lexbor/lexbor
+
+Package: lexbor
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: The lexbor project is being developed using the C language, without dependencies.
