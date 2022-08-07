@@ -296,11 +296,11 @@ chroot_build_packages()
 				mkdir -p "${target_dir}"/root/deps/
 				if [[ -n $package_extra_builddeps ]]; then
 				  for dependency in $package_extra_builddeps; do
-				      if [[ -z $(find "${DEB_STORAGE}/extra/" -name "${f}_*$REVISION*_$arch.deb") ]]; then
-				          echo "was not able to find file: ${f}"
+				      if [[ -z $(find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb") ]]; then
+				          echo "was not able to find file: ${dependency}"
 				      else
-				          echo "was able to find file: ${f}"
-				          find "${DEB_STORAGE}/extra/" -name "${f}_*$REVISION*_$arch.deb" -exec cp {} "${target_dir}"/root/deps/ \;
+				          echo "was able to find file: ${dependency}"
+				          find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb" -exec cp {} "${target_dir}"/root/deps/ \;
 				      fi
 				  done
 				fi
