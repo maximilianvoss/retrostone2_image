@@ -382,19 +382,13 @@ create_build_script ()
 	# copy overlay / "debianization" files
 	[[ -d "/root/overlay/${package_name}/" ]] && rsync -aq /root/overlay/"${package_name}" /root/build/
 
-	# install the custom packages first
-	if [[ ! -z "\$(ls /root/deps/*.deb 2>/dev/null)" ]]; then
-	  display_alert "Installing build dependencies: " "\$(ls /root/deps/*.deb)" "info"
-	  dpkg -i /root/deps/*.deb
-	fi
-
 	package_builddeps="$package_builddeps"
 	if [ -z "\$package_builddeps" ]; then
 		# Calculate build dependencies by a standard dpkg function
 		package_builddeps="\$(dpkg-checkbuilddeps |& awk -F":" '{print \$NF}')"
 	fi
 	if [[ -n "\${package_builddeps}" ]]; then
-		install_pkg_deb \${package_builddeps}
+		install_pkg_deb \${package_builddeps} \$(ls /root/deps/*.deb)
 	fi
 
 	# set upstream version
