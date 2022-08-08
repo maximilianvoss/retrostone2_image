@@ -6,7 +6,7 @@ Build-Depends: debhelper (>=10), cmake, csafestring, casserts, clogger, chttp, a
 Standards-Version: 4.0.0
 Homepage: https://github.com/maximilianvoss/romfetcher
 
-Package: romfetchers
+Package: romfetcher
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: A tool to download ROMss
