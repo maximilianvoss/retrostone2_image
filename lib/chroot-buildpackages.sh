@@ -297,9 +297,9 @@ chroot_build_packages()
 				if [[ -n $package_extra_builddeps ]]; then
 				  for dependency in $package_extra_builddeps; do
 				      if [[ -z $(find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb") ]]; then
-				        display_alert "Package not found: " "${dependency}" "error"
+				        display_alert "Required custom package not found: " "${dependency}" "error"
 				      else
-				          display_alert "Package found: " "${dependency}" "info"
+				          display_alert "Required custom package found: " "${dependency}" "info"
 				          find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb" -exec cp {} "${target_dir}"/root/deps/ \;
 				      fi
 				  done
