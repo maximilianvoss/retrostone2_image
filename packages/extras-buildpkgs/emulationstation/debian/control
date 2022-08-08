@@ -1,0 +1,12 @@
+Source: emulationstation
+Section: x11
+Priority: optional
+Maintainer: Maximilian Voss <maximilian@voss.rocks>
+Build-Depends: debhelper (>=10), libsdl2-dev, libfreeimage-dev, libfreetype6-dev, libcurl4-openssl-dev, rapidjson-dev, libasound2-dev, libgles2-mesa-dev, build-essential, cmake, fonts-droid-fallback, libvlc-dev, libvlccore-dev, vlc-bin
+Standards-Version: 4.0.0
+Homepage: https://github.com/RetroPie/EmulationStation
+
+Package: emulationstation
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: The emulation station
