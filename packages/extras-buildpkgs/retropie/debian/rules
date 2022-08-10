@@ -1,12 +1,16 @@
 #!/usr/bin/make -f
 
-override_dh_auto_configure:
-	cmake -DCMAKE_INSTALL_PREFIX=/usr
-
 %:
 	dh $@
+
+override_dh_auto_build:
+	./retropie_setup.sh
 
 override_dh_builddeb:
 	dh_builddeb -- -Zgzip -z9
 
 override_dh_usrlocal:
+
+override_dh_auto_test:
+
+override_dh_auto_configure:
