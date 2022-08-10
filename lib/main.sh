@@ -401,7 +401,7 @@ POST_DETERMINE_CTHREADS
 
 if [[ $BETA == yes ]]; then
 	IMAGE_TYPE=nightly
-elif [[ $BETA != "yes" && IMAGE_TYPE != user-built]]; then
+elif [[ $BETA != "yes" && $IMAGE_TYPE != "user-built" ]]; then
 	IMAGE_TYPE=stable
 else
 	IMAGE_TYPE=user-built
