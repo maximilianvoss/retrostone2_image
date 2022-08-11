@@ -1,3 +1,0 @@
-#!/bin/bash
-
-rm /usr/lib/arm-linux-gnueabihf/libSDL2-2.0.so.0
