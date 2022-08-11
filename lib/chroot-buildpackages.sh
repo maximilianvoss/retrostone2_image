@@ -293,8 +293,7 @@ chroot_build_packages()
 				[[ -v $dist_builddeps_name ]] && package_builddeps="${package_builddeps} ${!dist_builddeps_name}"
 
 				# provide extra dependencies
-				mkdir -p "${target_dir}"/root/debs/update
-				mkdir -p "${target_dir}"/root/debs/install
+				mkdir -p "${target_dir}"/root/debs
 
 				if [[ -n $package_extra_builddeps ]]; then
 				  for dependency in $package_extra_builddeps; do
@@ -302,18 +301,7 @@ chroot_build_packages()
 				        display_alert "Required custom package not found: " "${dependency}" "error"
 				      else
 				          display_alert "Required custom package found: " "${dependency}" "info"
-				          find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb" -exec cp {} "${target_dir}"/root/debs/install/ \;
-				      fi
-				  done
-				fi
-
-				if [[ -n $package_extra_builddeps_update ]]; then
-				  for dependency in $package_extra_builddeps_update; do
-				      if [[ -z $(find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb") ]]; then
-				        display_alert "Required custom package not found: " "${dependency}" "error"
-				      else
-				          display_alert "Required custom package found: " "${dependency}" "info"
-				          find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb" -exec cp {} "${target_dir}"/root/debs/update/ \;
+				          find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb" -exec cp {} "${target_dir}"/root/debs/ \;
 				      fi
 				  done
 				fi
@@ -400,9 +388,8 @@ create_build_script ()
 		# Calculate build dependencies by a standard dpkg function
 		package_builddeps="\$(dpkg-checkbuilddeps |& awk -F":" '{print \$NF}')"
 	fi
-	\$(find /root/debs/update -name "*.deb" -exec dpkg --update-avail {} \;)
 	if [[ -n "\${package_builddeps}" ]]; then
-		install_pkg_deb \${package_builddeps} \$(ls /root/debs/install/*.deb)
+		install_pkg_deb \${package_builddeps} \$(ls /root/debs/*.deb)
 	fi
 
 	# set upstream version
