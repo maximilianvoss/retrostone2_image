@@ -39,6 +39,10 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
  EXTERNAL_NEW=compile \
  DESKTOP_ENVIRONMENT_CONFIG_NAME=config_base \
  DESKTOP_APPGROUPS_SELECTED=y \
+ IMAGE_TYPE=user-built \
+ RELEASE=jammy \
+ ARCH=armhf \
+ BETA=no \
  CARD_DEVICE="/dev/sdb"
 ```
 
