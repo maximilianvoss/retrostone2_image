@@ -1,12 +1,12 @@
 # retropie
-local package_name="retropie-runcommand"
+local package_name="retropie-retropiemenu"
 local package_repo="https://github.com/RetroPie/RetroPie-Setup"
 local package_ref="branch:master"
 
 local package_upstream_version="4.8"
-local package_builddeps="lsb-release iproute2 libexif12 libgif7 libid3tag0 libimlib2 yudit-common python3-pkg-resources cmake"
+local package_builddeps="lsb-release iproute2 libgpm2 libssh2-1 mc-data subversion dialog curl unzip xmlstarlet python3-pyudev libapr1 libaprutil1 libcurl4 libserf-1-1 libsvn1 libutf8proc2 libxslt1.1 python3-six libslang2"
 local package_extra_builddeps="libsdl2-dev libsdl2-2.0-0"
-local package_install_target="retropie-runcommand"
+local package_install_target="retropie-retropiemenu"
 local package_component="${release}-utils"
 
 package_checkbuild()
