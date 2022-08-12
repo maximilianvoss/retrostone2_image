@@ -4,7 +4,23 @@
 	dh $@
 
 override_dh_auto_build:
-	./retropie_setup.sh
+	./retropie_package.sh retroarch
+	./retropie_package.sh retropiemenu
+	./retropie_package.sh runcommand
+	./retropie_package.sh joy2key
+	./retropie_package.sh mupen64plus
+	./retropie_package.sh lr-atari800
+	./retropie_package.sh lr-beetle-ngp
+	./retropie_package.sh lr-beetle-psx
+	./retropie_package.sh lr-fceumm
+	./retropie_package.sh lr-gambatte
+	./retropie_package.sh lr-genesis-plus-gx
+	./retropie_package.sh lr-mgba
+	./retropie_package.sh lr-mupen64plus
+	./retropie_package.sh lr-nestopia
+	./retropie_package.sh lr-parallel-n64
+	./retropie_package.sh lr-snes9x
+	./retropie_package.sh lr-vba-next
 
 override_dh_builddeb:
 	dh_builddeb -- -Zgzip -z9
