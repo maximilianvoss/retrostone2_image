@@ -6,7 +6,7 @@ Build-Depends: debhelper (>=10), lsb-release, libsdl2-dev
 Standards-Version: 4.0.0
 Homepage: https://retropie.org.uk/
 
-Package: retropie
+Package: retropie-retroarch
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: The retropie
