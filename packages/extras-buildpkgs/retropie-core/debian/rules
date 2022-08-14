@@ -8,7 +8,7 @@ override_dh_auto_build:
 	./retropie_packages.sh retropiemenu
 	./retropie_packages.sh runcommand
 	./retropie_packages.sh joy2key
-	while [ true ]; do sleep 1; echo "sleeping"; done
+	mv /opt/retropie /root/build/
 	#./retropie_packages.sh lr-beetle-ngp
 	#./retropie_packages.sh lr-beetle-psx
 	#./retropie_packages.sh lr-fceumm
