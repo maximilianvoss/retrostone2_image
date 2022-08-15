@@ -4,14 +4,14 @@
 	dh $@
 
 override_dh_auto_build:
-	mkdir -p /root/build/retropie-core/debian/opt/
-	mkdir -p /root/build/retropie-core/debian/root/RetroPie/
+	mkdir -p /root/build/retropie-core/debian/tmp/opt/
+	mkdir -p /root/build/retropie-core/debian/tmp/root/RetroPie/
 	./retropie_packages.sh retroarch
 	./retropie_packages.sh retropiemenu
 	./retropie_packages.sh runcommand
 	./retropie_packages.sh joy2key
-	mv /opt/retropie /root/build/retropie-core/debian/opt/
-	mv /root/RetroPie/retropiemenu /root/build/retropie-core/debian/root/RetroPie/
+	mv /opt/retropie /root/build/retropie-core/debian/tmp/opt/
+	mv /root/RetroPie/retropiemenu /root/build/retropie-core/debian/tmp/root/RetroPie/
 	#./retropie_packages.sh lr-beetle-ngp
 	#./retropie_packages.sh lr-beetle-psx
 	#./retropie_packages.sh lr-fceumm
