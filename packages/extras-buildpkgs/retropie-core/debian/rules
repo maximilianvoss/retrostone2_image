@@ -10,6 +10,7 @@ override_dh_auto_build:
 	./retropie_packages.sh retropiemenu
 	./retropie_packages.sh runcommand
 	./retropie_packages.sh joy2key
+	find / >> /root/build-retropie-core.log
 	mv /opt/retropie /root/build/retropie-core/debian/tmp/opt/
 	mv /root/RetroPie/retropiemenu /root/build/retropie-core/debian/tmp/root/RetroPie/
 	#./retropie_packages.sh lr-beetle-ngp
