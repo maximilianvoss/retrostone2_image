@@ -4,15 +4,11 @@
 	dh $@
 
 override_dh_auto_build:
-	mkdir -p /root/build/retropie-core/debian/tmp/opt/
-	mkdir -p /root/build/retropie-core/debian/tmp/root/RetroPie/
-	./retropie_packages.sh retroarch
-	./retropie_packages.sh retropiemenu
-	./retropie_packages.sh runcommand
-	./retropie_packages.sh joy2key
-	find / >> /root/build-retropie-core.log
-	mv /opt/retropie /root/build/retropie-core/debian/tmp/opt/
-	mv /root/RetroPie/retropiemenu /root/build/retropie-core/debian/tmp/root/RetroPie/
+	./retropie_packages.sh retroarch build
+	./retropie_packages.sh retropiemenu build
+	./retropie_packages.sh runcommand build
+	./retropie_packages.sh joy2key build
+
 	#./retropie_packages.sh lr-beetle-ngp
 	#./retropie_packages.sh lr-beetle-psx
 	#./retropie_packages.sh lr-fceumm
@@ -26,6 +22,16 @@ override_dh_auto_build:
 
 override_dh_builddeb:
 	dh_builddeb -- -Zgzip -z9
+
+override_dh_install:
+	./retropie_packages.sh retroarch install
+	./retropie_packages.sh retroarch configure
+    ./retropie_packages.sh retropiemenu install
+    ./retropie_packages.sh retropiemenu configure
+    ./retropie_packages.sh runcommand install
+    ./retropie_packages.sh runcommand configure
+    ./retropie_packages.sh joy2key install
+    ./retropie_packages.sh joy2key configure
 
 override_dh_usrlocal:
 
