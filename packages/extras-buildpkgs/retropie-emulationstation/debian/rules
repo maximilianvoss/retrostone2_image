@@ -1,0 +1,28 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE = 1
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	./retropie_packages.sh emulationstation depends
+	./retropie_packages.sh emulationstation sources
+	./retropie_packages.sh emulationstation build
+
+override_dh_builddeb:
+	dh_builddeb -- -Zgzip -z9
+
+override_dh_install:
+	./retropie_packages.sh emulationstation install
+	./retropie_packages.sh emulationstation configure
+	mkdir -p debian/retropie-core/opt
+	mv /opt/retropie debian/retropie-core/opt/
+	mkdir -p debian/retropie-core/root
+	mv /root/RetroPie debian/retropie-core/root
+
+override_dh_usrlocal:
+
+override_dh_auto_test:
+
+override_dh_auto_configure:
