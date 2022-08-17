@@ -1,22 +1,24 @@
 #!/usr/bin/make -f
 
+export DH_VERBOSE = 1
+
 %:
 	dh $@
 
 override_dh_auto_build:
-	#./retropie_packages.sh retroarch depends
-	#./retropie_packages.sh retroarch sources
-	#./retropie_packages.sh retroarch build
-	#./retropie_packages.sh retropiemenu depends
-	#./retropie_packages.sh retropiemenu sources
-	#./retropie_packages.sh retropiemenu build
+	./retropie_packages.sh retroarch depends
+	./retropie_packages.sh retroarch sources
+	./retropie_packages.sh retroarch build
+	./retropie_packages.sh retropiemenu depends
+	./retropie_packages.sh retropiemenu sources
+	./retropie_packages.sh retropiemenu build
 	./retropie_packages.sh runcommand depends
 	./retropie_packages.sh runcommand sources
 	./retropie_packages.sh runcommand build
-	#./retropie_packages.sh joy2key depends
-	#./retropie_packages.sh joy2key sources
-	#./retropie_packages.sh joy2key build
-	#
+	./retropie_packages.sh joy2key depends
+	./retropie_packages.sh joy2key sources
+	./retropie_packages.sh joy2key build
+
 	#./retropie_packages.sh lr-beetle-ngp
 	#./retropie_packages.sh lr-beetle-psx
 	#./retropie_packages.sh lr-fceumm
@@ -32,14 +34,16 @@ override_dh_builddeb:
 	dh_builddeb -- -Zgzip -z9
 
 override_dh_install:
-	#./retropie_packages.sh retroarch install
-	#./retropie_packages.sh retroarch configure
-	#./retropie_packages.sh retropiemenu install
-	#./retropie_packages.sh retropiemenu configure
-	./retropie_packages.sh runcommand install
-	./retropie_packages.sh runcommand configure
-	#./retropie_packages.sh joy2key install
-	#./retropie_packages.sh joy2key configure
+	./retropie_packages.sh retroarch install
+	./retropie_packages.sh retroarch configure
+	./retropie_packages.sh retropiemenu install
+	./retropie_packages.sh retropiemenu configure
+	/retropie_packages.sh runcommand install
+	/retropie_packages.sh runcommand configure
+	./retropie_packages.sh joy2key install
+	./retropie_packages.sh joy2key configure
+	mkdir -p debian/retropie-core/opt
+    mv /opt/retropie debian/retropie-core/opt/
 
 override_dh_usrlocal:
 
