@@ -39,11 +39,13 @@ override_dh_install:
 	./retropie_packages.sh retropiemenu install
 	./retropie_packages.sh retropiemenu configure
 	/retropie_packages.sh runcommand install
-	/retropie_packages.sh runcommand configure
+	./retropie_packages.sh runcommand configure
 	./retropie_packages.sh joy2key install
 	./retropie_packages.sh joy2key configure
 	mkdir -p debian/retropie-core/opt
 	mv /opt/retropie debian/retropie-core/opt/
+	mkdir -p debian/retropie-core/root
+	mv /root/RetroPie debian/retropie-core/root
 
 override_dh_usrlocal:
 
