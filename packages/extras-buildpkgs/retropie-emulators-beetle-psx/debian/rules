@@ -2,8 +2,20 @@
 
 export DH_VERBOSE = 1
 
+INSTALL_BASEDIR=debian/retropie-emulators-beetle-psx
+
+INSTALL=opt/retropie/configs/all/retroarch/cores/mednafen_psx_*.info \
+opt/retropie/configs/psx/* \
+opt/retropie/libretrocores/lr-beetle-psx/*
+
 %:
 	dh $@
+
+copydata:
+	for file in $(INSTALL); do \
+		mkdir -p "$(INSTALL_BASEDIR)/$$(dirname $$file)"; \
+		mv "/$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/"; \
+	done
 
 override_dh_auto_build:
 	./retropie_packages.sh lr-beetle-psx depends
@@ -16,8 +28,7 @@ override_dh_builddeb:
 override_dh_install:
 	./retropie_packages.sh lr-beetle-psx install
 	./retropie_packages.sh lr-beetle-psx configure
-	mkdir -p debian/retropie-emulators-beetle-psx/opt
-	mv /opt/retropie debian/retropie-emulators-beetle-psx/opt/
+	copydata
 
 override_dh_usrlocal:
 

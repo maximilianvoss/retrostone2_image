@@ -14,6 +14,12 @@ opt/retropie/libretrocores/lr-beetle-ngp
 %:
 	dh $@
 
+copydata:
+	for file in $(INSTALL); do \
+		mkdir -p "$(INSTALL_BASEDIR)/$$(dirname $$file)"; \
+		mv "/$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/"; \
+	done
+
 override_dh_auto_build:
 	./retropie_packages.sh lr-beetle-ngp depends
 	./retropie_packages.sh lr-beetle-ngp sources
@@ -35,9 +41,3 @@ override_dh_auto_test:
 override_dh_auto_configure:
 
 dh_strip_nondeterminism:
-
-copydata:
-	for file in $(INSTALL); do \
-		mkdir -p "$(INSTALL_BASEDIR)/$$(dirname $$file)"; \
-		mv "/$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/"; \
-	done
