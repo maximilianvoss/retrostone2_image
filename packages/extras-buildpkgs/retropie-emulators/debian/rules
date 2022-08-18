@@ -1,0 +1,71 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE = 1
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	./retropie_packages.sh lr-beetle-ngp depends
+	./retropie_packages.sh lr-beetle-ngp sources
+	./retropie_packages.sh lr-beetle-ngp build
+	./retropie_packages.sh lr-beetle-psx depends
+	./retropie_packages.sh lr-beetle-psx sources
+	./retropie_packages.sh lr-beetle-psx build
+	./retropie_packages.sh lr-fceumm depends
+	./retropie_packages.sh lr-fceumm sources
+	./retropie_packages.sh lr-fceumm build
+	./retropie_packages.sh lr-gambatte depends
+	./retropie_packages.sh lr-gambatte sources
+	./retropie_packages.sh lr-gambatte build
+	./retropie_packages.sh lr-genesis-plus-gx depends
+	./retropie_packages.sh lr-genesis-plus-gx sources
+	./retropie_packages.sh lr-genesis-plus-gx build
+	./retropie_packages.sh lr-mgba depends
+	./retropie_packages.sh lr-mgba sources
+	./retropie_packages.sh lr-mgba build
+	./retropie_packages.sh lr-nestopia depends
+	./retropie_packages.sh lr-nestopia sources
+	./retropie_packages.sh lr-nestopia build
+	./retropie_packages.sh lr-parallel-n64 depends
+	./retropie_packages.sh lr-parallel-n64 sources
+	./retropie_packages.sh lr-parallel-n64 build
+	./retropie_packages.sh lr-snes9x depends
+	./retropie_packages.sh lr-snes9x sources
+	./retropie_packages.sh lr-snes9x build
+	./retropie_packages.sh lr-vba-next depends
+	./retropie_packages.sh lr-vba-next sources
+	./retropie_packages.sh lr-vba-next build
+
+override_dh_builddeb:
+	dh_builddeb -- -Zgzip -z9
+
+override_dh_install:
+	./retropie_packages.sh lr-beetle-ngp install
+	./retropie_packages.sh lr-beetle-ngp configure
+	./retropie_packages.sh lr-beetle-psx install
+	./retropie_packages.sh lr-beetle-psx configure
+	./retropie_packages.sh lr-fceumm install
+	./retropie_packages.sh lr-fceumm configure
+	./retropie_packages.sh lr-gambatte install
+	./retropie_packages.sh lr-gambatte configure
+	./retropie_packages.sh lr-genesis-plus-gx install
+	./retropie_packages.sh lr-genesis-plus-gx configure
+	./retropie_packages.sh lr-mgba install
+	./retropie_packages.sh lr-mgba configure
+	./retropie_packages.sh lr-nestopia install
+	./retropie_packages.sh lr-nestopia configure
+	./retropie_packages.sh lr-parallel-n64 install
+	./retropie_packages.sh lr-parallel-n64 configure
+	./retropie_packages.sh lr-snes9x install
+	./retropie_packages.sh lr-snes9x configure
+	./retropie_packages.sh lr-vba-next install
+	./retropie_packages.sh lr-vba-next configure
+	mkdir -p debian/retropie-core/opt
+	mv /opt/retropie debian/retropie-core/opt/
+
+override_dh_usrlocal:
+
+override_dh_auto_test:
+
+override_dh_auto_configure:
