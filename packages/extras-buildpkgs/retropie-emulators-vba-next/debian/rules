@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE = 1
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	./retropie_packages.sh lr-vba-next depends
+	./retropie_packages.sh lr-vba-next sources
+	./retropie_packages.sh lr-vba-next build
+
+override_dh_builddeb:
+	dh_builddeb -- -Zgzip -z9
+
+override_dh_install:
+	./retropie_packages.sh lr-vba-next install
+	./retropie_packages.sh lr-vba-next configure
+	mkdir -p debian/retropie-core/opt
+	mv /opt/retropie debian/retropie-core/opt/
+
+override_dh_usrlocal:
+
+override_dh_auto_test:
+
+override_dh_auto_configure:
