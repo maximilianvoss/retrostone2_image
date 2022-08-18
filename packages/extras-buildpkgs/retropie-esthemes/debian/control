@@ -1,0 +1,14 @@
+Source: retropie-esthemes
+Section: x11
+Priority: optional
+Maintainer: Maximilian Voss <maximilian@voss.rocks>
+Build-Depends:
+ debhelper (>=10),
+ feh
+Standards-Version: 4.0.0
+Homepage: https://retropie.org.uk/
+
+Package: retropie-esthemes
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: The retropie
