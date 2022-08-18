@@ -2,6 +2,15 @@
 
 export DH_VERBOSE = 1
 
+INSTALL_BASEDIR=debian/retropie-emulators-beetle-ngp
+
+INSTALL=opt/retropie/configs/all/retroarch/cores/mednafen_ngp_libretro.info \
+opt/retropie/configs/all/retroarch/shaders/handheld/console-border/ngpc-*.glslp \
+opt/retropie/configs/all/retroarch/shaders/handheld/console-border/resources/ngpc-border-square-4x.png \
+opt/retropie/configs/ngp/* \
+opt/retropie/configs/ngpc/* \
+opt/retropie/libretrocores/lr-beetle-ngp
+
 %:
 	dh $@
 
@@ -16,17 +25,7 @@ override_dh_builddeb:
 override_dh_install:
 	./retropie_packages.sh lr-beetle-ngp install
 	./retropie_packages.sh lr-beetle-ngp configure
-	mkdir -p debian/retropie-emulators-beetle-ngp/opt/retropie/configs/all/retroarch/cores/
-	mv /opt/retropie/configs/all/retroarch/cores/mednafen_ngp_libretro.info debian/retropie-emulators-beetle-ngp/opt/retropie/configs/all/retroarch/cores/
-	mkdir -p debian/retropie-emulators-beetle-ngp/opt/retropie/configs/all/retroarch/shaders/handheld/console-border/
-	mv /opt/retropie/configs/all/retroarch/shaders/handheld/console-border/ngpc-*.glslp debian/retropie-emulators-beetle-ngp/opt/retropie/configs/all/retroarch/shaders/handheld/console-border/
-	mkdir -p debian/retropie-emulators-beetle-ngp/opt/retropie/configs/all/retroarch/shaders/handheld/console-border/resources/
-	mv /opt/retropie/configs/all/retroarch/shaders/handheld/console-border/resources/ngpc-border-square-4x.png debian/retropie-emulators-beetle-ngp/opt/retropie/configs/all/retroarch/shaders/handheld/console-border/resources/
-	mkdir -p debian/retropie-emulators-beetle-ngp/opt/retropie/configs
-	mv /opt/retropie/configs/ngp debian/retropie-emulators-beetle-ngp/opt/retropie/configs
-	mv /opt/retropie/configs/ngpc debian/retropie-emulators-beetle-ngp/opt/retropie/configs
-	mkdir -p debian/retropie-emulators-beetle-ngp/opt/retropie/libretrocores/
-	mv /opt/retropie/libretrocores/lr-beetle-ngp debian/retropie-emulators-beetle-ngp/opt/retropie/libretrocores/
+	copydata
 
 
 override_dh_usrlocal:
@@ -36,3 +35,9 @@ override_dh_auto_test:
 override_dh_auto_configure:
 
 dh_strip_nondeterminism:
+
+copydata:
+	for file in $(INSTALL); do \
+		mkdir -p "$(INSTALL_BASEDIR)/$$(dirname $$file)"; \
+		mv "/$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/"; \
+	done
