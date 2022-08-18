@@ -16,8 +16,8 @@ override_dh_builddeb:
 override_dh_install:
 	./retropie_packages.sh lr-beetle-psx install
 	./retropie_packages.sh lr-beetle-psx configure
-	mkdir -p debian/retropie-core/opt
-	mv /opt/retropie debian/retropie-core/opt/
+	mkdir -p debian/retropie-emulators-beetle-psx/opt
+	mv /opt/retropie debian/retropie-emulators-beetle-psx/opt/
 
 override_dh_usrlocal:
 

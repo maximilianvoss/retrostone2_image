@@ -16,8 +16,8 @@ override_dh_builddeb:
 override_dh_install:
 	./retropie_packages.sh lr-fceumm install
 	./retropie_packages.sh lr-fceumm configure
-	mkdir -p debian/retropie-core/opt
-	mv /opt/retropie debian/retropie-core/opt/
+	mkdir -p debian/retropie-emulators-fceumm/opt
+	mv /opt/retropie debian/retropie-emulators-fceumm/opt/
 
 override_dh_usrlocal:
 
