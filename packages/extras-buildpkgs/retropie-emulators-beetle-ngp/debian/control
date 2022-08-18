@@ -49,7 +49,7 @@ Build-Depends:
 Standards-Version: 4.0.0
 Homepage: https://retropie.org.uk/
 
-Package: retropie-emulators-beetle-ngb
+Package: retropie-emulators-beetle-ngp
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: The retropie
