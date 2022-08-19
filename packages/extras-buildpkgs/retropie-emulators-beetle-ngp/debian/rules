@@ -17,6 +17,7 @@ opt/retropie/libretrocores/lr-beetle-ngp
 copydata:
 	for file in $(INSTALL); do \
 		mkdir -p $(INSTALL_BASEDIR)/$$(dirname $$file); \
+		ls /$$file; \
 		mv /$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/; \
 	done
 
