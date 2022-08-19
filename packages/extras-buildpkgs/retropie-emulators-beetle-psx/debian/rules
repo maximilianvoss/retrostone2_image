@@ -13,8 +13,8 @@ opt/retropie/libretrocores/lr-beetle-psx/*
 
 copydata:
 	for file in $(INSTALL); do \
-		mkdir -p "$(INSTALL_BASEDIR)/$$(dirname $$file)"; \
-		mv "/$$file" "$(INSTALL_BASEDIR)/$$(dirname $$file)/"; \
+		mkdir -p $(INSTALL_BASEDIR)/$$(dirname $$file); \
+		mv /$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/; \
 	done
 
 override_dh_auto_build:
