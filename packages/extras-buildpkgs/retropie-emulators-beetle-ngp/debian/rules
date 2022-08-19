@@ -4,10 +4,10 @@ export DH_VERBOSE = 1
 
 INSTALL_BASEDIR=debian/retropie-emulators-beetle-ngp
 
-INSTALL=opt/retropie/configs/ngp/* \
-opt/retropie/configs/ngpc/* \
+INSTALL=opt/retropie/libretrocores/lr-beetle-ngp \
 opt/retropie/configs/ngp/* \
-opt/retropie/libretrocores/lr-beetle-ngp
+opt/retropie/configs/ngpc/* \
+opt/retropie/configs/ngp/*
 
 %:
 	dh $@
@@ -36,4 +36,4 @@ override_dh_auto_test:
 
 override_dh_auto_configure:
 
-dh_strip_nondeterminism:
+override_dh_strip_nondeterminism:

@@ -34,4 +34,4 @@ override_dh_auto_test:
 
 override_dh_auto_configure:
 
-dh_strip_nondeterminism:
+override_dh_strip_nondeterminism:
