@@ -4,7 +4,12 @@ export DH_VERBOSE = 1
 
 INSTALL_BASEDIR=debian/retropie-emulators-genesis
 
-INSTALL=opt/retropie/libretrocores/lr-genesis-plus-gx/*
+INSTALL=opt/retropie/libretrocores/lr-genesis-plus-gx/* \
+opt/retropie/configs/gaemgear/* \
+opt/retropie/configs/mastersystem/* \
+opt/retropie/configs/megadrive/* \
+opt/retropie/configs/sg-1000/* \
+opt/retropie/configs/segacd/*
 
 %:
 	dh $@

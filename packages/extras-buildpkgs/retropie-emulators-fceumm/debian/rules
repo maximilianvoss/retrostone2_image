@@ -4,7 +4,9 @@ export DH_VERBOSE = 1
 
 INSTALL_BASEDIR=debian/retropie-emulators-fceumm
 
-INSTALL=opt/retropie/libretrocores/lr-fceumm/*
+INSTALL=opt/retropie/libretrocores/lr-fceumm/* \
+opt/retropie/configs/nes/* \
+opt/retropie/configs/fds/*
 
 %:
 	dh $@

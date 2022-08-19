@@ -4,7 +4,8 @@ export DH_VERBOSE = 1
 
 INSTALL_BASEDIR=debian/retropie-emulators-vba-next
 
-INSTALL=opt/retropie/libretrocores/lr-vba-next/*
+INSTALL=opt/retropie/libretrocores/lr-vba-next/* \
+opt/retropie/configs/gba/*
 
 %:
 	dh $@

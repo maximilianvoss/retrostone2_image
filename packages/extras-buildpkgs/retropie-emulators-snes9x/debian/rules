@@ -4,7 +4,8 @@ export DH_VERBOSE = 1
 
 INSTALL_BASEDIR=debian/retropie-emulators-snes9x
 
-INSTALL=opt/retropie/libretrocores/lr-snes9x/*
+INSTALL=opt/retropie/libretrocores/lr-snes9x/* \
+opt/retropie/configs/snes/*
 
 %:
 	dh $@

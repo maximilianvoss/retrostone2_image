@@ -4,7 +4,9 @@ export DH_VERBOSE = 1
 
 INSTALL_BASEDIR=debian/retropie-emulators-nestopia
 
-INSTALL=opt/retropie/libretrocores/lr-nestopia/*
+INSTALL=opt/retropie/libretrocores/lr-nestopia/* \
+opt/retropie/configs/nes/* \
+opt/retropie/configs/fds/* \
 
 %:
 	dh $@

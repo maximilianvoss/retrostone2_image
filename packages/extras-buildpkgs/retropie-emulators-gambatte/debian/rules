@@ -4,7 +4,9 @@ export DH_VERBOSE = 1
 
 INSTALL_BASEDIR=debian/retropie-emulators-gambatte
 
-INSTALL=opt/retropie/libretrocores/lr-gambatte/*
+INSTALL=opt/retropie/libretrocores/lr-gambatte/* \
+opt/retropie/configs/gb/* \
+opt/retropie/configs/gbc/*
 
 %:
 	dh $@

@@ -6,6 +6,7 @@ INSTALL_BASEDIR=debian/retropie-emulators-beetle-ngp
 
 INSTALL=opt/retropie/configs/ngp/* \
 opt/retropie/configs/ngpc/* \
+opt/retropie/configs/ngp/* \
 opt/retropie/libretrocores/lr-beetle-ngp
 
 %:
