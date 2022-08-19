@@ -2,6 +2,13 @@
 
 export DH_VERBOSE = 1
 
+INSTALL_BASEDIR=debian/retropie-emulators-mgba
+
+INSTALL=opt/retropie/libretrocores/lr-mbga/* \
+        opt/retropie/configs/gb/* \
+        opt/retropie/configs/gba/* \
+        opt/retropie/configs/gbc/*
+
 %:
 	dh $@
 
@@ -16,8 +23,12 @@ override_dh_builddeb:
 override_dh_install:
 	./retropie_packages.sh lr-mgba install
 	./retropie_packages.sh lr-mgba configure
-	mkdir -p debian/retropie-emulators-mgba/opt
-	mv /opt/retropie debian/retropie-emulators-mgba/opt/
+
+	for file in $(INSTALL); do \
+		mkdir -p $(INSTALL_BASEDIR)/$$(dirname $$file); \
+		ls /$$file; \
+		mv /$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/; \
+	done
 
 override_dh_usrlocal:
 
