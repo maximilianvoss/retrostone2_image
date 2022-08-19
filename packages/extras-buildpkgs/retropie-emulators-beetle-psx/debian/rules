@@ -11,13 +11,6 @@ opt/retropie/libretrocores/lr-beetle-psx/*
 %:
 	dh $@
 
-copydata:
-	for file in $(INSTALL); do \
-		mkdir -p $(INSTALL_BASEDIR)/$$(dirname $$file); \
-		ls /$$file; \
-		mv /$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/; \
-	done
-
 override_dh_auto_build:
 	./retropie_packages.sh lr-beetle-psx depends
 	./retropie_packages.sh lr-beetle-psx sources
@@ -29,7 +22,12 @@ override_dh_builddeb:
 override_dh_install: copydata
 	./retropie_packages.sh lr-beetle-psx install
 	./retropie_packages.sh lr-beetle-psx configure
-	copydata
+
+	for file in $(INSTALL); do \
+		mkdir -p $(INSTALL_BASEDIR)/$$(dirname $$file); \
+		ls /$$file; \
+		mv /$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/; \
+	done
 
 override_dh_usrlocal:
 
