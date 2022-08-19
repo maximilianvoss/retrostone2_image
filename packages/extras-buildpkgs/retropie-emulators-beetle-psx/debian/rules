@@ -4,8 +4,7 @@ export DH_VERBOSE = 1
 
 INSTALL_BASEDIR=debian/retropie-emulators-beetle-psx
 
-INSTALL=opt/retropie/configs/all/retroarch/cores/mednafen_psx_*.info \
-opt/retropie/configs/psx/* \
+INSTALL=opt/retropie/configs/psx/* \
 opt/retropie/libretrocores/lr-beetle-psx/*
 
 %:

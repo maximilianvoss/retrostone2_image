@@ -2,6 +2,10 @@
 
 export DH_VERBOSE = 1
 
+INSTALL_BASEDIR=debian/retropie-emulators-vba-next
+
+INSTALL=opt/retropie/libretrocores/lr-vba-next/*
+
 %:
 	dh $@
 
@@ -16,8 +20,12 @@ override_dh_builddeb:
 override_dh_install:
 	./retropie_packages.sh lr-vba-next install
 	./retropie_packages.sh lr-vba-next configure
-	mkdir -p debian/retropie-emulators-vba-next/opt
-	mv /opt/retropie debian/retropie-emulators-vba-next/opt/
+
+	for file in $(INSTALL); do \
+		mkdir -p $(INSTALL_BASEDIR)/$$(dirname $$file); \
+		ls /$$file; \
+		mv /$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/; \
+	done
 
 override_dh_usrlocal:
 

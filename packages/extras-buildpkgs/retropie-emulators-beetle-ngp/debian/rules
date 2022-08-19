@@ -4,10 +4,7 @@ export DH_VERBOSE = 1
 
 INSTALL_BASEDIR=debian/retropie-emulators-beetle-ngp
 
-INSTALL=opt/retropie/configs/all/retroarch/cores/mednafen_ngp_libretro.info \
-opt/retropie/configs/all/retroarch/shaders/handheld/console-border/ngpc-*.glslp \
-opt/retropie/configs/all/retroarch/shaders/handheld/console-border/resources/ngpc-border-square-4x.png \
-opt/retropie/configs/ngp/* \
+INSTALL=opt/retropie/configs/ngp/* \
 opt/retropie/configs/ngpc/* \
 opt/retropie/libretrocores/lr-beetle-ngp
 

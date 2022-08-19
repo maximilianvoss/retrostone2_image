@@ -2,6 +2,10 @@
 
 export DH_VERBOSE = 1
 
+INSTALL_BASEDIR=debian/retropie-emulators-gambatte
+
+INSTALL=opt/retropie/libretrocores/lr-gambatte/*
+
 %:
 	dh $@
 
@@ -16,8 +20,12 @@ override_dh_builddeb:
 override_dh_install:
 	./retropie_packages.sh lr-gambatte install
 	./retropie_packages.sh lr-gambatte configure
-	mkdir -p debian/retropie-emulators-gambatte/opt
-	mv /opt/retropie debian/retropie-emulators-gambatte/opt/
+
+	for file in $(INSTALL); do \
+		mkdir -p $(INSTALL_BASEDIR)/$$(dirname $$file); \
+		ls /$$file; \
+		mv /$$file $(INSTALL_BASEDIR)/$$(dirname $$file)/; \
+	done
 
 override_dh_usrlocal:
 
