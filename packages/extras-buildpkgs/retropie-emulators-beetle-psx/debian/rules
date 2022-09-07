@@ -19,7 +19,7 @@ override_dh_auto_build:
 override_dh_builddeb:
 	dh_builddeb -- -Zgzip -z9
 
-override_dh_install: copydata
+override_dh_install:
 	./retropie_packages.sh lr-beetle-psx install
 	./retropie_packages.sh lr-beetle-psx configure
 
