@@ -6,7 +6,7 @@ export DH_VERBOSE = 1
 	dh $@
 
 override_dh_auto_build:
-	./retropie_packages.sh setup basic_install
+	./retropie_packages.sh setup basic_install || true
 
 override_dh_builddeb:
 	dh_builddeb -- -Zgzip -z9
