@@ -18,41 +18,11 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
-  #InstallEmulationStation
-  #InstallRetroPie
-	case $RELEASE in
-		stretch)
-			# your code here
-			# InstallOpenMediaVault # uncomment to get an OMV 4 image
-			;;
-		buster)
-			# your code here
-			;;
-		bullseye)
-			# your code here
-			;;
-		bionic)
-			# your code here
-			;;
-		focal)
-			# your code here
-			;;
-	esac
-} # Main
+  PatchEmulationStationConfig
+}
 
-InstallEmulationStation() {
-  local tmp_dir libsdl2_dir
-  tmp_dir=$(mktemp -d)
-  chmod 700 ${tmp_dir}
-
-  git clone --recursive https://github.com/RetroPie/EmulationStation.git ${tmp_dir}
-  pushd ${tmp_dir}
-  mkdir build
-  cd build
-  cmake ..
-  make -j2
-  make install
-  popd
+PatchEmulationStationConfig() {
+  sed -i 's/\/root/~/g' /etc/emulationstation/es_systems.cfg
 }
 
 Main "$@"
