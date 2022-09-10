@@ -167,3 +167,15 @@ xscreensaver
 xserver-xorg
 xserver-xorg-video-fbdev
 xwallpaper
+python3-pip
+python3-setuptools
+python3-wheel
+python3-dev
+libexpat1-dev
+libjs-jquery
+libjs-sphinxdoc
+libjs-underscore
+libpython3-dev
+libpython3.10-dev
+python3.10-dev
+python3-uinput
