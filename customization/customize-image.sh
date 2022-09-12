@@ -20,6 +20,7 @@ BUILD_DESKTOP=$4
 Main() {
   if 	[[ $BOARD = retrostone2 ]]; then
     PatchEmulationStationConfig
+    EmulationstationBin
     InstallController
     RetropieSkeleton
   fi
@@ -33,18 +34,25 @@ InstallController() {
   mkdir -p /usr/local/lib/python2.7/
   tar -xvzf /tmp/overlay/retrostone2-python-packages.tar.gz -C /usr/local/lib/python2.7/
 
-  cp /tmp/overlay/retrostone2-controller.cfg /opt/retropie/configs/all/retroarch/autoconfig/
-  cp /tmp/overlay/retrostone2-retroarch.cfg /opt/retropie/configs/all/retroarch.cfg
+  #cp /tmp/overlay/retrostone2-controller.cfg /opt/retropie/configs/all/retroarch/autoconfig/
+  #cp /tmp/overlay/retrostone2-retroarch.cfg /opt/retropie/configs/all/retroarch.cfg
 
   cp /tmp/overlay/retrostone2-gpio-controller.py /usr/bin/
   chmod 755 /usr/bin/retrostone2-gpio-controller.py
 
+  echo "uinput" | cat >>/etc/modules
   cp /tmp/overlay/retrostone2-controller.service /etc/systemd/system/
   chmod 644 /etc/systemd/system/retrostone2-controller.service
 }
 
 RetropieSkeleton() {
   cp -R /root/RetroPie /etc/skel
+  mkdir /etc/skel/.emulationstation
+  cp /tmp/overlay/retrostone2-es_input.cfg /etc/skel/.emulationstation/es_input.cfg
+}
+
+EmulationstationBin() {
+  ln -s /opt/retropie/supplementary/emulationstation/emulationstation /usr/bin/emulationstation
 }
 
 Main "$@"
