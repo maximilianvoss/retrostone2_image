@@ -18,7 +18,7 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
-  if [ $BOARD == "Retrostone2" ]; then
+  if 	[[ $BOARD = retrostone2 ]]; then
     PatchEmulationStationConfig
     InstallController
     RetropieSkeleton
