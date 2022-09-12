@@ -18,11 +18,33 @@ BOARD=$3
 BUILD_DESKTOP=$4
 
 Main() {
-  PatchEmulationStationConfig
+  if [ $BOARD == "Retrostone2" ]; then
+    PatchEmulationStationConfig
+    InstallController
+    RetropieSkeleton
+  fi
 }
 
 PatchEmulationStationConfig() {
   sed -i 's/\/root/~/g' /etc/emulationstation/es_systems.cfg
+}
+
+InstallController() {
+  mkdir -p /usr/local/lib/python2.7/
+  tar -xvzf /tmp/overlay/retrostone2-python-packages.tar.gz -C /usr/local/lib/python2.7/
+
+  cp /tmp/overlay/retrostone2-controller.cfg /opt/retropie/configs/all/retroarch/autoconfig/
+  cp /tmp/overlay/retrostone2-retroarch.cfg /opt/retropie/configs/all/retroarch.cfg
+
+  cp /tmp/overlay/retrostone2-gpio-controller.py /usr/bin/
+  chmod 755 /usr/bin/retrostone2-gpio-controller.py
+
+  cp /tmp/overlay/retrostone2-controller.service /etc/systemd/system/
+  chmod 644 /etc/systemd/system/retrostone2-controller.service
+}
+
+RetropieSkeleton() {
+  cp -R /root/RetroPie /etc/skel
 }
 
 Main "$@"

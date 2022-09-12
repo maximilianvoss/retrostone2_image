@@ -1,0 +1,10 @@
+[Unit]
+Description=Retrostone2 Controller
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python2 /usr/bin/retrostone2-gpio-controller.py  > /var/log/retrostone2-controller.log
+
+[Install]
+WantedBy=multi-user.target

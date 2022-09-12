@@ -179,3 +179,5 @@ libpython3-dev
 libpython3.10-dev
 python3.10-dev
 python3-uinput
+libpython2-dev
+python2-dev

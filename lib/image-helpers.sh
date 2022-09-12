@@ -172,6 +172,10 @@ customize_image()
     cp customization/customize-image.sh $USERPATCHES_PATH/customize-image.sh
   fi
 
+  if [[ -e customization/overlay ]]; then
+    cp -R customization/overlay/* $USERPATCHES_PATH/overlay/
+  fi
+
 	# for users that need to prepare files at host
 	[[ -f $USERPATCHES_PATH/customize-image-host.sh ]] && source "$USERPATCHES_PATH"/customize-image-host.sh
 
