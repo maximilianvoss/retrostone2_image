@@ -31,7 +31,7 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
  KERNEL_CONFIGURE=no \
  RELEASE=jammy \
  BUILD_DESKTOP=yes \
- DESKTOP_ENVIRONMENT=emulationstation \
+ DESKTOP_ENVIRONMENT=retrostone2 \
  DISABLE_IPV6=true \
  MAINLINE_MIRROR=google \
  CLEAN_LEVEL=images \
