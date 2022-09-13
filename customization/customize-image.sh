@@ -40,7 +40,6 @@ InstallController() {
   cp /tmp/overlay/retrostone2-gpio-controller.py /usr/bin/
   chmod 755 /usr/bin/retrostone2-gpio-controller.py
 
-  echo "uinput" | cat >>/etc/modules
   cp /tmp/overlay/retrostone2-controller.service /etc/systemd/system/
   chmod 644 /etc/systemd/system/retrostone2-controller.service
 }

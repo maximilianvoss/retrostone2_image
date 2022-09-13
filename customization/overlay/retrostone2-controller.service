@@ -4,6 +4,7 @@ After=multi-user.target
 
 [Service]
 Type=idle
+Restart=on-failure
 ExecStart=/usr/bin/python2 /usr/bin/retrostone2-gpio-controller.py  > /var/log/retrostone2-controller.log
 
 [Install]
