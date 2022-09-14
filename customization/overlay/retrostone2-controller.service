@@ -1,10 +1,9 @@
 [Unit]
 Description=Retrostone2 Controller
-After=multi-user.target
+After=network.target
 
 [Service]
-Type=idle
-Restart=on-failure
+Restart=always
 ExecStart=/usr/bin/python2 /usr/bin/retrostone2-gpio-controller.py  > /var/log/retrostone2-controller.log
 
 [Install]

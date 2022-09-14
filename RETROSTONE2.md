@@ -43,6 +43,7 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
  RELEASE=jammy \
  ARCH=armhf \
  BETA=no \
+ EXTRAWIFI=no \
  CARD_DEVICE="/dev/sdb"
 ```
 

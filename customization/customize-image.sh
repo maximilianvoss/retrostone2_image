@@ -34,20 +34,24 @@ InstallController() {
   mkdir -p /usr/local/lib/python2.7/
   tar -xvzf /tmp/overlay/retrostone2-python-packages.tar.gz -C /usr/local/lib/python2.7/
 
-  #cp /tmp/overlay/retrostone2-controller.cfg /opt/retropie/configs/all/retroarch/autoconfig/
-  #cp /tmp/overlay/retrostone2-retroarch.cfg /opt/retropie/configs/all/retroarch.cfg
+  cp /tmp/overlay/retrostone2-controller.cfg /opt/retropie/configs/all/retroarch/autoconfig/
+  cp /tmp/overlay/retrostone2-retroarch.cfg /opt/retropie/configs/all/retroarch.cfg
 
   cp /tmp/overlay/retrostone2-gpio-controller.py /usr/bin/
   chmod 755 /usr/bin/retrostone2-gpio-controller.py
 
   cp /tmp/overlay/retrostone2-controller.service /etc/systemd/system/
   chmod 644 /etc/systemd/system/retrostone2-controller.service
+  ln -s /etc/systemd/system/retrostone2-controller.service /etc/systemd/system/multi-user.target.wants/retrostone2-controller.service
 }
 
 RetropieSkeleton() {
   cp -R /root/RetroPie /etc/skel
   mkdir /etc/skel/.emulationstation
   cp /tmp/overlay/retrostone2-es_input.cfg /etc/skel/.emulationstation/es_input.cfg
+  mkdir /etc/skel/.config
+  ln -s /opt/retropie/configs/all/retroarch /etc/skel/.config/retroarch
+  ln -s /opt/retropie/configs/c64 /etc/skel/.config/vice
 }
 
 EmulationstationBin() {
