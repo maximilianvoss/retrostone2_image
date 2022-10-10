@@ -86,7 +86,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
 
       - name: Updating releases
-        uses: ncipollo/release-action@v1.10.0
+        uses: ncipollo/release-action@v1.11.1
         with:
           artifacts: "rootfscache.version"
           repo: "mirror"
@@ -367,7 +367,7 @@ jobs:
           echo "${{ needs.release-start.outputs.rootfscache_version }}" | sudo tee rootfscache.version
 
       - name: Upload
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.11.1
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
           repo: "mirror"

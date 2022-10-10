@@ -154,7 +154,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: ncipollo/release-action@v1
+      - uses: ncipollo/release-action@v1.11.1
         if: ${{ github.repository_owner == 'Armbian' && github.event.inputs.choice != 'stable'  && github.event.inputs.choice != 'rc' }}
         with:
           artifacts: "LICENSE"
@@ -377,7 +377,7 @@ jobs:
           )
           cat README.tmp
         
-      - uses: ncipollo/release-action@v1
+      - uses: ncipollo/release-action@v1.11.1
         with:
           tag: "${{ env.VERSION }}"
           bodyFile: "README.tmp"
