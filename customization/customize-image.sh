@@ -20,6 +20,7 @@ BUILD_DESKTOP=$4
 Main() {
   if 	[[ $BOARD = retrostone2 ]]; then
     PatchEmulationStationConfig
+    EmulationstationSetup
     EmulationstationBin
     InstallController
     RetropieSkeleton
@@ -43,6 +44,25 @@ InstallController() {
   cp /tmp/overlay/retrostone2-controller.service /etc/systemd/system/
   chmod 644 /etc/systemd/system/retrostone2-controller.service
   ln -s /etc/systemd/system/retrostone2-controller.service /etc/systemd/system/multi-user.target.wants/retrostone2-controller.service
+}
+
+EmulationstationSetup() {
+    #cp /tmp/overlay/retrostone2-emulationstation.service /etc/systemd/system/
+    #chmod 644 /etc/systemd/system/retrostone2-emulationstation.service
+    #ln -s /etc/systemd/system/retrostone2-emulationstation.service /etc/systemd/system/graphical.target.wants/retrostone2-emulationstation.service
+
+    update-rc.d -f lightdm remove
+    systemctl disable lightdm
+
+    cp /tmp/overlay/retrostone2-profile.sh /etc/profile.d/retrostone2-profile.sh
+    chmod 755 /etc/profile.d/retrostone2-profile.sh
+    cp /tmp/overlay/retrostone2-autostart.sh /usr/local/bin/retrostone2-autostart.sh
+    chmod 755 /usr/local/bin/retrostone2-autostart.sh
+
+    #pi@RetrOrangePi:/etc/systemd/system$ cat getty@tty1.service.d/autologin.conf
+    #[Service]
+    #ExecStart=
+    #ExecStart=-/sbin/agetty --autologin pi %I
 }
 
 RetropieSkeleton() {

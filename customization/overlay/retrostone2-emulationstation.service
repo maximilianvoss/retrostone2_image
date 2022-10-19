@@ -1,0 +1,12 @@
+[Unit]
+Description=Emulationstation
+After=network.target
+
+[Service]
+Restart=always
+User=max
+Group=max
+ExecStart=/usr/bin/emulationstation
+
+[Install]
+WantedBy=multi-user.target
