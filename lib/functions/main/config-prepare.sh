@@ -153,10 +153,10 @@ POST_DETERMINE_CTHREADS
 
 	if [[ $BETA == yes ]]; then
 		IMAGE_TYPE=nightly
-	elif [[ $BETA != "yes" ]]; then
-		IMAGE_TYPE=stable
-	else
+	elif [[ $BETA == no ]]; then
 		IMAGE_TYPE=user-built
+	else
+	  IMAGE_TYPE=stable
 	fi
 
 	BOOTSOURCEDIR="${BOOTDIR}/$(branch2dir "${BOOTBRANCH}")"
