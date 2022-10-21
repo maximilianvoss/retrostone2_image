@@ -151,7 +151,7 @@ function prepare_and_config_main_build_single() {
 Called early, before any compilation work starts.
 POST_DETERMINE_CTHREADS
 
-  if [[ ! -z $IMAGE_TYPE ]]; then
+  if [[ -z $IMAGE_TYPE ]]; then
     if [[ $BETA == yes ]]; then
       IMAGE_TYPE=nightly
     else
