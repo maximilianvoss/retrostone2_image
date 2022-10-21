@@ -29,7 +29,7 @@ Main() {
 }
 
 PatchArmbianFirstLogin() {
-  patch /usr/lib/armbian/armbian-firstrun </tmp/overlay/retrostone2_armbian-firstlogin.patch
+  patch /usr/lib/armbian/armbian-firstlogin </tmp/overlay/retrostone2_armbian-firstlogin.patch
 }
 
 PatchEmulationStationConfig() {
