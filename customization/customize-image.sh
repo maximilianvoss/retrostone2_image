@@ -47,10 +47,6 @@ InstallController() {
 }
 
 EmulationstationSetup() {
-    #cp /tmp/overlay/retrostone2-emulationstation.service /etc/systemd/system/
-    #chmod 644 /etc/systemd/system/retrostone2-emulationstation.service
-    #ln -s /etc/systemd/system/retrostone2-emulationstation.service /etc/systemd/system/graphical.target.wants/retrostone2-emulationstation.service
-
     update-rc.d -f lightdm remove
     systemctl disable lightdm
 
@@ -58,11 +54,6 @@ EmulationstationSetup() {
     chmod 755 /etc/profile.d/retrostone2-profile.sh
     cp /tmp/overlay/retrostone2-autostart.sh /usr/local/bin/retrostone2-autostart.sh
     chmod 755 /usr/local/bin/retrostone2-autostart.sh
-
-    #pi@RetrOrangePi:/etc/systemd/system$ cat getty@tty1.service.d/autologin.conf
-    #[Service]
-    #ExecStart=
-    #ExecStart=-/sbin/agetty --autologin pi %I
 }
 
 RetropieSkeleton() {
