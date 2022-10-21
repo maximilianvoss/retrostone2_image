@@ -24,7 +24,12 @@ Main() {
     EmulationstationBin
     InstallController
     RetropieSkeleton
+    PatchArmbianFirstLogin
   fi
+}
+
+PatchArmbianFirstLogin() {
+  patch /usr/lib/armbian/armbian-firstrun </tmp/overlay/retrostone2_armbian-firstlogin.patch
 }
 
 PatchEmulationStationConfig() {
