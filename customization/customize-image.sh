@@ -52,8 +52,7 @@ InstallController() {
 }
 
 EmulationstationSetup() {
-    update-rc.d -f lightdm remove
-    systemctl disable lightdm
+    rm /etc/systemd/system/display-manager.service
 
     cp /tmp/overlay/retrostone2-profile.sh /etc/profile.d/retrostone2-profile.sh
     chmod 755 /etc/profile.d/retrostone2-profile.sh
