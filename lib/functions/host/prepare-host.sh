@@ -239,7 +239,7 @@ prepare_host() {
 		fi
 	fi
 
-	if [[ -f customzation/customize-image.sh ]]; then
+	if [[ -f customization/customize-image.sh ]]; then
 	  cp customization/customize-image.sh ${USERPATCHES_PATH}/customize-image.sh
 	fi
 
