@@ -239,6 +239,10 @@ prepare_host() {
 		fi
 	fi
 
+	if [[ -f customzation/customize-image.sh ]]; then
+	  cp customization/customize-image.sh ${USERPATCHES_PATH}/customize-image.sh
+	fi
+
 	[[ ! -f "${USERPATCHES_PATH}"/customize-image.sh ]] && cp "${SRC}"/config/templates/customize-image.sh.template "${USERPATCHES_PATH}"/customize-image.sh
 
 	if [[ ! -f "${USERPATCHES_PATH}"/README ]]; then
