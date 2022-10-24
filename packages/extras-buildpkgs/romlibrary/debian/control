@@ -1,0 +1,12 @@
+Source: romlibrary
+Section: x11
+Priority: optional
+Maintainer: Maximilian Voss <maximilian@voss.rocks>
+Build-Depends: debhelper (>=10), cmake, csafestring, casserts, clogger, chttp, acll, lexbor, libcurl4-openssl-dev, libsqlite3-dev, libssl-dev
+Standards-Version: 4.0.0
+Homepage: https://github.com/maximilianvoss/romlibrary
+
+Package: romlibrary
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: romlibrary to support the romfetcher

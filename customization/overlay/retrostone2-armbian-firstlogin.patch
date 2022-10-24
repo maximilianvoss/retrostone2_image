@@ -1,0 +1,93 @@
+--- usr/lib/armbian/armbian-firstlogin
++++ usr/lib/armbian/armbian-firstlogin
+@@ -143,64 +143,6 @@
+ 	CCODE=$(echo ${RES} | cut -d"," -f3 | xargs)
+ 	echo -e "Detected timezone: \x1B[92m$TZDATA\x1B[0m"
+ 	echo ""
+-	unset response
+-	while [[ ! "${response}" =~ ^(Y|y|N|n)$ ]]; do
+-		read -n1 -s -r -p "Set user language based on your location? [Y/n] " response
+-		echo ""
+-	done
+-	# change it only if we have a match and if we agree
+-	if [[ "${response}" =~ ^(N|n)$ ]]; then
+-		unset CCODE TZDATA
+-	fi
+-
+-	LOCALES=$(grep territory /usr/share/i18n/locales/* | grep _"$CCODE" | cut -d ":" -f 1 | cut -d "/" -f 6 |  \
+-	xargs -I{} grep {} /usr/share/i18n/SUPPORTED | grep "\.UTF-8" | cut -d " " -f 1)
+-	# UTF8 is not present everywhere so check again in case it returns empty value
+-	[[ -z "$LOCALES" ]] && LOCALES=$(grep territory /usr/share/i18n/locales/* | grep _"$CCODE" | cut -d ":" -f 1 | cut -d "/" -f 6 |  \
+-	xargs -I{} grep {} /usr/share/i18n/SUPPORTED | cut -d " " -f 1)
+-
+-	options=(`echo ${LOCALES}`);
+-
+-	# when having more locales, prompt for choosing one
+-	if [[ "${#options[@]}" -gt 1 ]]; then
+-
+-		options+=("Skip generating locales")
+-		echo -e "\nAt your location, more locales are possible:\n"
+-		PS3='Please enter your choice:'
+-		select opt in "${options[@]}"
+-			do
+-				if [[ " ${options[@]} " =~ " ${opt} " ]]; then
+-					LOCALES=${opt}
+-					break
+-				fi
+-			done
+-		fi
+-
+-	if [[ "${LOCALES}" != *Skip* ]]; then
+-
+-		# if TZDATA was not detected, we need to select one
+-		if [[ -z ${TZDATA} ]]; then
+-			TZDATA=$(tzselect | tail -1)
+-		fi
+-
+-		timedatectl set-timezone "${TZDATA}"
+-		dpkg-reconfigure --frontend=noninteractive tzdata > /dev/null 2>&1
+-
+-		# generate locales
+-		echo ""
+-		sed -i 's/# '"${LOCALES}"'/'"${LOCALES}"'/' /etc/locale.gen
+-		echo -e "Generating locales: \x1B[92m${LOCALES}\x1B[0m"
+-		locale-gen "${LOCALES}" > /dev/null 2>&1
+-
+-		# setting detected locales only for user
+-		echo "export LC_ALL=$LOCALES" >> /home/"$RealUserName"/.bashrc
+-		echo "export LANG=$LOCALES" >> /home/"$RealUserName"/.bashrc
+-		echo "export LANGUAGE=$LOCALES" >> /home/"$RealUserName"/.bashrc
+-		echo "export LC_ALL=$LOCALES" >> /home/"$RealUserName"/.xsessionrc
+-		echo "export LANG=$LOCALES" >> /home/"$RealUserName"/.xsessionrc
+-		echo "export LANGUAGE=$LOCALES" >> /home/"$RealUserName"/.xsessionrc
+-
+-	fi
+ }
+
+
+@@ -285,6 +227,15 @@
+ 					touch /home/"${RealUserName}"/.activate_psd
+ 					chown "$RealUserName":"$RealUserName" /home/"${RealUserName}"/.activate_psd
+ 				fi
++
++				# set up auto login for TTY1
++				mkdir -p /etc/systemd/system/getty@tty1.service.d
++				cat <<- EOF > /etc/systemd/system/getty@tty1.service.d/autologin.conf
++[Service]
++ExecStart=
++ExecStart=-/sbin/agetty --autologin $username %I
++EOF
++
+ 				break
+ 			else
+ 				echo -e "Rejected - \e[0;31m$okay.\x1B[0m Try again [${REPEATS}]."
+
+@@ -281,7 +281,7 @@
+ 				# set up profile sync daemon on desktop systems
+ 				command -v psd >/dev/null 2>&1
+ 				if [ $? -eq 0 ]; then
+-					echo -e "${RealUserName} ALL=(ALL) NOPASSWD: /usr/bin/psd-overlay-helper" >> /etc/sudoers
++					echo -e "${RealUserName} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+ 					touch /home/"${RealUserName}"/.activate_psd
+ 					chown "$RealUserName":"$RealUserName" /home/"${RealUserName}"/.activate_psd
+ 				fi

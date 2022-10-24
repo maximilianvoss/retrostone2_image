@@ -239,6 +239,16 @@ prepare_host() {
 		fi
 	fi
 
+	if [[ -f customization/customize-image.sh ]]; then
+	  cp customization/customize-image.sh ${USERPATCHES_PATH}/customize-image.sh
+	fi
+
+	if [[ -d customization/overlay ]]; then
+	  rsync -avh customization/overlay/ ${USERPATCHES_PATH}/overlay/ --delete
+	fi
+
+	Overlay is missing ....
+
 	[[ ! -f "${USERPATCHES_PATH}"/customize-image.sh ]] && cp "${SRC}"/config/templates/customize-image.sh.template "${USERPATCHES_PATH}"/customize-image.sh
 
 	if [[ ! -f "${USERPATCHES_PATH}"/README ]]; then

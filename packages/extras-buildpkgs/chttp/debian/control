@@ -1,0 +1,12 @@
+Source: chttp
+Section: x11
+Priority: optional
+Maintainer: Maximilian Voss <maximilian@voss.rocks>
+Build-Depends: debhelper (>=10), cmake, libcurl4-openssl-dev, libssl3, libssl-dev, openssl, clogger
+Standards-Version: 4.0.0
+Homepage: https://github.com/maximilianvoss/chttp
+
+Package: chttp
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Library for HTTP calls in C

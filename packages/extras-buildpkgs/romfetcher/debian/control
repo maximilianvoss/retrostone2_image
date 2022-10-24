@@ -1,0 +1,12 @@
+Source: romfetcher
+Section: x11
+Priority: optional
+Maintainer: Maximilian Voss <maximilian@voss.rocks>
+Build-Depends: debhelper (>=10), cmake, csafestring, casserts, clogger, chttp, acll, lexbor, libcurl4-openssl-dev, libsqlite3-dev, libssl-dev, romlibrary, libsdl2-ttf-dev, libsdl2-image-dev, libsdl2-dev
+Standards-Version: 4.0.0
+Homepage: https://github.com/maximilianvoss/romfetcher
+
+Package: romfetcher
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: A tool to download ROMss

@@ -1,0 +1,12 @@
+Source: json2map
+Section: x11
+Priority: optional
+Maintainer: Maximilian Voss <maximilian@voss.rocks>
+Build-Depends: debhelper (>=10), cmake, csafestring
+Standards-Version: 4.0.0
+Homepage: https://github.com/maximilianvoss/json2map
+
+Package: json2map
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: C library to convert JSONs to a map

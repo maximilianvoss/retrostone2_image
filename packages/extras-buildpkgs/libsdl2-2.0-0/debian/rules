@@ -1,0 +1,108 @@
+#!/usr/bin/make -f
+
+DH_VERBOSE = 1
+export DEB_BUILD_MAINT_OPTIONS = hardening=+bindnow
+
+include /usr/share/dpkg/architecture.mk
+include /usr/share/dpkg/pkg-info.mk
+
+confflags = --disable-rpath \
+            --disable-nas --disable-esd --disable-arts \
+            --disable-alsa-shared --disable-pulseaudio-shared \
+            --enable-ibus \
+            --disable-x11-shared --disable-video-directfb \
+            --enable-video-opengles \
+            --disable-video-opengles1 \
+            --disable-wayland-shared \
+            --enable-video-kmsdrm --disable-kmsdrm-shared \
+            --enable-hidapi --enable-hidapi-joystick
+
+# disable autoheader (invoked automatically by autoreconf), necessary in order
+# to use debhelper compat level v10 without overriding dh-autoreconf calls
+export AUTOHEADER := /bin/true
+
+
+ifeq ($(DEB_HOST_ARCH_CPU),powerpc)
+  confflags += --disable-altivec
+endif
+
+ifeq ($(DEB_HOST_ARCH_CPU),ppc64el)
+  confflags += --disable-altivec
+endif
+
+ifeq ($(DEB_HOST_ARCH_OS),linux)
+  confflags += --enable-libdecor
+  confflags += --enable-pipewire
+  confflags += --enable-video-vulkan
+  confflags += --enable-video-wayland
+else
+  confflags += --disable-libdecor
+  confflags += --disable-pipewire
+  confflags += --disable-video-vulkan
+  confflags += --disable-video-wayland
+endif
+
+# don't use libunwind even if it happens to be installed
+confflags += ac_cv_header_libunwind_h=no
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(confflags)
+
+override_dh_builddeb:
+	dh_builddeb -- -Zgzip -z9
+
+override_dh_auto_build-indep:
+	GZIP="-9n" tar \
+		--exclude=autom4te.cache \
+		--owner=0 --group=0 --mode=go=rX,u+rw,a-s \
+		--clamp-mtime --mtime="@$(SOURCE_DATE_EPOCH)" \
+		--sort=name \
+		-czf debian/examples.tar.gz test
+	sed -e 's/FULL_PATH_NAMES *=.*/FULL_PATH_NAMES = NO/' < docs/doxyfile > debian/Doxyfile
+	cd docs && doxygen ../debian/Doxyfile
+	# useless files
+	find docs/output -name "*.md5" -delete
+	find docs/output -type d -empty -delete
+
+# Force examples to be installed in libsdl2-doc, it does not happen with compat
+# level v11 despite having the file debian/libsdl2-doc.examples (it gets
+# installed as part of libsdl2-dev instead)
+override_dh_installexamples-indep:
+	dh_installexamples -i --doc-main-package=libsdl2-doc
+
+override_dh_auto_build-arch: build-library
+override_dh_auto_build-indep: build-library
+build-library:
+	dh_auto_build -- V=1
+build-tests:
+	mkdir -p $(CURDIR)/debian/build-tests
+	touch $(CURDIR)/debian/biuld-tests/sampletest
+
+override_dh_auto_clean-indep:
+	dh_auto_clean
+	rm -f debian/Doxyfile
+	rm -f debian/examples.tar.gz
+	rm -rf docs/output
+
+override_dh_auto_install-arch:
+	dh_auto_install -- V=1
+
+override_dh_install:
+	mkdir -p debian/tmp/usr/include/$(DEB_HOST_MULTIARCH)/SDL2
+	mv debian/tmp/usr/include/SDL2/SDL_config.h debian/tmp/usr/include/$(DEB_HOST_MULTIARCH)/SDL2/_real_SDL_config.h
+	ln -s ../../SDL2/SDL_platform.h debian/tmp/usr/include/$(DEB_HOST_MULTIARCH)/SDL2/
+	ln -s ../../SDL2/begin_code.h debian/tmp/usr/include/$(DEB_HOST_MULTIARCH)/SDL2/
+	ln -s ../../SDL2/close_code.h debian/tmp/usr/include/$(DEB_HOST_MULTIARCH)/SDL2/
+	dh_install
+
+override_dh_link:
+	# to address lintian warning
+	# W: libsdl2-2.0-0: dev-pkg-without-shlib-symlink usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.0.0 usr/lib/x86_64-linux-gnu/libSDL2-2.0.so
+	dh_link -plibsdl2-dev usr/lib/$(DEB_HOST_MULTIARCH)/libSDL2-2.0.so.0 usr/lib/$(DEB_HOST_MULTIARCH)/libSDL2-2.0.so
+	dh_link --remaining-packages
+
+override_dh_installchangelogs:
+	dh_installchangelogs -- WhatsNew.txt

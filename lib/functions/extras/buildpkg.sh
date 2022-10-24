@@ -267,6 +267,20 @@ chroot_build_packages() {
 				local dist_builddeps_name="package_builddeps_${release}"
 				[[ -v $dist_builddeps_name ]] && package_builddeps="${package_builddeps} ${!dist_builddeps_name}"
 
+				# provide extra dependencies
+				mkdir -p "${target_dir}"/root/debs
+
+				if [[ -n $package_extra_builddeps ]]; then
+				  for dependency in $package_extra_builddeps; do
+				      if [[ -z $(find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb") ]]; then
+				        display_alert "Required custom package not found: " "${dependency}" "error"
+				      else
+				          display_alert "Required custom package found: " "${dependency}" "info"
+				          find "${DEB_STORAGE}/extra/" -name "${dependency}_*$REVISION*_$arch.deb" -exec cp {} "${target_dir}"/root/debs/ \;
+				      fi
+				  done
+				fi
+
 				# create build script
 				LOG_OUTPUT_FILE=/root/build-"${package_name}".log
 				create_build_script
@@ -349,7 +363,7 @@ create_build_script() {
 			package_builddeps="\$(dpkg-checkbuilddeps |& awk -F":" '{print \$NF}')"
 		fi
 		if [[ -n "\${package_builddeps}" ]]; then
-			install_pkg_deb \${package_builddeps}
+		  install_pkg_deb \${package_builddeps} \$(ls /root/debs/*.deb)
 		fi
 
 		# set upstream version
