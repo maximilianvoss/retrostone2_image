@@ -15,7 +15,7 @@ new file mode 100644
 index 0000000..1739982
 --- /dev/null
 +++ b/arch/arm/dts/sun7i-a20-retrostone2.dts
-@@ -0,0 +1,287 @@
+@@ -0,0 +1,291 @@
 +/*
 + * This is based on sun4i-a10-olinuxino-lime.dts
 + *
@@ -279,6 +279,10 @@ index 0000000..1739982
 +};
 +
 +&reg_usb2_vbus {
++	status = "okay";
++};
++
++&codec {
 +	status = "okay";
 +};
 +
