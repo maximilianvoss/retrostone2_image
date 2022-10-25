@@ -334,7 +334,7 @@ new file mode 100644
 index 0000000..4302b2c
 --- /dev/null
 +++ b/configs/A20-Retrostone2_defconfig
-@@ -0,0 +1,46 @@
+@@ -0,0 +1,47 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_SUNXI=y
 +CONFIG_SPL=y
@@ -381,4 +381,5 @@ index 0000000..4302b2c
 +#CONFIG_SYS_NAND_BLOCK_SIZE=0x200
 +#CONFIG_SYS_NAND_PAGE_SIZE=0x1000
 +#CONFIG_SYS_NAND_OOBSIZE=0x0
++CONFIG_SOUND=y
 
