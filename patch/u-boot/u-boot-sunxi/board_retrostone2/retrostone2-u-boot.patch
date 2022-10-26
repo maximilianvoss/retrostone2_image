@@ -334,7 +334,7 @@ new file mode 100644
 index 0000000..4302b2c
 --- /dev/null
 +++ b/configs/A20-Retrostone2_defconfig
-@@ -0,0 +1,48 @@
+@@ -0,0 +1,47 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_SUNXI=y
 +CONFIG_SPL=y
@@ -342,7 +342,6 @@ index 0000000..4302b2c
 +CONFIG_DRAM_CLK=384
 +CONFIG_MMC0_CD_PIN="PH1"
 +CONFIG_I2C1_ENABLE=y
-+CONFIG_I2C0_ENABLE=y
 +CONFIG_SATAPWR="PC3"
 +CONFIG_AHCI=y
 +CONFIG_NR_DRAM_BANKS=1
