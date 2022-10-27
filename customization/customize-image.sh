@@ -39,6 +39,7 @@ PatchArmbianFirstLogin() {
 
 PatchEmulationStationConfig() {
   sed -i 's/\/root/~/g' /etc/emulationstation/es_systems.cfg
+  sed -i 's/sudo ~\/build\/retropie-core/sudo \/opt\/RetroPie-Setup/g' /etc/emulationstation/es_systems.cfg
 }
 
 InstallController() {
