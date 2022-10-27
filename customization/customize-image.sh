@@ -25,7 +25,12 @@ Main() {
     InstallController
     RetropieSkeleton
     PatchArmbianFirstLogin
+    AlsaSettings
   fi
+}
+
+AlsaSettings() {
+  cp /tmp/overlay/retrostone2-asound.conf /etc/asound.conf
 }
 
 PatchArmbianFirstLogin() {
