@@ -65,7 +65,12 @@
  }
 
 
-@@ -285,6 +227,15 @@
+@@ -281,10 +223,19 @@
+ 				# set up profile sync daemon on desktop systems
+ 				command -v psd >/dev/null 2>&1
+ 				if [ $? -eq 0 ]; then
+-					echo -e "${RealUserName} ALL=(ALL) NOPASSWD: /usr/bin/psd-overlay-helper" >> /etc/sudoers
++					echo -e "${RealUserName} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
  					touch /home/"${RealUserName}"/.activate_psd
  					chown "$RealUserName":"$RealUserName" /home/"${RealUserName}"/.activate_psd
  				fi
@@ -81,13 +86,21 @@
  				break
  			else
  				echo -e "Rejected - \e[0;31m$okay.\x1B[0m Try again [${REPEATS}]."
+@@ -441,8 +392,6 @@
+                         [[ -x $(command -v plasmashell) ]] && sed -i "s/user-session.*/user-session=plasmawayland/" /etc/lightdm/lightdm.conf.d/11-armbian.conf
+                         [[ -x $(command -v plasmashell) ]] && sed -i "s/user-session.*/user-session=plasmawayland/" /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
 
-@@ -281,7 +281,7 @@
- 				# set up profile sync daemon on desktop systems
- 				command -v psd >/dev/null 2>&1
- 				if [ $? -eq 0 ]; then
--					echo -e "${RealUserName} ALL=(ALL) NOPASSWD: /usr/bin/psd-overlay-helper" >> /etc/sudoers
-+					echo -e "${RealUserName} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
- 					touch /home/"${RealUserName}"/.activate_psd
- 					chown "$RealUserName":"$RealUserName" /home/"${RealUserName}"/.activate_psd
- 				fi
+-			ln -sf /lib/systemd/system/lightdm.service /etc/systemd/system/display-manager.service
+-
+ 			if [[ -f /var/run/resize2fs-reboot ]]; then
+ 				# Let the user reboot now otherwise start desktop environment
+ 				printf "\n\n\e[0;91mWarning: a reboot is needed to finish resizing the filesystem \x1B[0m \n"
+@@ -450,7 +399,7 @@
+ 			elif [ -z "$ConfigureDisplay" ] || [ "$ConfigureDisplay" = "n" ] || [ "$ConfigureDisplay" = "N" ]; then
+ 				echo -e "\n\e[1m\e[39mNow starting desktop environment...\x1B[0m\n"
+ 				sleep 1
+-				service lightdm start 2>/dev/null
++				retrostone2_autostart.sh
+ 				if [ -f /root/.desktop_autologin ]; then
+ 					rm /root/.desktop_autologin
+ 				else

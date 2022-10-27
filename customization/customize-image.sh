@@ -25,7 +25,12 @@ Main() {
     InstallController
     RetropieSkeleton
     PatchArmbianFirstLogin
+    AlsaSettings
   fi
+}
+
+AlsaSettings() {
+  cp /tmp/overlay/retrostone2-asound.conf /etc/asound.conf
 }
 
 PatchArmbianFirstLogin() {
@@ -52,12 +57,10 @@ InstallController() {
 }
 
 EmulationstationSetup() {
-    rm /etc/systemd/system/display-manager.service
-
     cp /tmp/overlay/retrostone2-profile.sh /etc/profile.d/retrostone2-profile.sh
     chmod 755 /etc/profile.d/retrostone2-profile.sh
-    cp /tmp/overlay/retrostone2-autostart.sh /usr/local/bin/retrostone2-autostart.sh
-    chmod 755 /usr/local/bin/retrostone2-autostart.sh
+    cp /tmp/overlay/retrostone2-autostart.sh /usr/bin/retrostone2-autostart.sh
+    chmod 755 /usr/bin/retrostone2-autostart.sh
 }
 
 RetropieSkeleton() {
