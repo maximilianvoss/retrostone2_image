@@ -63,8 +63,8 @@
 -
 -	fi
  }
-
-
+ 
+ 
 @@ -281,10 +223,19 @@
  				# set up profile sync daemon on desktop systems
  				command -v psd >/dev/null 2>&1
@@ -89,7 +89,7 @@
 @@ -441,8 +392,6 @@
                          [[ -x $(command -v plasmashell) ]] && sed -i "s/user-session.*/user-session=plasmawayland/" /etc/lightdm/lightdm.conf.d/11-armbian.conf
                          [[ -x $(command -v plasmashell) ]] && sed -i "s/user-session.*/user-session=plasmawayland/" /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
-
+ 
 -			ln -sf /lib/systemd/system/lightdm.service /etc/systemd/system/display-manager.service
 -
  			if [[ -f /var/run/resize2fs-reboot ]]; then
