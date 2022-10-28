@@ -307,7 +307,6 @@ index 0000000..1739982
 +	usb2_vbus-supply = <&reg_usb2_vbus>;
 +	status = "okay";
 +};
-\ No newline at end of file
 diff --git a/arch/arm/dts/sun7i-a20.dtsi b/arch/arm/dts/sun7i-a20.dtsi
 index e529e4f..2e47789 100644
 --- a/arch/arm/dts/sun7i-a20.dtsi
@@ -383,4 +382,3 @@ index 0000000..4302b2c
 +#CONFIG_SYS_NAND_PAGE_SIZE=0x1000
 +#CONFIG_SYS_NAND_OOBSIZE=0x0
 +#CONFIG_SOUND=y
-\ No newline at end of file
