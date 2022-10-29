@@ -95,12 +95,45 @@
  			if [[ -f /var/run/resize2fs-reboot ]]; then
  				# Let the user reboot now otherwise start desktop environment
  				printf "\n\n\e[0;91mWarning: a reboot is needed to finish resizing the filesystem \x1B[0m \n"
-@@ -450,7 +399,7 @@
+@@ -450,7 +399,6 @@
  			elif [ -z "$ConfigureDisplay" ] || [ "$ConfigureDisplay" = "n" ] || [ "$ConfigureDisplay" = "N" ]; then
  				echo -e "\n\e[1m\e[39mNow starting desktop environment...\x1B[0m\n"
  				sleep 1
 -				service lightdm start 2>/dev/null
-+				retrostone2_autostart.sh
  				if [ -f /root/.desktop_autologin ]; then
  					rm /root/.desktop_autologin
  				else
+@@ -459,6 +407,7 @@
+ 				fi
+ 				# logout if logged at console
+ 				[[ -n $(who -la | grep root | grep tty1) ]] && exit 1
++                logout
+ 			fi
+ 
+ 	elif [ -n "$desktop_gdm3" ] && [ -n "$RealName" ] ; then
+@@ -471,8 +420,6 @@
+ 			AutomaticLogin = $RealUserName
+ 			EOF
+ 
+-			ln -sf /lib/systemd/system/gdm3.service /etc/systemd/system/display-manager.service
+-
+ 				if [[ -f /var/run/resize2fs-reboot ]]; then
+ 
+ 					# Let the user reboot now otherwise start desktop environment
+@@ -483,7 +430,6 @@
+ 
+ 					echo -e "\n\e[1m\e[39mNow starting desktop environment...\x1B[0m\n"
+ 					sleep 1
+-					service gdm3 start 2>/dev/null
+ 					if [ -f /root/.desktop_autologin ]; then
+ 						rm /root/.desktop_autologin
+ 					else
+@@ -491,7 +437,7 @@
+ 					fi
+ 					# logout if logged at console
+ 					[[ -n $(who -la | grep root | grep tty1) ]] && exit 1
+-
++                    logout
+ 				fi
+ 
+ 	else
