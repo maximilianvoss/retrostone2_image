@@ -39,6 +39,7 @@ PatchArmbianFirstLogin() {
 
 PatchEmulationStationConfig() {
   sed -i 's/\/root/~/g' /etc/emulationstation/es_systems.cfg
+  sed -i 's/sudo ~\/build\/retropie-core/sudo \/opt\/RetroPie-Setup/g' /etc/emulationstation/es_systems.cfg
 }
 
 InstallController() {
@@ -70,6 +71,17 @@ RetropieSkeleton() {
   mkdir /etc/skel/.config
   ln -s /opt/retropie/configs/all/retroarch /etc/skel/.config/retroarch
   ln -s /opt/retropie/configs/c64 /etc/skel/.config/vice
+
+  mkdir /etc/skel/RetroPie/retropiemenu/RetroPie
+  mv /etc/skel/RetroPie/retropiemenu/* /etc/skel/RetroPie/retropiemenu/RetroPie
+
+  cat <<-EOF >/etc/skel/RetroPie/retropiemenu/Rom\ Fetcher.sh
+#!/bin/bash
+#
+
+romfetcher
+EOF
+  chmod 755 /etc/skel/RetroPie/retropiemenu/Rom\ Fetcher.sh
 }
 
 EmulationstationBin() {

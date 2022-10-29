@@ -2,7 +2,7 @@ diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
 index 94e01f3..0415451 100755
 --- a/arch/arm/dts/Makefile
 +++ b/arch/arm/dts/Makefile
-@@ -409,6 +409,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
+@@ -612,6 +612,7 @@
  	sun7i-a20-pcduino3.dtb \
  	sun7i-a20-pcduino3-nano.dtb \
  	sun7i-a20-primo73.dtb \
@@ -314,17 +314,17 @@ index e529e4f..2e47789 100644
 @@ -946,6 +946,17 @@
  				function = "lvds1";
  			};
-
-+                       lcd0_rgb888_pins: lcd0-rgb888 {
-+                               pins = "PD0", "PD1", "PD2", "PD3",
-+                                      "PD4", "PD5", "PD6", "PD7",
-+                                      "PD8", "PD9", "PD10", "PD11",
-+                                      "PD12", "PD13", "PD14", "PD15",
-+                                      "PD16", "PD17", "PD18", "PD19",
-+                                      "PD20", "PD21", "PD22", "PD23",
-+                                      "PD24", "PD25", "PD26", "PD27";
-+                               function = "lcd0";
-+	                };
+ 
++			lcd0_rgb888_pins: lcd0-rgb888 {
++				pins = "PD0", "PD1", "PD2", "PD3",
++					"PD4", "PD5", "PD6", "PD7",
++					"PD8", "PD9", "PD10", "PD11",
++					"PD12", "PD13", "PD14", "PD15",
++					"PD16", "PD17", "PD18", "PD19",
++					"PD20", "PD21", "PD22", "PD23",
++					"PD24", "PD25", "PD26", "PD27";
++				function = "lcd0";
++			};
 +
  			/omit-if-no-ref/
  			mmc0_pins: mmc0-pins {
@@ -382,4 +382,3 @@ index 0000000..4302b2c
 +#CONFIG_SYS_NAND_PAGE_SIZE=0x1000
 +#CONFIG_SYS_NAND_OOBSIZE=0x0
 +#CONFIG_SOUND=y
-
