@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: retrostone_splashscreen
+Upstream-Name: retrostone2_splashscreen
 Upstream-Contact: Maximilian Voss <maximilian@voss.rocks>
-Source: https://github.com/maximilianvoss/retrostone_splashscreen
+Source: https://github.com/maximilianvoss/retrostone2_splashscreen
 
 Files: *
 License: Apache2.0
