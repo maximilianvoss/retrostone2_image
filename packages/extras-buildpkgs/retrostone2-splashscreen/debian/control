@@ -1,4 +1,4 @@
-Source: retrostone2_splashscreen
+Source: retrostone2-splashscreen
 Section: x11
 Priority: optional
 Maintainer: Maximilian Voss <maximilian@voss.rocks>
@@ -6,7 +6,7 @@ Build-Depends: debhelper (>=10), cmake
 Standards-Version: 4.0.0
 Homepage: https://github.com/maximilianvoss/retrostone2_splashscreen
 
-Package: retrostone2_splashscreen
+Package: retrostone2-splashscreen
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Retrostone2 Splash-Screen
