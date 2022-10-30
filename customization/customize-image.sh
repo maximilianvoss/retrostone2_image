@@ -26,6 +26,7 @@ Main() {
     RetropieSkeleton
     PatchArmbianFirstLogin
     AlsaSettings
+    PlymouthSetup
   fi
 }
 
@@ -86,6 +87,12 @@ EOF
 
 EmulationstationBin() {
   ln -s /opt/retropie/supplementary/emulationstation/emulationstation /usr/bin/emulationstation
+}
+
+PlymouthSetup() {
+  sed -i 's/verbosity=1/verbosity=0/g' /boot/armbianEnv.txt
+  sed -i 's/bootlogo=false/bootlogo=true/g' /boot/armbianEnv.txt
+  ln -sf /usr/share/plymouth/themes/retrostone2/retrostone2.plymouth /etc/alternatives/default.plymouth
 }
 
 Main "$@"
