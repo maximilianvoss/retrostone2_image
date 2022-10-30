@@ -2,7 +2,7 @@ diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
 index 9f4bc9e02..2ceacb164 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1065,6 +1065,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
+@@ -1218,6 +1218,7 @@
  	sun7i-a20-orangepi-mini.dtb \
  	sun7i-a20-pcduino3.dtb \
  	sun7i-a20-pcduino3-nano.dtb \
@@ -15,7 +15,7 @@ new file mode 100644
 index 000000000..547381d62
 --- /dev/null
 +++ b/arch/arm/boot/dts/sun7i-a20-retrostone2.dts
-@@ -0,0 +1,435 @@
+@@ -0,0 +1,434 @@
 +/*
 + * This is based on sun4i-a10-olinuxino-lime.dts
 + *
@@ -450,13 +450,12 @@ index 000000000..547381d62
 +	usb2_vbus-supply = <&reg_usb2_vbus>;
 +	status = "okay";
 +};
-+
 diff --git a/arch/arm/boot/dts/sun7i-a20.dtsi b/arch/arm/boot/dts/sun7i-a20.dtsi
 index 9ad8e445b..9b0b830f5 100644
 --- a/arch/arm/boot/dts/sun7i-a20.dtsi
 +++ b/arch/arm/boot/dts/sun7i-a20.dtsi
-@@ -867,6 +867,17 @@
- 				function = "ir1";
+@@ -948,6 +948,17 @@
+ 				function = "lvds1";
  			};
  
 +			lcd0_rgb888_pins: lcd0-rgb888 {
@@ -467,7 +466,7 @@ index 9ad8e445b..9b0b830f5 100644
 +                                      "PD16", "PD17", "PD18", "PD19",
 +                                      "PD20", "PD21", "PD22", "PD23",
 +                                      "PD24", "PD25", "PD26", "PD27";
-+			function = "lcd0";
++                               function = "lcd0";
 +			};
 +
  			/omit-if-no-ref/
@@ -477,9 +476,9 @@ diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-
 index ee6900eb3..8b8d81e8e 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -2937,26 +2937,27 @@
+@@ -2938,26 +2938,27 @@
  };
-
+ 
  static const struct drm_display_mode lemaker_bl035_rgb_002_mode = {
 -	.clock = 7000,
 -	.hdisplay = 320,
@@ -501,7 +500,7 @@ index ee6900eb3..8b8d81e8e 100644
 +	.vtotal = 480 + 10 + 3 + 32,
 +	.flags = DRM_MODE_FLAG_NVSYNC | DRM_MODE_FLAG_NHSYNC,
  };
-
+ 
  static const struct panel_desc lemaker_bl035_rgb_002 = {
  	.modes = &lemaker_bl035_rgb_002_mode,
  	.num_modes = 1,
@@ -513,5 +512,5 @@ index ee6900eb3..8b8d81e8e 100644
  	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
 -	.bus_flags = DRM_BUS_FLAG_DE_LOW,
  };
-
+ 
  static const struct drm_display_mode lg_lb070wv8_mode = {

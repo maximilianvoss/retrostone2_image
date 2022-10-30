@@ -1,3 +1,6 @@
+# Retrostone2
+Find the latest news on [Retrostone2 here](RETROSTONE2.md)
+
 <p align="center">
   <a href="#build-framework">
   <img src=".github/armbian-logo.png" alt="Armbian logo" width="144">

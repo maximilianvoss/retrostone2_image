@@ -1,28 +1,23 @@
-# Build for Retrostone2
+# Retrostone2
+I bought the Retrostone2 Pro years ago in the good faith the software will improve over time. Unfortunately time showed 
+that there is no update of RetrOrangePi since 2019 and there is no update to be expected in the very near future.
+After time I came to the conclusion that the only way to improve the Software for my Retrostone2 - which is indeed
+a very nice gadget - is to create my own image.
 
-## 2 Do
-[/] armbian-firstrun - enables Mali out-of-the-tree module and Bluetooth service : /usr/lib/armbian  
-[/] btpatch.tar.gz - Broadcom utility to flash Bluetooth firmwares - must be extracted to /  
-[/] e.py - Python script for controller buttons testing  
-[ ] GuiMenu.cpp - EmulationStation GUI menu source file  
-[ ] GuiMenu.h - EmulationStation GUI menu header  
-[x] gpio_retrostone2-production-with-brightness.py - Enables the Retrostone GPIO controls - /home/pi/RetrOrangePi/GPIO/drivers/tz_gpio_controller.py  
-[/] joystick.rules - UDEV rule to give write privileges to input : /etc/udev/rules.d/ (not tested yet)  
-[x] kernel-sunxi-current.patch - Armbian kernel patch (v5.3.13) -> retrostone2-kernel.patch   
-[x] retroarch.cfg - Retroarch configuration file: /opt/retropie/configs/all/  
-[x] RetroStone2 Controle.cfg - Controller configuration file: /opt/retropie/configs/all/retroarch/autoconfig/
-[x] retrostone2.csc - Armbian Retrostone 2 configuration - adds board to Armbian building script: build/config/boards   
-[/] ropi-rs2-final.sh - simple test script (network, bluetooth, storage, audio and controls)  
-[/] RS2GPIO.tar.gz - GPIO sources - /home/pi/RetrOrangePi/GPIO/  
-[x] SDL_gamecontrollerdb.h - add support to Retrostone controller in SDL2 sources  
-[?] sun7i-a20-retrostone2.dts - adds Retrostone DTS with backlight/LCD support -> already included in retrostone2-u-boot.patch  
-[x] u-boot-sunxi-current.patch - Armbian u-boot patch -> retrostone2-u-boot.patch  
+This image is completely based on the latest Armbian. All files I created a prefixed with `retrostone2-` and I intended
+to only change as minimal as possible on the existing Armbian distribution to always have a path forward.
 
+## Things I introduced on the Armbian distribution
+* [/customzation](customization): this folder holds all files to customize the image after build. It overwrites whatever there is on customization in `userpatches`
+* [/retrostone2-patches](retrostone2-patches): it contains the original files and the adaptations which are needed for the Retrostone2. It helps in updating to newer versions of u-boot and kernel
+
+## Building your own image
+### What you need to have installed on your latest Ubuntu (22.04.1 LTS)
 ```bash
 apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison build-essential debian-archive-keyring debian-keyring device-tree-compiler dwarves flex gcc-arm-linux-gnueabi gcc-aarch64-linux-gnu libbison-dev libc6-dev-armhf-cross libcrypto++-dev libelf-dev libfdt-dev libfile-fcntllock-perl libfl-dev liblz4-tool libncurses-dev libpython2.7-dev libssl-dev libusb-1.0-0-dev patchutils pixz pkg-config python3-distutils qemu-user-static swig u-boot-tools uuid-dev zlib1g-dev lib32ncurses-dev lib32stdc++6 libc6-i386 python2 apt-cacher-ng
 ```
 
-
+### Command to execute build
 ```bash
  ./compile.sh \
  BOARD=retrostone2 \
@@ -44,4 +39,7 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
  EXTRAWIFI=no
 ```
 
-
+## Known Issues
+* `reboot` is actually shutting down the device
+* `shutdown` is halting but not powering off
+* No booting from NAND
