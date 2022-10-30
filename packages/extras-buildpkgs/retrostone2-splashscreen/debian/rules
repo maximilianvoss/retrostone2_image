@@ -11,9 +11,8 @@ override_dh_builddeb:
 	dh_builddeb -- -Zgzip -z9
 
 override_dh_install:
-	mkdir -p debian/usr/share/plymouth/themes/retrostone2
-	git clone https://github.com/maximilianvoss/retrostone2_splashscreen.git /tmp/retrostone2_splashscreen
-	mv /tmp/retrostone2_splashscreen/src/* debian/usr/share/plymouth/themes/retrostone2/
+	mkdir -p debian/retrostone2-splashscreen/usr/share/plymouth/themes/retrostone2
+	cp -R src/* debian/retrostone2-splashscreen/usr/share/plymouth/themes/retrostone2/
 
 override_dh_usrlocal:
 
