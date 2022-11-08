@@ -15,7 +15,7 @@ new file mode 100644
 index 0000000..1739982
 --- /dev/null
 +++ b/arch/arm/dts/sun7i-a20-retrostone2.dts
-@@ -0,0 +1,300 @@
+@@ -0,0 +1,291 @@
 +/*
 + * This is based on sun4i-a10-olinuxino-lime.dts
 + *
@@ -227,15 +227,6 @@ index 0000000..1739982
 +	status = "okay";
 +};
 +
-+&mmc1 {
-+    pinctrl-names = "default";
-+    pinctrl-0 = <&mmc2_pins>;
-+    vmmc-supply = <&reg_vcc3v3>;
-+    bus-width = <4>;
-+    non-removable;
-+    status = "okay";
-+};
-+
 +&ohci0 {
 +	status = "okay";
 +};
@@ -343,7 +334,7 @@ new file mode 100644
 index 0000000..4302b2c
 --- /dev/null
 +++ b/configs/A20-Retrostone2_defconfig
-@@ -0,0 +1,47 @@
+@@ -0,0 +1,49 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_SUNXI=y
 +CONFIG_SPL=y
@@ -354,11 +345,8 @@ index 0000000..4302b2c
 +CONFIG_SATAPWR="PC3"
 +CONFIG_AHCI=y
 +CONFIG_NR_DRAM_BANKS=1
-+# CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set
++CONFIG_SPL_SPI_SUNXI=y
 +CONFIG_SPL_I2C=y
-+# CONFIG_CMD_FLASH is not set
-+# CONFIG_SPL_DOS_PARTITION is not set
-+# CONFIG_SPL_EFI_PARTITION is not set
 +CONFIG_DEFAULT_DEVICE_TREE="sun7i-a20-retrostone2"
 +CONFIG_SCSI_AHCI=y
 +CONFIG_ETH_DESIGNWARE=y
@@ -382,12 +370,17 @@ index 0000000..4302b2c
 +CONFIG_ENV_IS_IN_EXT4=y
 +CONFIG_SYS_I2C_MVTWSI=y
 +CONFIG_DM_PMIC=y
-+CONFIG_SYS_I2C_SLAVE=0x7f
-+CONFIG_SYS_I2C_SPEED=400000
-+CONFIG_NAND_BOOT=n
++#CONFIG_SYS_I2C_SLAVE=0x7f
++#CONFIG_SYS_I2C_SPEED=400000
 +CONFIG_SD_BOOT=y
-+#CONFIG_NAND_BOOT=y
-+#CONFIG_SYS_NAND_BLOCK_SIZE=0x200
-+#CONFIG_SYS_NAND_PAGE_SIZE=0x1000
-+#CONFIG_SYS_NAND_OOBSIZE=0x0
-+#CONFIG_SOUND=y
++CONFIG_SPI=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_MUSB_GADGET=y
++CONFIG_CMD_MMC=y
++CONFIG_SPL_MMC_BOOT=y
++CONFIG_SPL_MMC=y
++CONFIG_ENV_IS_IN_MMC=y
++CONFIG_SUPPORT_EMMC_BOOT=y
++CONFIG_SUPPORT_EMMC_RPMB=y
++
