@@ -334,7 +334,7 @@ new file mode 100644
 index 0000000..4302b2c
 --- /dev/null
 +++ b/configs/A20-Retrostone2_defconfig
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,46 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_SUNXI=y
 +CONFIG_SPL=y
@@ -380,7 +380,4 @@ index 0000000..4302b2c
 +CONFIG_CMD_MMC=y
 +CONFIG_SPL_MMC_BOOT=y
 +CONFIG_SPL_MMC=y
-+CONFIG_ENV_IS_IN_MMC=y
-+CONFIG_SUPPORT_EMMC_BOOT=y
-+CONFIG_SUPPORT_EMMC_RPMB=y
 +
