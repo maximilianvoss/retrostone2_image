@@ -205,7 +205,7 @@
 	pinctrl-0 = <&mmc0_pins>;
 	vmmc-supply = <&reg_vcc3v3>;
 	bus-width = <4>;
-	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
+	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PG1 */
 	status = "okay";
 };
 
@@ -213,8 +213,7 @@
     pinctrl-names = "default";
     vmmc-supply = <&reg_vcc3v3>;
     bus-width = <4>;
-    cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
-    bias-pull-down;
+    cd-gpios = <&pio 2 7>; /* PC7 */
     status = "okay";
 };
 

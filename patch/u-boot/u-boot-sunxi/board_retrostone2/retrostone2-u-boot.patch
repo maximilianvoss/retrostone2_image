@@ -15,7 +15,7 @@ new file mode 100644
 index 0000000..1739982
 --- /dev/null
 +++ b/arch/arm/dts/sun7i-a20-retrostone2.dts
-@@ -0,0 +1,300 @@
+@@ -0,0 +1,299 @@
 +/*
 + * This is based on sun4i-a10-olinuxino-lime.dts
 + *
@@ -223,7 +223,7 @@ index 0000000..1739982
 +	pinctrl-0 = <&mmc0_pins>;
 +	vmmc-supply = <&reg_vcc3v3>;
 +	bus-width = <4>;
-+	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
++	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PG1 */
 +	status = "okay";
 +};
 +
@@ -231,8 +231,7 @@ index 0000000..1739982
 +    pinctrl-names = "default";
 +    vmmc-supply = <&reg_vcc3v3>;
 +    bus-width = <4>;
-+    cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
-+    bias-pull-down;
++    cd-gpios = <&pio 2 7>; /* PC7 */
 +    status = "okay";
 +};
 +
