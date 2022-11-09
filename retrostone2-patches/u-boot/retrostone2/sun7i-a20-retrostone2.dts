@@ -209,6 +209,14 @@
 	status = "okay";
 };
 
+&mmc1 {
+    pinctrl-names = "default";
+    vmmc-supply = <&reg_vcc3v3>;
+    bus-width = <4>;
+    cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
+    status = "okay";
+};
+
 &ohci0 {
 	status = "okay";
 };
