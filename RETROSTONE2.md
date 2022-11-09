@@ -41,5 +41,50 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
 
 ## Known Issues
 * `reboot` is actually shutting down the device
+ ```
+ [   83.690550] reboot: Restarting system
+```
 * `shutdown` is halting but not powering off
+ ```
+[   90.046464] ——————[ cut here ]——————
+[   90.051085] WARNING: CPU: 0 PID: 1 at drivers/i2c/i2c-core.h:41 i2c_transfer+0x93/0xbc
+[   90.059020] No atomic I2C transfer handler for 'i2c-0'
+[   90.064152] Modules linked in: brcmfmac brcmutil at24 cfg80211 axp20x_battery evdev joydev axp20x_adc sun4i_gpadc_iio input_leds industrialio sun4i_ts sun4i_codec sunxi_cedrus(C) v4l2_mem2mem videobuf2_dma_contig videobuf2_memops videobuf2_v4l2 videobuf2_common lz4hc lz4 uio_pdrv_genirq uio cpufreq_dt zram sch_fq_codel bonding hidp rfcomm hci_uart btrtl btbcm bluetooth ecdh_generic rfkill ecc ramoops reed_solomon pstore_blk pstore_zone ip_tables x_tables autofs4 hid_logitech_hidpp lima gpu_sched pinctrl_axp209 sun4i_gpadc pwm_sun4i sunxi phy_generic panel_simple drm_dp_aux_bus pwrseq_emmc pwrseq_simple display_connector pwm_bl hid_logitech_dj
+[   90.121210] CPU: 0 PID: 1 Comm: systemd-shutdow Tainted: G         C        5.15.75-sunxi #trunk
+[   90.129990] Hardware name: Allwinner sun7i (A20) Family
+[   90.135219] [<c010cd21>] (unwind_backtrace) from [<c01095fd>] (show_stack+0x11/0x14)
+[   90.142975] [<c01095fd>] (show_stack) from [<c09e0c4d>] (dump_stack_lvl+0x2b/0x34)
+[   90.150556] [<c09e0c4d>] (dump_stack_lvl) from [<c011c3f9>] (__warn+0xad/0xc0)
+[   90.157787] [<c011c3f9>] (__warn) from [<c09da8eb>] (warn_slowpath_fmt+0x5f/0x7c)
+[   90.165274] [<c09da8eb>] (warn_slowpath_fmt) from [<c07a7d1f>] (i2c_transfer+0x93/0xbc)
+[   90.173284] [<c07a7d1f>] (i2c_transfer) from [<c07a7d83>] (i2c_transfer_buffer_flags+0x3b/0x50)
+[   90.181989] [<c07a7d83>] (i2c_transfer_buffer_flags) from [<c06a79ef>] (regmap_i2c_write+0x13/0x24)
+[   90.191044] [<c06a79ef>] (regmap_i2c_write) from [<c06a449b>] (_regmap_raw_write_impl+0x48b/0x560)
+[   90.200007] [<c06a449b>] (_regmap_raw_write_impl) from [<c06a45b1>] (_regmap_bus_raw_write+0x41/0x5c)
+[   90.209227] [<c06a45b1>] (_regmap_bus_raw_write) from [<c06a3e29>] (_regmap_write+0x35/0xc8)
+[   90.217667] [<c06a3e29>] (_regmap_write) from [<c06a4d2d>] (regmap_write+0x29/0x3c)
+[   90.225327] [<c06a4d2d>] (regmap_write) from [<c06aebb3>] (axp20x_power_off+0x23/0x30)
+[   90.233251] [<c06aebb3>] (axp20x_power_off) from [<c0138e7d>] (__do_sys_reboot+0xf5/0x16c)
+[   90.241522] [<c0138e7d>] (__do_sys_reboot) from [<c0100061>] (ret_fast_syscall+0x1/0x52)
+[   90.249606] Exception stack(0xc1559fa8 to 0xc1559ff0)
+[   90.254660] 9fa0:                   00000000 00000000 fee1dead 28121969 4321fedc 4321fedc
+[   90.262834] 9fc0: 00000000 00000000 00000003 00000058 becb1a84 fffff000 004967ac 00000006
+[   90.271004] 9fe0: 00000058 becb19f4 b6c2d185 b6b9db06
+[   90.276051] —[ end trace 953d131e9f13ec79 ]—
+[   92.073887] i2c i2c-0: mv64xxx: I2C bus locked, block: 1, time_left: 0
+[   92.585888] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
+[   92.593543] CPU: 0 PID: 1 Comm: systemd-shutdow Tainted: G        WC        5.15.75-sunxi #trunk
+[   92.602324] Hardware name: Allwinner sun7i (A20) Family
+[   92.607549] [<c010cd21>] (unwind_backtrace) from [<c01095fd>] (show_stack+0x11/0x14)
+[   92.615307] [<c01095fd>] (show_stack) from [<c09e0c4d>] (dump_stack_lvl+0x2b/0x34)
+[   92.622886] [<c09e0c4d>] (dump_stack_lvl) from [<c09da715>] (panic+0xc1/0x238)
+[   92.630114] [<c09da715>] (panic) from [<c0120c03>] (do_exit+0x86b/0x86c)
+[   92.636821] [<c0120c03>] (do_exit) from [<c0138e83>] (__do_sys_reboot+0xfb/0x16c)
+[   92.644309] [<c0138e83>] (__do_sys_reboot) from [<c0100061>] (ret_fast_syscall+0x1/0x52)
+[   92.652400] Exception stack(0xc1559fa8 to 0xc1559ff0)
+[   92.657453] 9fa0:                   00000000 00000000 fee1dead 28121969 4321fedc 4321fedc
+[   92.665627] 9fc0: 00000000 00000000 00000003 00000058 becb1a84 fffff000 004967ac 00000006
+[   92.673797] 9fe0: 00000058 becb19f4 b6c2d185 b6b9db06
+[   92.678858] —[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000 ]—
+```
 * No booting from NAND
