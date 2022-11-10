@@ -232,7 +232,7 @@ index 0000000..1739982
 +    pinctrl-0 = <&mmc1_pins>;
 +    vmmc-supply = <&reg_vcc3v3>;
 +    bus-width = <4>;
-+    cd-gpios = <&pio 2 7 GPIO_ACTIVE_HIGH>; /* PC7 */
++    cd-gpios = <&pio 7 1 GPIO_ACTIVE_HIGH>; /* PC7 */
 +    status = "okay";
 +};
 +
@@ -338,6 +338,22 @@ index e529e4f..2e47789 100644
  			/omit-if-no-ref/
  			mmc0_pins: mmc0-pins {
  				pins = "PF0", "PF1", "PF2",
+@@ -955,6 +966,15 @@
+ 				bias-pull-up;
+ 			};
+ 
++            /omit-if-no-ref/
++            mmc1_pins: mmc1-pins {
++                pins = "PG0", "PG1", "PG2",
++                       "PG3", "PG4", "PG5";
++                function = "mmc1";
++                drive-strength = <30>;
++                bias-pull-up;
++            };
++
+ 			/omit-if-no-ref/
+ 			mmc2_pins: mmc2-pins {
+ 				pins = "PC6", "PC7", "PC8",
 diff --git a/configs/A20-Retrostone2_defconfig b/configs/A20-Retrostone2_defconfig
 new file mode 100644
 index 0000000..4302b2c
