@@ -27,7 +27,19 @@ Main() {
     PatchArmbianFirstLogin
     AlsaSettings
     PlymouthSetup
+    DisableServices
   fi
+}
+
+DisableServices() {
+  # OpenVPN
+  rm /etc/systemd/system/multi-user.target.wants/openvpn.service
+
+  # CUPS
+  rm /etc/systemd/system/printer.target.wants/cups.service
+  rm /etc/systemd/system/sockets.target.wants/cups.socket
+  rm /etc/systemd/system/multi-user.target.wants/cups.path
+  rm /etc/systemd/system/multi-user.target.wants/cups.service
 }
 
 AlsaSettings() {

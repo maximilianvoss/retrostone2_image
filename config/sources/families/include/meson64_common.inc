@@ -6,6 +6,7 @@ ARCH=arm64
 SERIALCON=ttyAML0
 SRC_LOADADDR='LOADADDR=0x1080000'
 BOOTBRANCH="${BOOTBRANCH_BOARD:-"tag:v2022.07"}"
+BOOTPATCHDIR="${BOOTPATCHDIR:-"v2022.07"}"
 OVERLAY_PREFIX='meson'
 
 # this family does not need it
@@ -250,7 +251,7 @@ family_tweaks_bsp() {
 
 	mkdir -p "$destination"/etc/X11/xorg.conf.d
 	case "${BOARD}" in
-		"odroidc2" | "nanopik2-s905" | "lepotato" | "lafrite" | "khadas-vim1" | "khadas-vim2")
+		"odroidc2" | "nanopik2-s905" | "lepotato" | "lafrite" | "khadas-vim1" | "khadas-vim2" | "aml-s9xx-box" )
 			cat <<- EOF > "$destination"/etc/X11/xorg.conf.d/02-driver.conf
 				Section "OutputClass"
 				    Identifier "Amlogic"

@@ -155,3 +155,11 @@ python3.10-dev
 python3-uinput
 libpython2-dev
 python2-dev
+libapr1
+libaprutil1
+libserf-1-1
+libsvn1
+libutf8proc2
+python3-pyudev
+subversion
+xmlstarlet

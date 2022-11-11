@@ -1,5 +1,46 @@
 --- usr/lib/armbian/armbian-firstlogin
 +++ usr/lib/armbian/armbian-firstlogin
+@@ -75,23 +75,23 @@
+ 	optionsAudits=($(grep "zsh\|/bash" /etc/shells | sed 's/\/bin\///g' | sed 's/\/usr//g' | uniq))
+ 	USER_SHELL="bash"
+ 
+-	if [[ "${#optionsAudits[@]}" -gt 1 ]]; then
+-		while :
+-			do
+-				i=1
+-				echo -e "\nChoose default system command shell:\n"
+-				for o in  "${optionsAudits[@]}"; do
+-					echo "$i) $o"
+-					let i++
+-				done
+-				read -n1 -s reply
+-				case $reply in
+-					"1"|"${optionsAudits[0]}") USER_SHELL="${optionsAudits[0]}"; break;;
+-					"2"|"${optionsAudits[1]}") USER_SHELL="${optionsAudits[1]}"; break;;
+-					*) USER_SHELL="${optionsAudits[0]}"; break;;
+-				esac
+-			done
+-	fi
++#	if [[ "${#optionsAudits[@]}" -gt 1 ]]; then
++#		while :
++#			do
++#				i=1
++#				echo -e "\nChoose default system command shell:\n"
++#				for o in  "${optionsAudits[@]}"; do
++#					echo "$i) $o"
++#					let i++
++#				done
++#				read -n1 -s reply
++#				case $reply in
++#					"1"|"${optionsAudits[0]}") USER_SHELL="${optionsAudits[0]}"; break;;
++#					"2"|"${optionsAudits[1]}") USER_SHELL="${optionsAudits[1]}"; break;;
++#					*) USER_SHELL="${optionsAudits[0]}"; break;;
++#				esac
++#			done
++#	fi
+ 	SHELL_PATH=$(grep /$USER_SHELL$ /etc/shells | tail -1)
+ 
+ 	chsh -s $(grep -iF "/$USER_SHELL" /etc/shells | tail -1)
 @@ -145,64 +145,6 @@
  	CCODE=$(echo ${RES} | cut -d"," -f3 | xargs)
  	echo -e "Detected timezone: \x1B[92m$TZDATA\x1B[0m"
@@ -86,54 +127,12 @@
  				break
  			else
  				echo -e "Rejected - \e[0;31m$okay.\x1B[0m Try again [${REPEATS}]."
-@@ -443,8 +394,6 @@
-                         [[ -x $(command -v plasmashell) ]] && sed -i "s/user-session.*/user-session=plasmawayland/" /etc/lightdm/lightdm.conf.d/11-armbian.conf
-                         [[ -x $(command -v plasmashell) ]] && sed -i "s/user-session.*/user-session=plasmawayland/" /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
+@@ -407,6 +358,8 @@
+ 		printf "\nYou selected \e[0;91mZSH\x1B[0m as your default shell. If you want to use it right away, please logout and login! \n\n"
+ 	fi
  
--			ln -sf /lib/systemd/system/lightdm.service /etc/systemd/system/display-manager.service
--
- 			if [[ -f /var/run/resize2fs-reboot ]]; then
- 				# Let the user reboot now otherwise start desktop environment
- 				printf "\n\n\e[0;91mWarning: a reboot is needed to finish resizing the filesystem \x1B[0m \n"
-@@ -452,7 +401,6 @@
- 			elif [ -z "$ConfigureDisplay" ] || [ "$ConfigureDisplay" = "n" ] || [ "$ConfigureDisplay" = "N" ]; then
- 				echo -e "\n\e[1m\e[39mNow starting desktop environment...\x1B[0m\n"
- 				sleep 1
--				service lightdm start 2>/dev/null
- 				if [ -f /root/.desktop_autologin ]; then
- 					rm /root/.desktop_autologin
- 				else
-@@ -461,6 +409,7 @@
- 				fi
- 				# logout if logged at console
- 				[[ -n $(who -la | grep root | grep tty1) ]] && exit 1
-+                logout
- 			fi
++    reboot
++
+ 	# check whether desktop environment has to be considered
+ 	if [ -n "$desktop_lightdm" ] && [ -n "$RealName" ] ; then
  
- 	elif [ -n "$desktop_gdm3" ] && [ -n "$RealName" ] ; then
-@@ -473,8 +422,6 @@
- 			AutomaticLogin = $RealUserName
- 			EOF
- 
--			ln -sf /lib/systemd/system/gdm3.service /etc/systemd/system/display-manager.service
--
- 				if [[ -f /var/run/resize2fs-reboot ]]; then
- 
- 					# Let the user reboot now otherwise start desktop environment
-@@ -485,7 +432,6 @@
- 
- 					echo -e "\n\e[1m\e[39mNow starting desktop environment...\x1B[0m\n"
- 					sleep 1
--					service gdm3 start 2>/dev/null
- 					if [ -f /root/.desktop_autologin ]; then
- 						rm /root/.desktop_autologin
- 					else
-@@ -493,7 +439,7 @@
- 					fi
- 					# logout if logged at console
- 					[[ -n $(who -la | grep root | grep tty1) ]] && exit 1
--
-+                    logout
- 				fi
- 
- 	else
