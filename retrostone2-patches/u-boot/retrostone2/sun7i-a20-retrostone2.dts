@@ -205,7 +205,7 @@
 	pinctrl-0 = <&mmc0_pins>;
 	vmmc-supply = <&reg_vcc3v3>;
 	bus-width = <4>;
-	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PG1 */
+	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
 	status = "okay";
 };
 
@@ -216,6 +216,23 @@
     bus-width = <4>;
     status = "okay";
 };
+
+&mmc2 {
+    pinctrl-names = "default";
+    pinctrl-0 = <&mmc2_pins>;
+    vmmc-supply = <&reg_vcc3v3>;
+    bus-width = <4>;
+    status = "okay";
+};
+
+&mmc3 {
+    pinctrl-names = "default";
+    pinctrl-0 = <&mmc3_pins>;
+    vmmc-supply = <&reg_vcc3v3>;
+    bus-width = <4>;
+    status = "okay";
+};
+
 
 &ohci0 {
 	status = "okay";
