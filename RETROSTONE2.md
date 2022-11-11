@@ -87,4 +87,37 @@ apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison bui
 [   92.673797] 9fe0: 00000058 becb19f4 b6c2d185 b6b9db06
 [   92.678858] —[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000 ]—
 ```
-* No booting from NAND
+* Uboot booting directly NAND 
+
+# Booting from NAND
+It is possible that the main OS is loaded from the NAND flash, whereby the SD card will hold the `/boot` folder including
+u-boot instructions and the kernel. 
+
+1. Flash your SD Card with image.img
+2. Boot Retrostone2
+3. Do default configuration
+4. Copy the image.img to the Retrostone2 
+ ```bash
+scp image.img root@retrostone2:~/image.img
+```
+5. Flash the NAND
+ ```bash
+dd if=/root/image.img of=/dev/mmcblk1
+```
+6. Reboot
+7. Generate new UUID for the SD Card
+ ```bash
+tune2fs -U random /dev/mmcblk0p1
+```
+8. Reboot
+9. Mount SD Card
+ ```bash
+mount /dev/mmcblk0p1 /mnt
+```
+10. Delete unnecessary clutter
+ ```bash
+cd /mnt
+ls | grep -v boot | grep -v lost+found | xargs rm -rf
+```
+11. Reboot
+12. Done
