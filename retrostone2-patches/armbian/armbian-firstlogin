@@ -358,8 +358,7 @@ if [[ -f /root/.not_logged_in_yet && -n $(tty) ]]; then
 		printf "\nYou selected \e[0;91mZSH\x1B[0m as your default shell. If you want to use it right away, please logout and login! \n\n"
 	fi
 
-    logout
-    exit
+    reboot
 
 	# check whether desktop environment has to be considered
 	if [ -n "$desktop_lightdm" ] && [ -n "$RealName" ] ; then

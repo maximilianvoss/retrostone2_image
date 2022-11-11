@@ -127,12 +127,11 @@
  				break
  			else
  				echo -e "Rejected - \e[0;31m$okay.\x1B[0m Try again [${REPEATS}]."
-@@ -407,6 +358,9 @@
+@@ -407,6 +358,8 @@
  		printf "\nYou selected \e[0;91mZSH\x1B[0m as your default shell. If you want to use it right away, please logout and login! \n\n"
  	fi
  
-+    logout
-+    exit
++    reboot
 +
  	# check whether desktop environment has to be considered
  	if [ -n "$desktop_lightdm" ] && [ -n "$RealName" ] ; then
