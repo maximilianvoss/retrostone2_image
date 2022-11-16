@@ -127,10 +127,10 @@ jobs:
 
           # skip if version in git is the same as at release
           if [[ "$RELE" == "$SOUR" ]]; then
-              echo ::set-output name=changes::$(echo 'true')
+              echo "changes=true" >> $GITHUB_OUTPUT
           fi
           # output version
-          echo ::set-output name=version::$(echo ${SOUR})
+          echo "version=${SOUR}" >> $GITHUB_OUTPUT          
 
       - uses: actions/upload-artifact@v3
         with:
@@ -166,11 +166,12 @@ jobs:
         with:
           fetch-depth: 1
 
-      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      - uses: ClementTsang/delete-tag-and-release@v0.3.1
         if: ${{ github.repository_owner == 'Armbian' && github.event.inputs.choice != 'stable'  && github.event.inputs.choice != 'rc' }}
         with:
           delete_release: true
           tag_name: latest
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
