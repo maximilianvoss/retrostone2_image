@@ -227,7 +227,7 @@ index 0000000..1739982
 +	status = "okay";
 +};
 +
-+&mmc0 {
++&mmc1 {
 +    pinctrl-names = "default";
 +    pinctrl-0 = <&mmc2_pins>;
 +    vmmc-supply = <&reg_vcc3v3>;
