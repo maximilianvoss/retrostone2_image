@@ -16,7 +16,7 @@ index aa9d35780..2698d5632 100644
 --- a/src/joystick/SDL_gamecontrollerdb.h
 +++ b/src/joystick/SDL_gamecontrollerdb.h
 EOF
-curl -o SDL_gamecontrollerdb.h https://raw.githubusercontent.com/libsdl-org/SDL/2.0.22/src/joystick/SDL_gamecontrollerdb.h
+curl -o SDL_gamecontrollerdb.h https://raw.githubusercontent.com/libsdl-org/SDL/release-2.0.22/src/joystick/SDL_gamecontrollerdb.h
 diff -Naur SDL_gamecontrollerdb.h SDL/SDL_gamecontrollerdb.h | tail -n +3 >>$patchfile
 rm SDL_gamecontrollerdb.h
 
