@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # prepare_host
 #
 # * checks and installs necessary packages
@@ -67,7 +68,7 @@ prepare_host() {
 	fi
 
 	# Add support for Ubuntu 20.04, 21.04 and Mint 20.x
-	if [[ $HOSTRELEASE =~ ^(focal|impish|hirsute|jammy|kinetic|ulyana|ulyssa|vanessa|bullseye|uma|una)$ ]]; then
+	if [[ $HOSTRELEASE =~ ^(focal|impish|hirsute|jammy|kinetic|lunar|ulyana|ulyssa|vanessa|bullseye|uma|una)$ ]]; then
 		hostdeps+=" python2 python3"
 		ln -fs /usr/bin/python2.7 /usr/bin/python2
 		ln -fs /usr/bin/python2.7 /usr/bin/python
@@ -82,7 +83,7 @@ prepare_host() {
 	#
 	# NO_HOST_RELEASE_CHECK overrides the check for a supported host system
 	# Disable host OS check at your own risk. Any issues reported with unsupported releases will be closed without discussion
-	if [[ -z $HOSTRELEASE || "buster bullseye focal impish hirsute jammy kinetic debbie tricia ulyana ulyssa vanessa uma una" != *"$HOSTRELEASE"* ]]; then
+	if [[ -z $HOSTRELEASE || "buster bullseye focal impish hirsute jammy lunar kinetic debbie tricia ulyana ulyssa vanessa uma una" != *"$HOSTRELEASE"* ]]; then
 		if [[ $NO_HOST_RELEASE_CHECK == yes ]]; then
 			display_alert "You are running on an unsupported system" "${HOSTRELEASE:-(unknown)}" "wrn"
 			display_alert "Do not report any errors, warnings or other issues encountered beyond this point" "" "wrn"
@@ -237,7 +238,7 @@ prepare_host() {
 	fi # check offline
 
 	# enable arm binary format so that the cross-architecture chroot environment will work
-	if [[ $KERNEL_ONLY != yes ]]; then
+	if build_task_is_enabled "bootstrap"; then
 		modprobe -q binfmt_misc
 		mountpoint -q /proc/sys/fs/binfmt_misc/ || mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc
 		if [[ "$(arch)" != "aarch64" ]]; then
