@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # get_package_list_hash
 #
 # returns md5 hash for current package list and rootfs cache version
@@ -224,9 +225,8 @@ create_rootfs_cache() {
 
 		# stage: check md5 sum of installed packages. Just in case.
 		display_alert "Checking MD5 sum of installed packages" "debsums" "info"
-		eval 'LC_ALL=C LANG=C sudo chroot $SDCARD /bin/bash -e -c "dpkg-query -f ${binary:Package} -W | xargs debsums"' \
-			${PROGRESS_LOG_TO_FILE:+' | tee -a $DEST/${LOG_SUBPATH}/debootstrap.log'} '>/dev/null 2>/dev/null'} ';EVALPIPE=(${PIPESTATUS[@]})'
-		[[ ${EVALPIPE[0]} -ne 0 ]] && exit_with_error "MD5 sums check of installed packages failed"
+		chroot $SDCARD /bin/bash -e -c "debsums -s"
+		[[ $? -ne 0 ]] && exit_with_error "MD5 sums check of installed packages failed"
 
 		# Remove packages from packages.uninstall
 
@@ -256,8 +256,8 @@ create_rootfs_cache() {
 		# DEBUG: print free space
 		local freespace=$(LC_ALL=C df -h)
 		echo -e "$freespace" >> $DEST/${LOG_SUBPATH}/debootstrap.log
-		display_alert "Free SD cache" "$(echo -e "$freespace" | grep $SDCARD | awk '{print $5}')" "info"
-		display_alert "Mount point" "$(echo -e "$freespace" | grep $MOUNT | head -1 | awk '{print $5}')" "info"
+		display_alert "Free SD cache" "$(echo -e "$freespace" | awk -v mp="${SDCARD}" '$6==mp {print $5}')" "info"
+		display_alert "Mount point" "$(echo -e "$freespace" | awk -v mp="${MOUNT}" '$6==mp {print $5}')" "info"
 
 		# create list of installed packages for debug purposes
 		chroot $SDCARD /bin/bash -c "dpkg -l | grep ^ii | awk '{ print \$2\",\"\$3 }'" > ${cache_fname}.list 2>&1

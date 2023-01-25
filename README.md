@@ -4,13 +4,13 @@
   </a><br>
   <strong>Armbian Linux Build Framework</strong><br>
 <br>
-<a href=https://github.com/armbian/build/actions/workflows/build-train.yml><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/armbian/build/Build%20train?logo=githubactions&label=Kernel%20compile&logoColor=white&style=for-the-badge"></a>
-<a href=https://github.com/armbian/build/actions/workflows/build-all-desktops.yml><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/armbian/build/Build%20All%20Desktops?logo=githubactions&logoColor=white&label=Images%20assembly&style=for-the-badge"></a>
-<a href=https://github.com/armbian/build/actions/workflows/smoke-tests.yml><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/armbian/build/Smoke%20tests%20on%20DUTs?logo=speedtest&label=Smoke%20test&style=for-the-badge"></a>
+<a href=https://github.com/armbian/build/actions/workflows/build-train.yml><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/armbian/build/build-train.yml?logo=githubactions&label=Kernel%20compile&logoColor=white&style=for-the-badge&branch=master"></a>
+<a href=https://github.com/armbian/build/actions/workflows/build-all-desktops.yml><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/armbian/build/build-all-desktops.yml?logo=githubactions&logoColor=white&label=Images%20assembly&style=for-the-badge&branch=master"></a>
+<a href=https://github.com/armbian/build/actions/workflows/smoke-tests.yml><img alt="Smoke test success ratio" src="https://img.shields.io/badge/dynamic/json?logo=speedtest&label=Smoke%20tests%20success&query=SMOKE&color=44cc11&cacheSeconds=600&style=for-the-badge&url=https%3A%2F%2Fgithub.com%2Farmbian%2Fscripts%2Freleases%2Fdownload%2Fstatus%2Frunners_capacity.json"></a>
  <br>
 
 <br>
-<a href=https://twitter.com/armbian><img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/armbian?logo=twitter&style=flat-square"></a>
+<a href=https://fosstodon.org/@armbian><img alt="Mastodon Follow" src="https://img.shields.io/mastodon/follow/109365956768424870?domain=https%3A%2F%2Ffosstodon.org&logo=mastodon&style=flat-square"></a>
 <a href=http://discord.armbian.com/><img alt="Discord" src="https://img.shields.io/discord/854735915313659944?label=Discord&logo=discord&style=flat-square"></a>
 <a href=https://liberapay.com/armbian><img alt="Liberapay patrons" src="https://img.shields.io/liberapay/patrons/armbian?logo=liberapay&style=flat-square"></a>
 </p>
@@ -41,8 +41,8 @@
 
 ### Basic requirements
 
-- x64 or aarch64 machine with at least 2GB of memory and ~35GB of disk space for a virtual machine, container or bare metal installation,
-- Ubuntu Jammy 22.04 x64 or aarch64 for native building or any [Docker](https://docs.armbian.com/Developer-Guide_Building-with-Docker/) capable x64 / aarch64 Linux for containerised,
+- x86_64 or aarch64 machine with at least 2GB of memory and ~35GB of disk space for a virtual machine, container or bare metal installation
+- Ubuntu Jammy 22.04.x amd64 or aarch64 for native building or any [Docker](https://docs.armbian.com/Developer-Guide_Building-with-Docker/) capable amd64 / aarch64 Linux for containerised
 - Superuser rights (configured sudo or root access).
 
 ### Simply start with the build script
@@ -206,7 +206,7 @@ Support is provided in one of two ways:
 - [Forums](https://forum.armbian.com) for Participate in Armbian
 - IRC: `#armbian` on Libera.chat
 - Discord: [http://discord.armbian.com](http://discord.armbian.com)
-- Follow [@armbian](https://twitter.com/armbian) on Twitter or [LinkedIn](https://www.linkedin.com/company/armbian).
+- Follow [@armbian](https://twitter.com/armbian) on Twitter, [Fosstodon](https://fosstodon.org/@armbian) or [LinkedIn](https://www.linkedin.com/company/armbian).
 - Bugs: [issues](https://github.com/armbian/build/issues) / [JIRA](https://armbian.atlassian.net/jira/dashboards/10000)
 - Office hours: [Wednesday, 12 midday, 18 afternoon, CET](https://calendly.com/armbian/office-hours)
 
@@ -222,15 +222,14 @@ Thank you to all the people who already contributed Armbian!
 
 - [Current and past contributors](https://github.com/armbian/build/graphs/contributors), our families and friends.
 - [Support staff](https://forum.armbian.com/members/2-moderators/) that keeps forums usable.
-- [Individuals](https://forum.armbian.com/) that help with their ideas, reports and [donations](https://www.armbian.com/donate).
+- [Friends and individuals](https://armbian.com/authors) who support us with resources and their time.
+- [The Armbian Community](https://forum.armbian.com/) that helps with their ideas, reports and [donations](https://www.armbian.com/donate).
 
-## Sponsors
+## Armbian Partners
 
-Most of the project is sponsored with a work done by volunteer collaborators, while some part of the project costs are being covered by the industry. We would not be able to get this far without their help.
-
-[Would you like your name to appear below?](https://www.armbian.com/#contact)
-
-<a href="https://www.armbian.com/download/?tx_maker=xunlong" target="_blank"><img border=0 src="https://www.armbian.com/wp-content/uploads/2018/03/orangepi-logo-150x150.png" width="122" height="122"></a><a href="https://www.armbian.com/download/?tx_maker=friendlyelec" target="_blank"><img border=0 src="https://www.armbian.com/wp-content/uploads/2018/02/friendlyelec-logo-150x150.png" width="122" height="122"></a><a href="https://k-space.ee" target="_blank"><img border=0 src="https://www.armbian.com/wp-content/uploads/2018/03/kspace-150x150.png" width="122" height="122"></a><a href="https://www.innoscale.net" target="_blank"><img border=0 src="https://www.armbian.com/wp-content/uploads/2020/07/innoscale-2-150x150.png" width="122" height="122"></a><a href="https://www.armbian.com/download/?tx_maker=olimex" target="_blank"><img border=0 src="https://www.armbian.com/wp-content/uploads/2018/02/olimex-logo-150x150.png" width="122" height="122"></a><a href="https://www.armbian.com/download/?tx_maker=kobol" target="_blank"><img border=0 src="https://www.armbian.com/wp-content/uploads/2020/06/Kobol_logo-150x150.png" width="122" height="122"></a><a href="https://github.com/WorksOnArm/cluster/issues/223" target="_blank"><img border=0 src="https://www.armbian.com/wp-content/uploads/2020/11/work-on-arm-150x150.png" width="122" height="122"></a><a href="https://fosshost.org/" target="_blank"><img border=0 src="https://www.armbian.com/wp-content/uploads/2020/11/foss-host-150x150.png" width="122" height="122"></a><a href="https://nlnet.nl/" target="_blank"><img border=0 src="https://www.armbian.com/wp-content/uploads/2022/01/nlnet-fundation-150x150.png" width="122" height="122"></a><a href="#"><img border=0 src="https://www.armbian.com/wp-content/uploads/2021/06/lanecloud-150x150.png" width="122" height="122"></a><a href="https://www.khadas.com/" target="_blank"><img border=0 src="https://www.armbian.com/wp-content/uploads/2021/05/khadas-150x150.png" width="122" height="122"></a>
+Armbian's partnership program helps to support Armbian and the Armbian community! Please take a moment to familiarize yourself with our Partners:
+- [Click here to visit our Partners page!](https://armbian.com/partners)
+- [How can I become a Partner?](https://forum.armbian.com/subscriptions)
 
 ## License
 
