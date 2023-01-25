@@ -15,8 +15,6 @@
 	patches.armbian/drv-gpu-drm-sun4i-Add-HDMI-audio-sun4i-hdmi-encoder.patch
 	patches.armbian/drv-net-stmmac-dwmac-sun8i-second-EMAC-clock-register.patch
 	patches.armbian/drv-phy-sun4i-usb-Allow-reset-line-to-be-shared.patch
-	patches.armbian/drv-phy-sun4i-usb-Introduce-port2-SIDDQ-quirk.patch
-	patches.armbian/drv-phy-sun4i-usb-Add-support-for-the-H616-USB-PHY.patch
 	patches.armbian/drv-iio-adc-sun4i-gpadc-iio-rename-A33-specified-registers-to-c.patch
 	patches.armbian/drv-iio-adc-sun4i-gpadc-iio-sampling-start-end-code-readout-reg.patch
 	patches.armbian/drv-iio-adc-sun4i-gpadc-iio-support-clocks-and-reset.patch
@@ -167,7 +165,6 @@
 	patches.armbian/Add-dump_reg-and-sunxi-sysinfo-drivers.patch
 	patches.armbian/Add-sunxi-addr-driver-Used-to-fix-uwe5622-bluetooth-MAC-address.patch
 	patches.armbian/net-phy-Support-yt8531c.patch
-	patches.armbian/wireless-Add-uwe5622-driver.patch
 	patches.armbian/allwinner-h6-Support-ac200-audio-codec.patch
 	patches.armbian/nvmem-sunxi_sid-add-sunxi_get_soc_chipid-sunxi_get_serial.patch
 	patches.armbian/add-initial-support-for-orangepi3-lts.patch
