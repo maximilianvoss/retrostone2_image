@@ -48,14 +48,6 @@ EOF
 diff -Naur kernel/original/sun7i-a20.dtsi kernel/retrostone2/sun7i-a20.dtsi | tail -n +3 >>$patchfile
 
 cat <<-EOF >>$patchfile
-diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
-index ee6900eb3..8b8d81e8e 100644
---- a/drivers/i2c/busses/i2c-mv64xxx.c
-+++ b/drivers/i2c/busses/i2c-mv64xxx.c
-EOF
-diff -Naur kernel/original/i2c-mv64xxx.c kernel/retrostone2/i2c-mv64xxx.c | tail -n +3 >>$patchfile
-
-cat <<-EOF >>$patchfile
 diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
 index ee6900eb3..8b8d81e8e 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
