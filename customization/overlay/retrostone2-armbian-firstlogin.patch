@@ -434,7 +434,7 @@
  			fi
 +			# set up auto login for TTY1
 +			mkdir -p /etc/systemd/system/getty@tty1.service.d
-+			cat <<- EOF > /etc/systemd/system/getty@tty1.service.d/autologin.conf
++			cat <<-EOF > /etc/systemd/system/getty@tty1.service.d/autologin.conf
 +[Service]
 +ExecStart=
 +ExecStart=-/sbin/agetty --autologin $username %I
@@ -575,11 +575,11 @@
 +# 1st run goes without login
 +    mkdir -p /etc/lightdm/lightdm.conf.d
 +    cat <<-EOF > /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
-+    [Seat:*]
-+    autologin-user=$RealUserName
-+    autologin-user-timeout=0
-+    user-session=xfce
-+    EOF
++[Seat:*]
++autologin-user=$RealUserName
++autologin-user-timeout=0
++user-session=xfce
++EOF
 +
 +# select gnome session (has to be first or it breaks budgie/cinnamon desktop autologin and user-session)
 +    [[ -x $(command -v gnome-session) ]] && sed -i "s/user-session.*/user-session=ubuntu/" /etc/lightdm/lightdm.conf.d/11-armbian.conf
@@ -633,7 +633,7 @@
 +    [daemon]
 +    AutomaticLoginEnable = true
 +    AutomaticLogin = $RealUserName
-+    EOF
++EOF
 +
 +    ln -sf /lib/systemd/system/gdm3.service /etc/systemd/system/display-manager.service
 +
