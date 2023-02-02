@@ -28,6 +28,7 @@ Main() {
     AlsaSettings
     PlymouthSetup
     DisableServices
+    SetPartitionMaxSize
   fi
 }
 
@@ -105,6 +106,11 @@ PlymouthSetup() {
   sed -i 's/verbosity=1/verbosity=0/g' /boot/armbianEnv.txt
   sed -i 's/bootlogo=false/bootlogo=true/g' /boot/armbianEnv.txt
   ln -sf /usr/share/plymouth/themes/retrostone2/retrostone2.plymouth /etc/alternatives/default.plymouth
+}
+
+SetPartitionMaxSize() {
+  # setting the Partition size to 14 GB
+  echo $((14*1024*1024)) >/root/.rootfs_resize
 }
 
 Main "$@"
