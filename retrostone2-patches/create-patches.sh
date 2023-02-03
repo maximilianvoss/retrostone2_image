@@ -8,6 +8,14 @@ cat <<-EOF > $patchfile
 EOF
 diff -Naur ../packages/bsp/common/usr/lib/armbian/armbian-firstlogin ./armbian/armbian-firstlogin | tail -n +3 >>$patchfile
 
+# armbian-zram-config
+patchfile=../customization/overlay/retrostone2-armbian-zram-config.patch
+cat <<-EOF > $patchfile
+--- etc/default/armbian-zram-config
++++ etc/default/armbian-zram-config
+EOF
+diff -Naur ../packages/bsp/common/etc/default/armbian-zram-config.dpkg-dist ./armbian/armbian-zram-config | tail -n +3 >>$patchfile
+
 # SDL2 Patch
 patchfile=../packages/extras-buildpkgs/libsdl2-2.0-0/debian/patches/retrostone2-sdl2.patch
 cat <<-EOF > $patchfile

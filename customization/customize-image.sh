@@ -29,6 +29,7 @@ Main() {
     PlymouthSetup
     DisableServices
     SetPartitionMaxSize
+    PatchZramConfig
   fi
 }
 
@@ -49,6 +50,10 @@ AlsaSettings() {
 
 PatchArmbianFirstLogin() {
   patch -b /usr/lib/armbian/armbian-firstlogin < /tmp/overlay/retrostone2-armbian-firstlogin.patch
+}
+
+PatchZramConfig() {
+    patch -b /etc/default/armbian-zram-config < /tmp/overlay/retrostone2-armbian-zram-config.patch
 }
 
 PatchEmulationStationConfig() {
@@ -110,7 +115,7 @@ PlymouthSetup() {
 
 SetPartitionMaxSize() {
   # setting the Partition size to 14 GB
-  echo $((14*1024*1024)) >/root/.rootfs_resize
+  echo $((14*1024*1024))B >/root/.rootfs_resize
 }
 
 Main "$@"

@@ -1,0 +1,11 @@
+--- etc/default/armbian-zram-config
++++ etc/default/armbian-zram-config
+@@ -4,7 +4,7 @@
+ ENABLED=true
+ 
+ # Zram swap enabled by default, unless set to disabled
+-# SWAP=false
++SWAP=false
+ 
+ # percentage of zram used as swap compared to physically available DRAM.
+ # Huge overcommitment (300) is possible and sometimes desirable. See
