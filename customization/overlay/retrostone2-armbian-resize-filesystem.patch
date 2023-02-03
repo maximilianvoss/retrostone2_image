@@ -1,0 +1,36 @@
+--- usr/lib/armbian/armbian-resize-filesystem
++++ usr/lib/armbian/armbian-resize-filesystem
+@@ -68,6 +68,16 @@
+ 		read RESIZE_VALUE </root/.rootfs_resize
+ 		echo "Resize rule $RESIZE_VALUE defined for root partition"
+ 		case $RESIZE_VALUE in
++            *f%)
++                # free percentage value
++                local percentage=$(echo $RESIZE_VALUE | tr -c -d '[:digit:]')
++                local lastsector=$(( $capacity * (100 - $percentage) / 100 ))
++                ;;
++            *fB)
++                # free byte value
++                local byte=$(echo $RESIZE_VALUE | tr -c -d '[:digit:]')
++                local lastsector=$(( $capacity - $partstart - ($byte / $sectorsize) ))
++                ;;
+ 			*%)
+ 				# percentage value
+ 				local percentage=$(echo $RESIZE_VALUE | tr -c -d '[:digit:]')
+@@ -90,7 +100,7 @@
+ 
+ 		# if remain more than 1GiB then create another partition
+ 		if [[ $(( $sectorsize * ($capacity - $lastsector) )) -ge $(( 1 * 1024 * 1024 * 1024 )) ]]; then
+-			local newpartition=$(( $capacity * 99 / 100 ))
++			local newpartition=$(( $capacity ))
+ 		fi
+ 	else
+ 		# check device capacity. If 4GiB or below do not use whole card but leave a 5% spare area
+@@ -154,6 +164,7 @@
+ 	if [[ -n $newpartition ]]; then
+ 		{
+ 			echo n; echo p; echo ; echo $(( $lastsector + 1 )); echo $newpartition
++            echo t; echo 2; echo 82;
+ 			echo w
+ 		} | fdisk $diskdev
+ 	fi

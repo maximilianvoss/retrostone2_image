@@ -8,6 +8,14 @@ cat <<-EOF > $patchfile
 EOF
 diff -Naur ../packages/bsp/common/usr/lib/armbian/armbian-firstlogin ./armbian/armbian-firstlogin | tail -n +3 >>$patchfile
 
+# armbian-resize-filesystem
+patchfile=../customization/overlay/retrostone2-armbian-resize-filesystem.patch
+cat <<-EOF > $patchfile
+--- usr/lib/armbian/armbian-resize-filesystem
++++ usr/lib/armbian/armbian-resize-filesystem
+EOF
+diff -Naur ../packages/bsp/common/usr/lib/armbian/armbian-resize-filesystem ./armbian/armbian-resize-filesystem | tail -n +3 >>$patchfile
+
 # armbian-zram-config
 patchfile=../customization/overlay/retrostone2-armbian-zram-config.patch
 cat <<-EOF > $patchfile
