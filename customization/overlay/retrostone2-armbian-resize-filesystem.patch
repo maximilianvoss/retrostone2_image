@@ -34,3 +34,16 @@
  			echo w
  		} | fdisk $diskdev
  	fi
+@@ -285,6 +296,12 @@
+ 
+ 	# disable itself
+ 	[[ ! -f /var/run/resize2fs-reboot ]] && systemctl disable armbian-resize-filesystem
++
++    swapdev=$(mount | grep "on / type" | awk '{ print $1 }' | sed 's/p1$//g' | xargs fdisk -l | grep /dev | grep 'Linux swap' | awk '{ print $1 }')
++    mkswap $swapdev
++    blkid=$(blkid  | grep $swapdev | sed 's/.* UUID="\(.*\)" TYPE.*/\1/')
++	echo UUID=$blkid none swap defaults 0 0
++	swapon -a
+ 	exit 0
+ }
+ 
