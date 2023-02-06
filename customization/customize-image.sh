@@ -26,6 +26,7 @@ Main() {
     RetropieSkeleton
     PatchArmbianFirstLogin
     PatchArmbianReziseFilesystem
+    PatchArmbianBoot
     PatchZramConfig
     AlsaSettings
     PlymouthSetup
@@ -55,6 +56,11 @@ PatchArmbianFirstLogin() {
 
 PatchArmbianReziseFilesystem() {
   patch -b /usr/lib/armbian/armbian-resize-filesystem < /tmp/overlay/retrostone2-armbian-resize-filesystem.patch
+}
+
+PatchArmbianBoot() {
+    patch -b /boot/boot.cmd < /tmp/overlay/retrostone2-armbian-boot.patch
+    mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
 }
 
 PatchZramConfig() {
