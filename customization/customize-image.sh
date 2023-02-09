@@ -28,6 +28,7 @@ Main() {
     PatchArmbianReziseFilesystem
     PatchArmbianBoot
     PatchZramConfig
+    PatchLogindConf
     AlsaSettings
     PlymouthSetup
     DisableServices
@@ -56,6 +57,10 @@ PatchArmbianFirstLogin() {
 
 PatchArmbianReziseFilesystem() {
   patch -b /usr/lib/armbian/armbian-resize-filesystem < /tmp/overlay/retrostone2-armbian-resize-filesystem.patch
+}
+
+PatchLogindConf() {
+  patch -b /etc/systemd/logind.conf < /tmp/overlay/retrostone2-logind.patch
 }
 
 PatchArmbianBoot() {

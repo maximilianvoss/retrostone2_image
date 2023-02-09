@@ -303,6 +303,7 @@ main()
 	echo UUID=$blkid none swap defaults 0 0 >>/etc/fstab
 	echo resume=UUID=$blkid >>/boot/armbianEnv.txt
 	mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
+	sync
 	swapon -a
 	exit 0
 }
