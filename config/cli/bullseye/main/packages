@@ -1,4 +1,5 @@
 bc
+cracklib-runtime
 chrony
 debconf-utils
 device-tree-compiler
@@ -10,7 +11,6 @@ ncurses-term
 openssh-server
 parted
 psmisc
-python3-apt
 smartmontools
 sysfsutils
 toilet
