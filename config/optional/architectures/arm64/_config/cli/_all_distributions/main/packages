@@ -1,4 +1,4 @@
-box64
 gpiod
 cpufrequtils
+mtd-utils
 nocache

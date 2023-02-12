@@ -1,0 +1,11 @@
+--- logind.conf.orig	2023-02-09 15:59:29.223366479 +0000
++++ logind.conf	2023-02-09 15:59:47.207316367 +0000
+@@ -22,7 +22,7 @@
+ #KillExcludeUsers=root
+ #InhibitDelayMaxSec=5
+ #UserStopDelaySec=10
+-#HandlePowerKey=poweroff
++HandlePowerKey=hibernate
+ #HandleSuspendKey=suspend
+ #HandleHibernateKey=hibernate
+ #HandleLidSwitch=suspend

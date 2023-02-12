@@ -8,6 +8,22 @@ cat <<-EOF > $patchfile
 EOF
 diff -Naur ../packages/bsp/common/usr/lib/armbian/armbian-firstlogin ./armbian/armbian-firstlogin | tail -n +3 >>$patchfile
 
+# armbian-resize-filesystem
+patchfile=../customization/overlay/retrostone2-armbian-resize-filesystem.patch
+cat <<-EOF > $patchfile
+--- usr/lib/armbian/armbian-resize-filesystem
++++ usr/lib/armbian/armbian-resize-filesystem
+EOF
+diff -Naur ../packages/bsp/common/usr/lib/armbian/armbian-resize-filesystem ./armbian/armbian-resize-filesystem | tail -n +3 >>$patchfile
+
+# armbian-zram-config
+patchfile=../customization/overlay/retrostone2-armbian-zram-config.patch
+cat <<-EOF > $patchfile
+--- etc/default/armbian-zram-config
++++ etc/default/armbian-zram-config
+EOF
+diff -Naur ../packages/bsp/common/etc/default/armbian-zram-config.dpkg-dist ./armbian/armbian-zram-config | tail -n +3 >>$patchfile
+
 # SDL2 Patch
 patchfile=../packages/extras-buildpkgs/libsdl2-2.0-0/debian/patches/retrostone2-sdl2.patch
 cat <<-EOF > $patchfile
@@ -16,7 +32,7 @@ index aa9d35780..2698d5632 100644
 --- a/src/joystick/SDL_gamecontrollerdb.h
 +++ b/src/joystick/SDL_gamecontrollerdb.h
 EOF
-curl -o SDL_gamecontrollerdb.h https://raw.githubusercontent.com/libsdl-org/SDL/2.0.22/src/joystick/SDL_gamecontrollerdb.h
+curl -o SDL_gamecontrollerdb.h https://raw.githubusercontent.com/libsdl-org/SDL/release-2.0.22/src/joystick/SDL_gamecontrollerdb.h
 diff -Naur SDL_gamecontrollerdb.h SDL/SDL_gamecontrollerdb.h | tail -n +3 >>$patchfile
 rm SDL_gamecontrollerdb.h
 
@@ -46,14 +62,6 @@ index 9ad8e445b..9b0b830f5 100644
 +++ b/arch/arm/boot/dts/sun7i-a20.dtsi
 EOF
 diff -Naur kernel/original/sun7i-a20.dtsi kernel/retrostone2/sun7i-a20.dtsi | tail -n +3 >>$patchfile
-
-cat <<-EOF >>$patchfile
-diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
-index ee6900eb3..8b8d81e8e 100644
---- a/drivers/i2c/busses/i2c-mv64xxx.c
-+++ b/drivers/i2c/busses/i2c-mv64xxx.c
-EOF
-diff -Naur kernel/original/i2c-mv64xxx.c kernel/retrostone2/i2c-mv64xxx.c | tail -n +3 >>$patchfile
 
 cat <<-EOF >>$patchfile
 diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c

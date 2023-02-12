@@ -12,7 +12,7 @@ gcr
 gdebi
 gist
 gnome-keyring
-gnome-orca
+gnome-disk-utility
 gnome-packagekit
 gnome-terminal
 gtk2-engines
@@ -48,8 +48,6 @@ mate-equake-applet
 mate-icon-theme
 mate-indicator-applet
 mate-indicator-applet-common
-mate-media
-mate-media-common
 mate-menu
 mate-menus
 mate-netbook

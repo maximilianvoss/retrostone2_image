@@ -1,7 +1,7 @@
 --- usr/lib/armbian/armbian-firstlogin
 +++ usr/lib/armbian/armbian-firstlogin
-@@ -75,23 +75,23 @@
- 	optionsAudits=($(grep "zsh\|/bash" /etc/shells | sed 's/\/bin\///g' | sed 's/\/usr//g' | uniq))
+@@ -76,25 +76,6 @@
+ 	readarray -t optionsAudits <<<"$(grep "zsh\|/bash" /etc/shells | sed 's/\/bin\///g' | sed 's/\/usr//g' | uniq)"
  	USER_SHELL="bash"
  
 -	if [[ "${#optionsAudits[@]}" -gt 1 ]]; then
@@ -11,9 +11,9 @@
 -				echo -e "\nChoose default system command shell:\n"
 -				for o in  "${optionsAudits[@]}"; do
 -					echo "$i) $o"
--					let i++
+-					(( i++ )) || true
 -				done
--				read -n1 -s reply
+-				read -r -n1 -s reply
 -				case $reply in
 -					"1"|"${optionsAudits[0]}") USER_SHELL="${optionsAudits[0]}"; break;;
 -					"2"|"${optionsAudits[1]}") USER_SHELL="${optionsAudits[1]}"; break;;
@@ -21,34 +21,20 @@
 -				esac
 -			done
 -	fi
-+#	if [[ "${#optionsAudits[@]}" -gt 1 ]]; then
-+#		while :
-+#			do
-+#				i=1
-+#				echo -e "\nChoose default system command shell:\n"
-+#				for o in  "${optionsAudits[@]}"; do
-+#					echo "$i) $o"
-+#					let i++
-+#				done
-+#				read -n1 -s reply
-+#				case $reply in
-+#					"1"|"${optionsAudits[0]}") USER_SHELL="${optionsAudits[0]}"; break;;
-+#					"2"|"${optionsAudits[1]}") USER_SHELL="${optionsAudits[1]}"; break;;
-+#					*) USER_SHELL="${optionsAudits[0]}"; break;;
-+#				esac
-+#			done
-+#	fi
- 	SHELL_PATH=$(grep /$USER_SHELL$ /etc/shells | tail -1)
+-	SHELL_PATH=$(grep "/$USER_SHELL$" /etc/shells | tail -1)
+-
+ 	chsh -s "$(grep -iF "/$USER_SHELL" /etc/shells | tail -1)"
+ 	echo -e "\nShell: \x1B[92m${USER_SHELL^^}\x1B[0m"
  
- 	chsh -s $(grep -iF "/$USER_SHELL" /etc/shells | tail -1)
-@@ -145,64 +145,6 @@
- 	CCODE=$(echo ${RES} | cut -d"," -f3 | xargs)
+@@ -149,69 +130,6 @@
+ 	CCODE=$(echo "${RES}" | cut -d"," -f3 | xargs)
  	echo -e "Detected timezone: \x1B[92m$TZDATA\x1B[0m"
  	echo ""
 -	unset response
 -	while [[ ! "${response}" =~ ^(Y|y|N|n)$ ]]; do
 -		read -n1 -s -r -p "Set user language based on your location? [Y/n] " response
--		echo ""
+-		response=${response:-Y}
+-		echo "$response"
 -	done
 -	# change it only if we have a match and if we agree
 -	if [[ "${response}" =~ ^(N|n)$ ]]; then
@@ -61,7 +47,7 @@
 -	[[ -z "$LOCALES" ]] && LOCALES=$(grep territory /usr/share/i18n/locales/* | grep _"$CCODE" | cut -d ":" -f 1 | cut -d "/" -f 6 |  \
 -	xargs -I{} grep {} /usr/share/i18n/SUPPORTED | cut -d " " -f 1)
 -
--	options=(`echo ${LOCALES}`);
+-	readarray -t options <<<"${LOCALES}"
 -
 -	# when having more locales, prompt for choosing one
 -	if [[ "${#options[@]}" -gt 1 ]]; then
@@ -71,12 +57,12 @@
 -		PS3='Please enter your choice:'
 -		select opt in "${options[@]}"
 -			do
--				if [[ " ${options[@]} " =~ " ${opt} " ]]; then
+-				if [[ " ${options[*]} " == *" ${opt} "* ]]; then
 -					LOCALES=${opt}
 -					break
 -				fi
 -			done
--		fi
+-	fi
 -
 -	if [[ "${LOCALES}" != *Skip* ]]; then
 -
@@ -95,44 +81,147 @@
 -		locale-gen "${LOCALES}" > /dev/null 2>&1
 -
 -		# setting detected locales only for user
--		echo "export LC_ALL=$LOCALES" >> /home/"$RealUserName"/.bashrc
--		echo "export LANG=$LOCALES" >> /home/"$RealUserName"/.bashrc
--		echo "export LANGUAGE=$LOCALES" >> /home/"$RealUserName"/.bashrc
--		echo "export LC_ALL=$LOCALES" >> /home/"$RealUserName"/.xsessionrc
--		echo "export LANG=$LOCALES" >> /home/"$RealUserName"/.xsessionrc
--		echo "export LANGUAGE=$LOCALES" >> /home/"$RealUserName"/.xsessionrc
+-		{
+-			echo "export LC_ALL=$LOCALES"
+-			echo "export LANG=$LOCALES"
+-			echo "export LANGUAGE=$LOCALES"
+-		} >> /home/"$RealUserName"/.bashrc
+-		{
+-			echo "export LC_ALL=$LOCALES"
+-			echo "export LANG=$LOCALES"
+-			echo "export LANGUAGE=$LOCALES"
+-		} >> /home/"$RealUserName"/.xsessionrc
 -
 -	fi
  }
  
  
-@@ -283,10 +225,19 @@
- 				# set up profile sync daemon on desktop systems
- 				command -v psd >/dev/null 2>&1
- 				if [ $? -eq 0 ]; then
--					echo -e "${RealUserName} ALL=(ALL) NOPASSWD: /usr/bin/psd-overlay-helper" >> /etc/sudoers
-+					echo -e "${RealUserName} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
- 					touch /home/"${RealUserName}"/.activate_psd
- 					chown "$RealUserName":"$RealUserName" /home/"${RealUserName}"/.activate_psd
- 				fi
-+
-+				# set up auto login for TTY1
-+				mkdir -p /etc/systemd/system/getty@tty1.service.d
-+				cat <<- EOF > /etc/systemd/system/getty@tty1.service.d/autologin.conf
+@@ -293,10 +211,17 @@
+ 			chmod +x /etc/update-motd.d/*
+ 			# set up profile sync daemon on desktop systems
+ 			if command -v psd >/dev/null 2>&1; then
+-				echo -e "${RealUserName} ALL=(ALL) NOPASSWD: /usr/bin/psd-overlay-helper" >> /etc/sudoers
++				echo -e "${RealUserName} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+ 				touch /home/"${RealUserName}"/.activate_psd
+ 				chown "$RealUserName":"$RealUserName" /home/"${RealUserName}"/.activate_psd
+ 			fi
++			# set up auto login for TTY1
++			mkdir -p /etc/systemd/system/getty@tty1.service.d
++			cat <<-EOF > /etc/systemd/system/getty@tty1.service.d/autologin.conf
 +[Service]
 +ExecStart=
 +ExecStart=-/sbin/agetty --autologin $username %I
 +EOF
-+
- 				break
- 			else
- 				echo -e "Rejected - \e[0;31m$okay.\x1B[0m Try again [${REPEATS}]."
-@@ -407,6 +358,8 @@
- 		printf "\nYou selected \e[0;91mZSH\x1B[0m as your default shell. If you want to use it right away, please logout and login! \n\n"
- 	fi
- 
+ 			break
+ 		elif [[ -n $password ]]; then
+ 			echo -e "Rejected - \e[0;31mpasswords do not match.\x1B[0m Try again [${REPEATS}]."
+@@ -406,108 +331,5 @@
+ 	trap '' 2
+ 	set_timezone_and_locales
+ 	trap - INT TERM EXIT
+-
+-	if [[ ${USER_SHELL} == zsh ]]; then
+-		printf "\nYou selected \e[0;91mZSH\x1B[0m as your default shell. If you want to use it right away, please logout and login! \n\n"
+-	fi
+-
+-	# check whether desktop environment has to be considered
+-	if [ -n "$desktop_lightdm" ] && [ -n "$RealName" ] ; then
+-
+-			# 1st run goes without login
+-			mkdir -p /etc/lightdm/lightdm.conf.d
+-			cat <<-EOF > /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
+-			[Seat:*]
+-			autologin-user=$RealUserName
+-			autologin-user-timeout=0
+-			user-session=xfce
+-			EOF
+-
+-			# select gnome session (has to be first or it breaks budgie/cinnamon desktop autologin and user-session)
+-			[[ -x $(command -v gnome-session) ]] && sed -i "s/user-session.*/user-session=ubuntu/" /etc/lightdm/lightdm.conf.d/11-armbian.conf
+-			[[ -x $(command -v gnome-session) ]] && sed -i "s/user-session.*/user-session=ubuntu/" /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
+-
+-			# select budgie session
+-			[[ -x $(command -v budgie-desktop) ]] && sed -i "s/user-session.*/user-session=budgie-desktop/" /etc/lightdm/lightdm.conf.d/11-armbian.conf
+-			[[ -x $(command -v budgie-desktop) ]] && sed -i "s/user-session.*/user-session=budgie-desktop/" /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
+-
+-			# select deepin session
+-			[[ -x $(command -v deepin-wm) ]] && sed -i "s/user-session.*/user-session=deepin/" /etc/lightdm/lightdm.conf.d/11-armbian.conf
+-			[[ -x $(command -v deepin-wm) ]] && sed -i "s/user-session.*/user-session=deepin/" /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
+-
+-			# select cinnamon session
+-			[[ -x $(command -v cinnamon) ]] && sed -i "s/user-session.*/user-session=cinnamon/" /etc/lightdm/lightdm.conf.d/11-armbian.conf
+-			[[ -x $(command -v cinnamon) ]] && sed -i "s/user-session.*/user-session=cinnamon/" /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
+-
+-			# select mate session
+-			[[ -x $(command -v mate-wm) ]] && sed -i "s/user-session.*/user-session=mate/" /etc/lightdm/lightdm.conf.d/11-armbian.conf
+-			[[ -x $(command -v mate-wm) ]] && sed -i "s/user-session.*/user-session=mate/" /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
+-
+-			# select plasma wayland session
+-			[[ -x $(command -v plasmashell) ]] && sed -i "s/user-session.*/user-session=plasmawayland/" /etc/lightdm/lightdm.conf.d/11-armbian.conf
+-			[[ -x $(command -v plasmashell) ]] && sed -i "s/user-session.*/user-session=plasmawayland/" /etc/lightdm/lightdm.conf.d/22-armbian-autologin.conf
+-
+-			ln -sf /lib/systemd/system/lightdm.service /etc/systemd/system/display-manager.service
+-
+-			if [[ -f /var/run/resize2fs-reboot ]]; then
+-				# Let the user reboot now otherwise start desktop environment
+-				printf "\n\n\e[0;91mWarning: a reboot is needed to finish resizing the filesystem \x1B[0m \n"
+-				printf "\e[0;91mPlease reboot the system now \x1B[0m \n\n"
+-			else
+-				echo -e "\n\e[1m\e[39mNow starting desktop environment...\x1B[0m\n"
+-				sleep 1
+-				service lightdm start 2>/dev/null
+-				if [ -f /root/.desktop_autologin ]; then
+-					rm /root/.desktop_autologin
+-				else
+-					systemctl -q enable armbian-disable-autologin.timer
+-					systemctl start armbian-disable-autologin.timer
+-				fi
+-				# logout if logged at console
+-				who -la | grep root | grep -q tty1 && exit 1
+-			fi
+-
+-	elif [ -n "$desktop_gdm3" ] && [ -n "$RealName" ] ; then
+-
+-			# 1st run goes without login
+-			mkdir -p /etc/gdm3
+-			cat <<-EOF > /etc/gdm3/custom.conf
+-			[daemon]
+-			AutomaticLoginEnable = true
+-			AutomaticLogin = $RealUserName
+-			EOF
+-
+-			ln -sf /lib/systemd/system/gdm3.service /etc/systemd/system/display-manager.service
+-
+-				if [[ -f /var/run/resize2fs-reboot ]]; then
+-
+-					# Let the user reboot now otherwise start desktop environment
+-					printf "\n\n\e[0;91mWarning: a reboot is needed to finish resizing the filesystem \x1B[0m \n"
+-					printf "\e[0;91mPlease reboot the system now \x1B[0m \n\n"
+-
+-				else
+-
+-					echo -e "\n\e[1m\e[39mNow starting desktop environment...\x1B[0m\n"
+-					sleep 1
+-					service gdm3 start 2>/dev/null
+-					if [ -f /root/.desktop_autologin ]; then
+-						rm /root/.desktop_autologin
+-					else
+-						(sleep 20; sed -i "s/AutomaticLoginEnable.*/AutomaticLoginEnable = false/" /etc/gdm3/custom.conf) &
+-					fi
+-					# logout if logged at console
+-					who -la | grep root | grep -q tty1 && exit 1
+-
+-				fi
+-
+-	else
+-
+-		# Display reboot recommendation if necessary
+-		if [[ -f /var/run/resize2fs-reboot ]]; then
+-			printf "\n\n\e[0;91mWarning: a reboot is needed to finish resizing the filesystem \x1B[0m \n"
+-			printf "\e[0;91mPlease reboot the system now \x1B[0m \n\n"
+-		fi
+-
+-	fi
+-
 +    reboot
-+
- 	# check whether desktop environment has to be considered
- 	if [ -n "$desktop_lightdm" ] && [ -n "$RealName" ] ; then
- 
+ fi

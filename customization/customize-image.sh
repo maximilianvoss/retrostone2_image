@@ -25,9 +25,14 @@ Main() {
     InstallController
     RetropieSkeleton
     PatchArmbianFirstLogin
+    PatchArmbianReziseFilesystem
+    PatchArmbianBoot
+    PatchZramConfig
+    PatchLogindConf
     AlsaSettings
     PlymouthSetup
     DisableServices
+    SetPartitionMaxSize
   fi
 }
 
@@ -48,6 +53,23 @@ AlsaSettings() {
 
 PatchArmbianFirstLogin() {
   patch -b /usr/lib/armbian/armbian-firstlogin < /tmp/overlay/retrostone2-armbian-firstlogin.patch
+}
+
+PatchArmbianReziseFilesystem() {
+  patch -b /usr/lib/armbian/armbian-resize-filesystem < /tmp/overlay/retrostone2-armbian-resize-filesystem.patch
+}
+
+PatchLogindConf() {
+  patch -b /etc/systemd/logind.conf < /tmp/overlay/retrostone2-logind.patch
+}
+
+PatchArmbianBoot() {
+    patch -b /boot/boot.cmd < /tmp/overlay/retrostone2-armbian-boot.patch
+    mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
+}
+
+PatchZramConfig() {
+    patch -b /etc/default/armbian-zram-config < /tmp/overlay/retrostone2-armbian-zram-config.patch
 }
 
 PatchEmulationStationConfig() {
@@ -105,6 +127,11 @@ PlymouthSetup() {
   sed -i 's/verbosity=1/verbosity=0/g' /boot/armbianEnv.txt
   sed -i 's/bootlogo=false/bootlogo=true/g' /boot/armbianEnv.txt
   ln -sf /usr/share/plymouth/themes/retrostone2/retrostone2.plymouth /etc/alternatives/default.plymouth
+}
+
+SetPartitionMaxSize() {
+  # setting the Partition size to 14 GB
+  echo $((2*1024*1024*1024))fB >/root/.rootfs_resize
 }
 
 Main "$@"
