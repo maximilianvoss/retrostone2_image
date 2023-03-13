@@ -1,6 +1,9 @@
 # Retrostone2
 Find the latest news on [Retrostone2 here](RETROSTONE2.md)
 
+# DEPRECATED:
+# This branch will not receive any further updates or fixes. Do NOT open bug reports when using it.
+
 <p align="center">
   <a href="#build-framework">
   <img src=".github/armbian-logo.png" alt="Armbian logo" width="144">
