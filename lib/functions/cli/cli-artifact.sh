@@ -17,6 +17,9 @@ function cli_artifact_run() {
 	: "${chosen_artifact:?chosen_artifact is not set}"
 	: "${chosen_artifact_impl:?chosen_artifact_impl is not set}"
 
+	# Make sure ORAS tooling is installed before starting.
+	run_tool_oras
+
 	display_alert "artifact" "${chosen_artifact}" "debug"
 	display_alert "artifact" "${chosen_artifact} :: ${chosen_artifact_impl}()" "debug"
 	artifact_cli_adapter_config_prep # only if in cli.
@@ -39,6 +42,10 @@ function cli_artifact_run() {
 		skip_unpack_if_found_in_caches="yes"
 		ignore_local_cache="yes"
 		deploy_to_remote="yes"
+
+		if [[ "${FORCE_ARTIFACTS_DOWNLOAD}" == "yes" ]]; then
+			skip_unpack_if_found_in_caches="no"
+		fi
 
 		# Pass ARTIFACT_USE_CACHE=yes to actually use the cache versions, but don't deploy to remote.
 		# @TODO this is confusing. each op should be individually controlled...

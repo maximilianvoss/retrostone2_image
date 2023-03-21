@@ -296,16 +296,6 @@ family_tweaks() {
 
 		chroot $SDCARD /bin/bash -c "systemctl --no-reload enable z28pro-bluetooth.service >/dev/null 2>&1"
 
-	elif [[ $BOARD == nanopi-r2s || $BOARD == nanopi-r2c || $BOARD == orangepi-r1plus ]]; then
-
-		# rename USB based network to lan0
-		mkdir -p $SDCARD/etc/udev/rules.d/
-		echo 'SUBSYSTEM=="net", ACTION=="add", DRIVERS=="r8152", KERNEL=="eth1", NAME="lan0"' > $SDCARD/etc/udev/rules.d/70-rename-lan.rules
-
-	elif [[ $BOARD == helios64 ]]; then
-
-		chroot $SDCARD /bin/bash -c "systemctl --no-reload enable helios64-heartbeat-led.service >/dev/null 2>&1"
-
 	elif [[ -f $SDCARD/lib/systemd/system/rk3399-bluetooth.service ]]; then
 
 		# install and enable Bluetooth
@@ -318,26 +308,6 @@ family_tweaks() {
 		chroot $SDCARD /bin/bash -c "apt-get -y -qq install rfkill bluetooth bluez bluez-tools"
 		chroot $SDCARD /bin/bash -c "systemctl --no-reload enable sprd-bluetooth.service >/dev/null 2>&1"
 
-	fi
-
-	if [[ -f $SDCARD/lib/systemd/system/orangepi5-usb2-init.service ]]; then
-
-		# enable usb2 init service
-		chroot $SDCARD /bin/bash -c "systemctl --no-reload enable orangepi5-usb2-init.service >/dev/null 2>&1"
-
-	fi
-
-	if [[ $BOARD == nanopim4* ]]; then
-
-		# enable fan support
-		chroot $SDCARD /bin/bash -c "systemctl --no-reload enable nanopim4-pwm-fan.service >/dev/null 2>&1"
-
-	fi
-
-	if [[ $BOARD == pinebook-pro ]]; then
-
-		chroot $SDCARD /bin/bash -c "echo SuspendState=freeze >> /etc/systemd/sleep.conf"
-		chroot $SDCARD /bin/bash -c "echo HandlePowerKey=ignore >> /etc/systemd/login.d"
 	fi
 
 	if [[ $BOARD == station* ]]; then
@@ -356,30 +326,6 @@ family_tweaks() {
 			install -m 755 $SRC/packages/blobs/station/firefly-fan.service $SDCARD/usr/lib/systemd/system/firefly-fan.service
 			chroot $SDCARD /bin/bash -c "systemctl --no-reload enable firefly-fan.service >/dev/null 2>&1"
 		fi
-
-	fi
-
-	if [[ $BOARD == khadas-edge2 ]]; then
-
-		cp -R $SRC/packages/blobs/station/firmware/* $SDCARD/lib/firmware/
-
-	fi
-
-	if [[ $BOARD == jetson-nano ]]; then
-		install -m 755 $SRC/packages/blobs/jetson/jetson.sh $SDCARD/etc/initramfs-tools/hooks/jetson.sh
-		if [[ $BRANCH == legacy ]]; then
-			install -m 755 $SRC/packages/blobs/jetson/tegra21x_xusb_firmware $SDCARD/lib/firmware/tegra21x_xusb_firmware
-			install -m 755 $SRC/packages/blobs/jetson/asound.conf.tegrahda $SDCARD/etc/asound.conf.tegrahda
-			install -m 755 $SRC/packages/blobs/jetson/asound.conf.tegrahda $SDCARD/etc/asound.conf
-			install -m 755 $SRC/packages/blobs/jetson/asound.conf.tegrasndt210ref $SDCARD/etc/asound.conf.tegrasndt210ref
-			install -m 755 $SRC/packages/blobs/jetson/tegra-hda.conf $SDCARD/usr/share/alsa/cards/tegra-hda.conf
-			install -m 755 $SRC/packages/blobs/jetson/tegra-snd-t210r.conf $SDCARD/usr/share/alsa/cards/tegra-snd-t210r.conf
-			sed -e 's/exit 0//g' -i $SDCARD/etc/rc.local
-			echo "su -c 'echo 255 > /sys/devices/pwm-fan/target_pwm'" >> $SDCARD/etc/rc.local
-			echo "exit 0" >> $SDCARD/etc/rc.local
-		else
-			cp -R $SRC/packages/blobs/jetson/firmware/* $SDCARD/lib/firmware/
-		fi
 	fi
 }
 
@@ -394,38 +340,6 @@ family_tweaks_bsp() {
 			         Driver "fbdev"
 			EndSection
 		EOF
-	fi
-
-	if [[ $BOARD == clockworkpi-a06 ]]; then
-		# rotate screen & disable dpms
-		mkdir -p "$destination"/etc/X11/xorg.conf.d
-		cat <<- EOF > "$destination"/etc/X11/xorg.conf.d/10-monitor.conf
-			# set monitor
-			Section "Monitor"
-			        Identifier "DSI-1"
-			        Option "Rotate" "right"
-			        Option "DPMS" "false"
-			EndSection
-
-			Section "ServerLayout"
-			        Identifier "ServerLayout0"
-			        Option "BlankTime"  "0"
-			        Option "StandbyTime" "0"
-			        Option "SuspendTime" "0"
-			        Option "OffTime" "0"
-			EndSection
-		EOF
-		# fan support
-		install -Dm644 $SRC/packages/bsp/clockworkpi-a06/temp_fan_daemon_a06.py $destination/usr/share/clockworkpi-a06-fan-daemon/bin/temp_fan_daemon_a06.py
-		cp $SRC/packages/bsp/clockworkpi-a06/clockworkpi-a06-fan-daemon.service $destination/lib/systemd/system/
-
-		# alsa-ucm-conf profile for DevTerm A06
-		mkdir -p $destination/usr/share/alsa/ucm2/Rockchip/es8388
-		install -Dm644 $SRC/packages/bsp/clockworkpi-a06/es8388.conf $destination/usr/share/alsa/ucm2/Rockchip/es8388/es8388.conf
-		install -Dm644 $SRC/packages/bsp/clockworkpi-a06/HiFi.conf $destination/usr/share/alsa/ucm2/Rockchip/es8388/HiFi.conf
-		mkdir -p $destination/usr/share/alsa/ucm2/conf.d/simple-card
-		ln -sfv /usr/share/alsa/ucm2/Rockchip/es8388/es8388.conf \
-			$destination/usr/share/alsa/ucm2/conf.d/simple-card/rockchip,es8388-codec.conf
 	fi
 
 	if [[ $BOARD == z28pro ]]; then
@@ -446,81 +360,6 @@ family_tweaks_bsp() {
 		if [[ $BOARD == nanop*4* || $BOARD == firefly* || $BOARD == orangepi-rk3399 ]]; then
 			sed -i s%BCM4345C5%BCM4356A2%g $destination/lib/systemd/system/rk3399-bluetooth.service
 		fi
-	fi
-
-	if [[ $BOARD == orangepi4-lts ]]; then
-
-		# Bluetooth on orangepi 4 LTS board is handled by a Spreadtrum (sprd) chip and requires
-		# a custom hciattach_opi binary, plus a systemd service to run it at boot time
-		install -m 755 $SRC/packages/bsp/rk3399/hciattach_opi $destination/usr/bin
-		cp $SRC/packages/bsp/rk3399/sprd-bluetooth.service $destination/lib/systemd/system/
-
-	fi
-
-	if [[ $BOARD == nanopim4* ]]; then
-
-		# Fan support
-		cp $SRC/packages/bsp/nanopim4/nanopim4-pwm-fan.service $destination/lib/systemd/system/
-		install -m 755 $SRC/packages/bsp/nanopim4/nanopim4-pwm-fan.sh $destination/usr/bin/nanopim4-pwm-fan.sh
-
-	fi
-
-	if [[ $BOARD == helios64 ]]; then
-
-		mkdir -p $destination/etc/udev/rules.d/
-		mkdir -p $destination/etc/systemd/system/fancontrol.service.d/
-		mkdir -p $destination/lib/systemd/system/
-		mkdir -p $destination/lib/systemd/system-shutdown/
-		cp $SRC/packages/bsp/helios64/50-usb-realtek-net.rules $destination/etc/udev/rules.d/
-		cp $SRC/packages/bsp/helios64/70-keep-usb-lan-as-eth1.rules $destination/etc/udev/rules.d/
-		cp $SRC/packages/bsp/helios64/90-helios64-ups.rules $destination/etc/udev/rules.d/
-		cp $SRC/packages/bsp/helios64/asound.conf $destination/etc/
-		install -m 755 $SRC/packages/bsp/helios64/disable_auto_poweron $destination/lib/systemd/system-shutdown/
-
-		### Fancontrol tweaks
-		# copy hwmon rules to fix device mapping
-		# changed to only use one file regardless of branch
-		install -m 644 $SRC/packages/bsp/helios64/90-helios64-hwmon.rules $destination/etc/udev/rules.d/
-
-		install -m 644 $SRC/packages/bsp/helios64/fancontrol.service.pid-override $destination/etc/systemd/system/fancontrol.service.d/pid.conf
-
-		# copy fancontrol config
-		install -m 644 $SRC/packages/bsp/helios64/fancontrol.conf $destination/etc/fancontrol
-
-		# LED tweak
-		if [[ $BRANCH == legacy ]]; then
-			install -m 644 $SRC/packages/bsp/helios64/helios64-heartbeat-led-legacy.service $destination/etc/systemd/system/helios64-heartbeat-led.service
-		else
-			install -m 644 $SRC/packages/bsp/helios64/helios64-heartbeat-led.service $destination/etc/systemd/system/
-		fi
-
-		# UPS service
-		cp $SRC/packages/bsp/helios64/helios64-ups.service $destination/lib/systemd/system/
-		cp $SRC/packages/bsp/helios64/helios64-ups.timer $destination/lib/systemd/system/
-		install -m 755 $SRC/packages/bsp/helios64/helios64-ups.sh $destination/usr/bin/helios64-ups.sh
-
-	fi
-
-	if [[ $BOARD == rk3318-box ]]; then
-		# Optional board dtbo selection script
-		mkdir -p $destination/usr/local/bin
-		install -m 755 $SRC/packages/bsp/rk3318/rk3318-config $destination/usr/sbin
-	fi
-
-	if [[ $BOARD == pinebook-pro ]]; then
-
-		# special keys
-		mkdir -p "${destination}"/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/
-		cp $SRC/packages/bsp/pinebook-pro/pointers.xml "${destination}"/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/
-
-		# touchpad and keyboard tweaks
-		mkdir -p "${destination}"/etc/X11/xorg.conf.d/
-		# from https://github.com/ayufan-rock64/linux-package/tree/master/root-pinebookpro
-		cp "${SRC}"/packages/bsp/pinebook-pro/40-pinebookpro-touchpad.conf "${destination}"/etc/X11/xorg.conf.d/
-
-		# keyboard hwdb
-		mkdir -p "${destination}"/etc/udev/hwdb.d/
-		cp "${SRC}"/packages/bsp/pinebook-pro/10-usb-kbd.hwdb "${destination}"/etc/udev/hwdb.d/
 	fi
 
 	# Graphics and media

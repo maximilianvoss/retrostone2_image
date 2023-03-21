@@ -245,7 +245,7 @@ function kernel_package_callback_linux_image() {
 			if [[ "${script}" == "preinst" ]]; then
 				cat <<- HOOK_FOR_REMOVE_VFAT_BOOT_FILES
 					check_boot_dev (){
-						boot_partition=\$(findmnt -n -o SOURCE /boot)
+						boot_partition=\$(findmnt --nofsroot -n -o SOURCE /boot)
 						bootfstype=\$(blkid -s TYPE -o value \$boot_partition)
 						if [ "\$bootfstype" = "vfat" ]; then
 							rm -f /boot/System.map* /boot/config* /boot/vmlinuz* /boot/$image_name /boot/uImage
@@ -435,8 +435,19 @@ function kernel_package_callback_linux_headers() {
 			make ARCH="${SRC_ARCH}" -j\$NCPU scripts
 			make ARCH="${SRC_ARCH}" -j\$NCPU M=scripts/mod/
 			# make ARCH="${SRC_ARCH}" -j\$NCPU modules_prepare # depends on too much other stuff.
-			make ARCH="${SRC_ARCH}" -j\$NCPU tools/objtool
 			echo "Done compiling kernel-headers tools (${kernel_version_family})."
 		EOT_POSTINST
+
+		if [[ "${ARCH}" == "amd64" ]]; then # This really only works on x86/amd64; @TODO revisit later
+			cat <<- EOT_POSTINST_OBJTOOL
+				echo "Compiling kernel-header objtool (${kernel_version_family})."
+				make ARCH="${SRC_ARCH}" -j\$NCPU tools/objtool
+				echo "Done compiling kernel-header objtool (${kernel_version_family})."
+			EOT_POSTINST_OBJTOOL
+		fi
+
+		cat <<- EOT_POSTINST_FINISH
+			echo "Done compiling kernel-headers tools (${kernel_version_family})."
+		EOT_POSTINST_FINISH
 	)
 }

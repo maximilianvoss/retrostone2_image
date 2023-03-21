@@ -1,12 +1,12 @@
 bc
 bridge-utils
-ca-certificates
 chrony
 command-not-found
 console-setup
 cron
 curl
 dbus-user-session
+dialog
 debconf-utils
 debsums
 device-tree-compiler
@@ -14,6 +14,7 @@ ethtool
 fake-hwclock
 fdisk
 figlet
+htop
 inetutils-ping
 init
 initramfs-tools
@@ -32,11 +33,14 @@ parted
 psmisc
 rsync
 rsyslog
+sudo
 sysfsutils
+sysstat
 toilet
 tzdata
 u-boot-tools
 usbutils
 vlan
+wget
 wireless-tools
 wpasupplicant
