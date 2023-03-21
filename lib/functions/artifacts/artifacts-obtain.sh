@@ -101,6 +101,9 @@ function obtain_complete_artifact() {
 	[[ "x${artifact_base_dir}x" == "xx" || "${artifact_base_dir}" == "undetermined" ]] && exit_with_error "artifact_base_dir is not set after artifact_prepare_version"
 	[[ "x${artifact_final_file}x" == "xx" || "${artifact_final_file}" == "undetermined" ]] && exit_with_error "artifact_final_file is not set after artifact_prepare_version"
 
+	# validate artifact_version begins with artifact_prefix_version
+	[[ "${artifact_version}" =~ ^${artifact_prefix_version} ]] || exit_with_error "artifact_version '${artifact_version}' does not begin with artifact_prefix_version '${artifact_prefix_version}'"
+
 	# validate artifact_type... it must be one of the supported types
 	case "${artifact_type}" in
 		deb | deb-tar)
@@ -215,7 +218,19 @@ function obtain_complete_artifact() {
 # This is meant to be run after config, inside default build.
 function build_artifact_for_image() {
 	initialize_artifact "${WHAT}"
-	obtain_complete_artifact
+
+	# Make sure ORAS tooling is installed before starting.
+	run_tool_oras
+
+	# Detour: if building kernel, and KERNEL_CONFIGURE=yes, ignore artifact cache.
+	if [[ "${WHAT}" == "kernel" && "${KERNEL_CONFIGURE}" == "yes" ]]; then
+		display_alert "Ignoring artifact cache for kernel" "KERNEL_CONFIGURE=yes" "info"
+		ARTIFACT_IGNORE_CACHE="yes" obtain_complete_artifact
+	else
+		obtain_complete_artifact
+	fi
+
+	return 0
 }
 
 function pack_artifact_to_local_cache() {

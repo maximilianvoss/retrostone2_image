@@ -34,7 +34,7 @@ function artifact_firmware_prepare_version() {
 	declare bash_hash_short="${bash_hash:0:${short_hash_size}}"
 
 	# outer scope
-	artifact_version="${fake_unchanging_base_version}-SA${short_sha1}-B${bash_hash_short}"
+	artifact_version="${artifact_prefix_version}${fake_unchanging_base_version}-SA${short_sha1}-B${bash_hash_short}"
 
 	declare -a reasons=(
 		"Armbian firmware git revision \"${GIT_INFO_ARMBIAN_FIRMWARE[SHA1]}\""
@@ -71,7 +71,6 @@ function artifact_firmware_cli_adapter_pre_run() {
 }
 
 function artifact_firmware_cli_adapter_config_prep() {
-	declare KERNEL_ONLY="yes"                            # @TODO: this is a hack, for the board/family code's benefit...
 	use_board="no" prep_conf_main_minimal_ni < /dev/null # no stdin for this, so it bombs if tries to be interactive.
 }
 
