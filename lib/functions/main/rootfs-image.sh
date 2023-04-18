@@ -35,6 +35,8 @@ function build_rootfs_and_image() {
 	#[[ $EXTERNAL_NEW == prebuilt ]] && LOG_SECTION="packages_prebuilt" do_with_logging chroot_installpackages "yes"
 	[[ $EXTERNAL_NEW == prebuilt ]] && display_alert "Not running" "NOT armbian-next ported yet: chroot_installpackages 'yes'" "warn"
 
+  LOG_SECTION="build_extra_pkgs" do_with_logging build_extra_pkgs
+
 	# stage: user customization script
 	# NOTE: installing too many packages may fill tmpfs mount
 	LOG_SECTION="customize_image" do_with_logging customize_image
