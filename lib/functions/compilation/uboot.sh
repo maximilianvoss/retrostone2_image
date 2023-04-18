@@ -60,7 +60,7 @@ function compile_uboot_target() {
 	PRE_CONFIG_UBOOT_TARGET
 
 	display_alert "${uboot_prefix}Preparing u-boot config" "${version} ${target_make}" "info"
-	export if_error_detail_message="${uboot_prefix}Failed to configure u-boot ${version} $BOOTCONFIG ${target_make}"
+	declare -g if_error_detail_message="${uboot_prefix}Failed to configure u-boot ${version} $BOOTCONFIG ${target_make}"
 	run_host_command_logged CCACHE_BASEDIR="$(pwd)" PATH="${toolchain}:${toolchain2}:${PATH}" \
 		"KCFLAGS=-fdiagnostics-color=always" \
 		unbuffer make "$CTHREADS" "$BOOTCONFIG" "CROSS_COMPILE=\"$CCACHE $UBOOT_COMPILER\""
@@ -144,6 +144,14 @@ function compile_uboot_target() {
 
 	fi
 
+	if [[ "${UBOOT_CONFIGURE:-"no"}" == "yes" ]]; then
+		display_alert "Configuring u-boot" "UBOOT_CONFIGURE=yes; experimental" "warn"
+		run_host_command_dialog make menuconfig
+		display_alert "Exporting saved config" "UBOOT_CONFIGURE=yes; experimental" "warn"
+		run_host_command_logged make savedefconfig
+		run_host_command_logged cp -v defconfig "${DEST}/defconfig-uboot-${BOARD}-${BRANCH}"
+	fi
+
 	# workaround when two compilers are needed
 	cross_compile="CROSS_COMPILE=\"$CCACHE $UBOOT_COMPILER\""
 	[[ -n $UBOOT_TOOLCHAIN2 ]] && cross_compile="ARMBIAN=foe" # empty parameter is not allowed
@@ -169,7 +177,7 @@ function compile_uboot_target() {
 	local uboot_cflags="${uboot_cflags_array[*]}"
 
 	display_alert "${uboot_prefix}Compiling u-boot" "${version} ${target_make} with gcc '${gcc_version_main}'" "info"
-	export if_error_detail_message="${uboot_prefix}Failed to build u-boot ${version} ${target_make}"
+	declare -g if_error_detail_message="${uboot_prefix}Failed to build u-boot ${version} ${target_make}"
 	do_with_ccache_statistics run_host_command_logged_long_running \
 		"CFLAGS='${uboot_cflags}'" "KCFLAGS='${uboot_cflags}'" \
 		CCACHE_BASEDIR="$(pwd)" PATH="${toolchain}:${toolchain2}:${PATH}" \

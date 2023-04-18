@@ -64,18 +64,8 @@ function prepare_kernel_packaging_debs() {
 	# display_alert "tmp_kernel_install_dirs INSTALL_HDR_PATH:" "${tmp_kernel_install_dirs[INSTALL_HDR_PATH]}" "debug"
 	# display_alert "tmp_kernel_install_dirs INSTALL_DTBS_PATH:" "${tmp_kernel_install_dirs[INSTALL_DTBS_PATH]}" "debug"
 
-	# For armhf, kernel's "make install" gives us the wrong "vmlinuz-xx" file. We want the arch/arm/boot/zImage.
-	if [[ "${ARCH}" == "armhf" ]]; then # @TODO: if you know a better way? some kbuild var? send PR.
-		display_alert "armhf: using arch/arm/boot/zImage as vmlinuz" "armhf zImage" "info"
-		run_host_command_logged ls -la "${kernel_work_dir}/arch/arm/boot/zImage" || true
-		run_host_command_logged file "${kernel_work_dir}/arch/arm/boot/zImage" || true
-		run_host_command_logged ls -la "${tmp_kernel_install_dirs[INSTALL_PATH]}/vmlinuz-${kernel_version_family}" || true
-		run_host_command_logged file "${tmp_kernel_install_dirs[INSTALL_PATH]}/vmlinuz-${kernel_version_family}" || true
-		# Just overwrite it...
-		run_host_command_logged cp -v "${kernel_work_dir}/arch/arm/boot/zImage" "${tmp_kernel_install_dirs[INSTALL_PATH]}/vmlinuz-${kernel_version_family}"
-		run_host_command_logged file "${tmp_kernel_install_dirs[INSTALL_PATH]}/vmlinuz-${kernel_version_family}"
-		display_alert "armhf: using arch/arm/boot/zImage as vmlinuz" "done with armhf zImage" "debug"
-	fi
+	# Due to we call `make install` twice, we will get some `.old` files
+	run_host_command_logged rm -rf "${tmp_kernel_install_dirs[INSTALL_PATH]}/*.old" || true
 
 	# package the linux-image (image, modules, dtbs (if present))
 	display_alert "Packaging linux-image" "${LINUXFAMILY} ${LINUXCONFIG}" "info"
@@ -181,18 +171,37 @@ function kernel_package_hook_helper() {
 function kernel_package_callback_linux_image() {
 	display_alert "linux-image deb packaging" "${package_directory}" "debug"
 
-	declare installed_image_path="boot/vmlinuz-${kernel_version_family}" # using old mkdebian terminology here.
-	declare image_name="Image"                                           # "Image" for arm64. or, "zImage" for arm, or "vmlinuz" for others.
+	# @TODO: we expect _all_ kernels to produce this, which is... not true.
+	declare kernel_pre_package_path="${tmp_kernel_install_dirs[INSTALL_PATH]}"
+	declare kernel_image_pre_package_path="${kernel_pre_package_path}/vmlinuz-${kernel_version_family}"
+	declare installed_image_path="boot/vmlinuz-${kernel_version_family}" # using old mkdebian terminology here for compatibility
+
+	display_alert "Showing contents of Kbuild produced /boot" "linux-image" "debug"
+	run_host_command_logged tree -C --du -h "${tmp_kernel_install_dirs[INSTALL_PATH]}"
+
+	display_alert "Kernel-built image filetype" "vmlinuz-${kernel_version_family}: $(file --brief "${kernel_image_pre_package_path}")" "info"
+
+	declare image_name="Image" # "Image" for arm64. or, "zImage" for arm, or "vmlinuz" for others. 'image_name' is for easy mkdebian compat
 	# If NAME_KERNEL is set (usually in arch config file), warn and use that instead.
 	if [[ -n "${NAME_KERNEL}" ]]; then
 		display_alert "NAME_KERNEL is set" "using '${NAME_KERNEL}' instead of '${image_name}'" "debug"
 		image_name="${NAME_KERNEL}"
-	else
-		display_alert "NAME_KERNEL is not set" "using default '${image_name}'" "debug"
 	fi
 
-	display_alert "Showing contents of Kbuild produced /boot" "linux-image" "debug"
-	run_host_command_logged tree -C --du -h "${tmp_kernel_install_dirs[INSTALL_PATH]}"
+	# allow hook to do stuff here. Some (legacy/vendor/weird) kernels spit out a vmlinuz that needs manual conversion to uImage, etc.
+	run_host_command_logged ls -la "${kernel_pre_package_path}" "${kernel_image_pre_package_path}"
+
+	call_extension_method "pre_package_kernel_image" <<- 'PRE_PACKAGE_KERNEL_IMAGE'
+		*fix Image/uImage/zImage before packaging kernel*
+		Some (legacy/vendor) kernels need preprocessing of the produced Image/uImage/zImage before packaging.
+		Use this hook to do that, by modifying the file in place, in `${kernel_pre_package_path}` directory.
+		The final file that will be used is stored in `${kernel_image_pre_package_path}` -- which you shouldn't change.
+	PRE_PACKAGE_KERNEL_IMAGE
+
+	display_alert "Kernel image filetype after pre_package_kernel_image" "vmlinuz-${kernel_version_family}: $(file --brief "${kernel_image_pre_package_path}")" "info"
+
+	unset kernel_pre_package_path       # be done with var after hook
+	unset kernel_image_pre_package_path # be done with var after hook
 
 	run_host_command_logged cp -rp "${tmp_kernel_install_dirs[INSTALL_PATH]}" "${package_directory}/"         # /boot stuff
 	run_host_command_logged cp -rp "${tmp_kernel_install_dirs[INSTALL_MOD_PATH]}/lib" "${package_directory}/" # so "lib" stuff sits at the root
@@ -362,6 +371,15 @@ function kernel_package_callback_linux_headers() {
 	tar -c -f - -C "${kernel_work_dir}" -T "${temp_file_list}" | tar -xf - -C "${headers_target_dir}"
 
 	# ${temp_file_list} is left at WORKDIR for later debugging, will be removed by WORKDIR cleanup trap
+
+	# Small detour: in v6.3-rc1, in commit https://github.com/torvalds/linux/commit/799fb82aa132fa3a3886b7872997a5a84e820062,
+	#               the tools/vm dir was renamed to tools/mm. Unfortunately tools/Makefile still expects it to exist,
+	#               and "make clean" in the "/tools" dir fails. Drop in a fake Makefile there to work around this.
+	if [[ ! -f "${headers_target_dir}/tools/vm/Makefile" ]]; then
+		display_alert "Creating fake tools/vm/Makefile" "6.3+ hackfix" "warn"
+		mkdir -p "${headers_target_dir}/tools/vm"
+		echo -e "clean:\n\techo fake clean for tools/vm" > "${headers_target_dir}/tools/vm/Makefile"
+	fi
 
 	# Now, make the script dirs clean.
 	# This is run in our _target_ dir, NOT the source tree, so we're free to make clean as we wish without invalidating the next build's cache.
