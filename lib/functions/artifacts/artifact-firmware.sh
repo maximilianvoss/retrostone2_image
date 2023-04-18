@@ -7,6 +7,11 @@
 # This file is a part of the Armbian Build Framework
 # https://github.com/armbian/build/
 
+function artifact_firmware_config_dump() {
+	# artifact_input_variables: None, for firmware.
+	:
+}
+
 function artifact_firmware_prepare_version() {
 	artifact_version="undetermined"        # outer scope
 	artifact_version_reason="undetermined" # outer scope
@@ -22,6 +27,9 @@ function artifact_firmware_prepare_version() {
 	declare -A GIT_INFO_ARMBIAN_FIRMWARE=([GIT_SOURCE]="${ARMBIAN_FIRMWARE_SOURCE}" [GIT_REF]="${ARMBIAN_FIRMWARE_BRANCH}")
 	run_memoized GIT_INFO_ARMBIAN_FIRMWARE "git2info" memoized_git_ref_to_info
 	debug_dict GIT_INFO_ARMBIAN_FIRMWARE
+
+	# Sanity check, the SHA1 gotta be sane.
+	[[ "${GIT_INFO_ARMBIAN_FIRMWARE[SHA1]}" =~ ^[0-9a-f]{40}$ ]] || exit_with_error "SHA1 is not sane: '${GIT_INFO_ARMBIAN_FIRMWARE[SHA1]}'"
 
 	declare fake_unchanging_base_version="1"
 
@@ -75,7 +83,7 @@ function artifact_firmware_cli_adapter_config_prep() {
 }
 
 function artifact_firmware_get_default_oci_target() {
-	artifact_oci_target_base="ghcr.io/armbian/cache-firmware/"
+	artifact_oci_target_base="${GHCR_SOURCE}/armbian/cache-firmware/"
 }
 
 function artifact_firmware_is_available_in_local_cache() {

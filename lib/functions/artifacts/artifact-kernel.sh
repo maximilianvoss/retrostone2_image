@@ -7,6 +7,16 @@
 # This file is a part of the Armbian Build Framework
 # https://github.com/armbian/build/
 
+function artifact_kernel_config_dump() {
+	# BOARD is NOT included. See explanation below.
+	artifact_input_variables[LINUXFAMILY]="${LINUXFAMILY}"
+	artifact_input_variables[BRANCH]="${BRANCH}"
+	artifact_input_variables[KERNEL_MAJOR_MINOR]="${KERNEL_MAJOR_MINOR}"
+	artifact_input_variables[KERNELSOURCE]="${KERNELSOURCE}"
+	artifact_input_variables[KERNELBRANCH]="${KERNELBRANCH}"
+	artifact_input_variables[KERNELPATCHDIR]="${KERNELPATCHDIR}"
+}
+
 # This is run in a logging section.
 # Prepare the version, "sans-repos": just the armbian/build repo contents are available.
 # It is OK to reach out to the internet for a curl or ls-remote, but not for a git clone, but
@@ -71,6 +81,9 @@ function artifact_kernel_prepare_version() {
 	fi
 	debug_dict GIT_INFO_KERNEL
 
+	# Sanity check, the SHA1 gotta be sane.
+	[[ "${GIT_INFO_KERNEL[SHA1]}" =~ ^[0-9a-f]{40}$ ]] || exit_with_error "SHA1 is not sane: '${GIT_INFO_KERNEL[SHA1]}'"
+
 	declare short_sha1="${GIT_INFO_KERNEL[SHA1]:0:${short_hash_size}}"
 
 	# get the drivers hash...
@@ -109,6 +122,26 @@ function artifact_kernel_prepare_version() {
 	kernel_config_modification_hash="${kernel_config_modification_hash:0:16}" # "long hash"
 	declare kernel_config_modification_hash_short="${kernel_config_modification_hash:0:${short_hash_size}}"
 
+	# Hash variables that affect the packaging of the kernel
+	declare -a vars_to_hash=(
+		"${KERNEL_INSTALL_TYPE}"
+		"${KERNEL_IMAGE_TYPE}"
+		"${KERNEL_EXTRA_TARGETS}"
+		"${NAME_KERNEL}"
+		"${SRC_LOADADDR}"
+	)
+	declare hash_vars="undetermined"
+	hash_vars="$(echo "${vars_to_hash[@]}" | sha256sum | cut -d' ' -f1)"
+	vars_config_hash="${hash_vars}"
+	declare var_config_hash_short="${vars_config_hash:0:${short_hash_size}}"
+
+	# Hash the extension hooks
+	declare -a extension_hooks_to_hash=("pre_package_kernel_image")
+	declare -a extension_hooks_hashed=("$(dump_extension_method_sources_functions "${extension_hooks_to_hash[@]}")")
+	declare hash_hooks="undetermined"
+	hash_hooks="$(echo "${extension_hooks_hashed[@]}" | sha256sum | cut -d' ' -f1)"
+	declare hash_hooks_short="${hash_hooks:0:${short_hash_size}}"
+
 	# @TODO: include the compiler version? host release?
 
 	# get the hashes of the lib/ bash sources involved...
@@ -117,7 +150,7 @@ function artifact_kernel_prepare_version() {
 	declare bash_hash="${hash_files}"
 	declare bash_hash_short="${bash_hash:0:${short_hash_size}}"
 
-	declare common_version_suffix="S${short_sha1}-D${kernel_drivers_hash_short}-P${kernel_patches_hash_short}-C${config_hash_short}H${kernel_config_modification_hash_short}-B${bash_hash_short}"
+	declare common_version_suffix="S${short_sha1}-D${kernel_drivers_hash_short}-P${kernel_patches_hash_short}-C${config_hash_short}H${kernel_config_modification_hash_short}-HK${hash_hooks_short}-V${var_config_hash_short}-B${bash_hash_short}"
 
 	# outer scope
 	if [[ "${KERNEL_SKIP_MAKEFILE_VERSION:-"no"}" == "yes" ]]; then
@@ -134,6 +167,7 @@ function artifact_kernel_prepare_version() {
 		"patches hash \"${patches_hash}\""
 		".config hash \"${config_hash}\""
 		".config hook hash \"${kernel_config_modification_hash}\""
+		"variables hash \"${vars_config_hash}\""
 		"framework bash hash \"${bash_hash}\""
 	)
 
@@ -182,7 +216,7 @@ function artifact_kernel_cli_adapter_config_prep() {
 }
 
 function artifact_kernel_get_default_oci_target() {
-	artifact_oci_target_base="ghcr.io/armbian/cache-kernel/"
+	artifact_oci_target_base="${GHCR_SOURCE}/armbian/cache-kernel/"
 }
 
 function artifact_kernel_is_available_in_local_cache() {
