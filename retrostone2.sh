@@ -18,3 +18,18 @@
  RELEASE=jammy \
  ARCH=armhf \
  EXTRAWIFI=no
+
+
+
+./compile.sh \
+BOARD=retrostone2 \
+BRANCH=current \
+RELEASE=jammy \
+BUILD_DESKTOP=yes \
+DESKTOP_ENVIRONMENT=retrostone2 \
+KERNEL_CONFIGURE=no \
+DESKTOP_ENVIRONMENT_CONFIG_NAME=config_base \
+DESKTOP_APPGROUPS_SELECTED=y \
+EXTERNAL_NEW=compile \
+KERNEL_GIT=shallow \
+ARTIFACT_IGNORE_CACHE=yes
