@@ -3,7 +3,7 @@
 build_extra_pkgs() {
 	: "${artifact_version:?artifact_version is not set}"
 
-	delcare package_name="csafestring"
+	declare package_name="csafestring"
 
 	declare cleanup_id="" tmp_dir=""
   prepare_temp_dir_in_workdir_and_schedule_cleanup package_name cleanup_id tmp_dir # namerefs
