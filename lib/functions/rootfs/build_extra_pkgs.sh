@@ -19,7 +19,7 @@ function build_extra_pkgs() {
 
   cd "${OVERLAY_MERGED}/build/${package_name}" || exit_with_error "can't change directory"
   cp -R "${SRC}/cache/sources/${package_name}" "${OVERLAY_MERGED}/build/${package_name}"
-  cp -R ~/rs2_image/packages/extras-buildpkgs/csafestring/debian "${OVERLAY_MERGED}/build/debian"
+  cp -R ~/rs2_image/packages/extras-buildpkgs/csafestring/debian "${OVERLAY_MERGED}/build/${package_name}/debian"
 
   dpkg-buildpackage -b -us -j4 -uc
   find "${OVERLAY_MERGED}/build"
