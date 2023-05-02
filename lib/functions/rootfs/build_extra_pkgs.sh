@@ -21,9 +21,11 @@ function build_extra_pkgs() {
   cp -R "${SRC}/cache/sources/${package_name}" "${OVERLAY_MERGED}/build/${package_name}"
   cp -R ~/rs2_image/packages/extras-buildpkgs/csafestring/debian "${OVERLAY_MERGED}/build/${package_name}/debian"
 
-  dpkg-buildpackage -b -us -j4 -uc
-  find "${OVERLAY_MERGED}/build"
-  dpkg -c "${OVERLAY_MERGED}/build/*.deb"
+  chroot "${OVERLAY_MERGED}"
+  run_host_command_logged_raw fakeroot dpkg-buildpackage -b -us -j4 -uc
+  run_host_command_logged_raw find "${OVERLAY_MERGED}/build"
+  run_host_command_logged_raw dpkg -c "${OVERLAY_MERGED}/build/*.deb"
+  mv "${OVERLAY_MERGED}/build/*.deb" "${DEB_STORAGE}"
 
   umount "${OVERLAY_MERGED}"
   rm -rf "${OVERLAY_UPPER}"
