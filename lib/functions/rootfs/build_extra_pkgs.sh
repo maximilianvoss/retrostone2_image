@@ -17,8 +17,8 @@ function build_extra_pkgs() {
 
   fetch_from_repo "$GITHUB_SOURCE/maximilianvoss/csafestring" "${package_name}" "tag:v1.8"
 
-  cd "${OVERLAY_MERGED}/build/${package_name}" || exit_with_error "can't change directory"
   cp -R "${SRC}/cache/sources/${package_name}" "${OVERLAY_MERGED}/build"
+  cd "${OVERLAY_MERGED}/build/${package_name}" || exit_with_error "can't change directory"
   cp -R ~/rs2_image/packages/extras-buildpkgs/csafestring/debian "${OVERLAY_MERGED}/build/${package_name}/debian"
 
   chroot "${OVERLAY_MERGED}"
