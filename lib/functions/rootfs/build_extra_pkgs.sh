@@ -53,6 +53,7 @@ function build_extra_pkg() {
 #  rm -rf "${OVERLAY_UPPER}"
 #  rm -rf "${OVERLAY_WORKDIR}"
 #  rm -rf "${OVERLAY_MERGED}"
+  return 0;
 }
 
 function build_extra_pkgs() {
