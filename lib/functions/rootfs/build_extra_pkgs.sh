@@ -20,7 +20,7 @@ function build_extra_pkg() {
   mkdir -p "${OVERLAY_MERGED}/build"
 
   # fetch source
-  fetch_from_repo "${package_repo]}" "${package_name}" "${package_ref}"
+  fetch_from_repo "${package_repo}" "${package_name}" "${package_ref}"
 
   # build prep
   cp -R "${SRC}/cache/sources/${package_name}" "${OVERLAY_MERGED}/build"
