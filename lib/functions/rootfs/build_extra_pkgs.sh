@@ -35,10 +35,10 @@ function build_extra_pkg() {
 		toolchain=$(find_toolchain "$KERNEL_COMPILER" "$KERNEL_USE_GCC")
 		[[ -z $toolchain ]] && exit_with_error "Could not find required toolchain" "${KERNEL_COMPILER}gcc $KERNEL_USE_GCC"
 	fi
-  export CC=${KERNEL_COMPILER}gcc
-  export CXX=${KERNEL_COMPILER}gcc
-  export CPP=${KERNEL_COMPILER}cpp
-  export LD=${KERNEL_COMPILER}ld
+#  export CC=${KERNEL_COMPILER}gcc
+#  export CXX=${KERNEL_COMPILER}gcc
+#  export CPP=${KERNEL_COMPILER}cpp
+#  export LD=${KERNEL_COMPILER}ld
 
   # Do the build in overlay dir
   chroot "${OVERLAY_MERGED}"
