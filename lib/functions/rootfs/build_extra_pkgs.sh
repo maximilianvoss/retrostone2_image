@@ -58,4 +58,5 @@ function build_extra_pkg() {
 
 function build_extra_pkgs() {
 #  build_extra_pkg csafestring ${GITHUB_SOURCE}/maximilianvoss/csafestring "tag:v1.8" ~/rs2_image/packages/extras-buildpkgs/csafestring/debian
+  return 0;
 }
