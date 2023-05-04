@@ -36,7 +36,7 @@ function build_extra_pkg() {
 		[[ -z $toolchain ]] && exit_with_error "Could not find required toolchain" "${KERNEL_COMPILER}gcc $KERNEL_USE_GCC"
 	fi
   export CC=${KERNEL_COMPILER}gcc
-  export CXX=${KERNEL_COMPILER}gcc
+  export CXX=${KERNEL_COMPILER}g++
   export CPP=${KERNEL_COMPILER}cpp
   export LD=${KERNEL_COMPILER}ld
 
