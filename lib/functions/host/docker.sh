@@ -118,10 +118,9 @@ function docker_cli_prepare() {
 	# @TODO: Make sure we can access docker, on Linux; gotta be part of 'docker' group: grep -q "$(whoami)" <(getent group docker)
 
 	declare -g DOCKER_ARMBIAN_INITIAL_IMAGE_TAG="armbian.local.only/armbian-build:initial"
+	# declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"debian:trixie"}"
 	# declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"debian:bookworm"}"
 	# declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"debian:sid"}"
-	# declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"debian:bullseye"}"
-	# declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"ubuntu:focal"}"
 	# declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"ubuntu:kinetic"}"
 	declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"ubuntu:jammy"}"
 	declare -g DOCKER_ARMBIAN_TARGET_PATH="${DOCKER_ARMBIAN_TARGET_PATH:-"/armbian"}"
@@ -247,6 +246,7 @@ function docker_cli_prepare_dockerfile() {
 
 	# initialize the extension manager; enable all extensions; only once..
 	if [[ "${docker_prepare_cli_skip_exts:-no}" != "yes" ]]; then
+		display_alert "Docker launcher" "enabling all extensions looking for Docker dependencies" "info"
 		enable_all_extensions_builtin_and_user
 		initialize_extension_manager
 	fi
@@ -378,8 +378,9 @@ function docker_cli_prepare_launch() {
 		# Change the ccache directory to the named volume or bind created. @TODO: this needs more love. it works for Docker, but not sudo
 		"--env" "CCACHE_DIR=${DOCKER_ARMBIAN_TARGET_PATH}/cache/ccache"
 
-		# Pass down the TERM
+		# Pass down the TERM and the COLUMNS
 		"--env" "TERM=${TERM}"
+		"--env" "COLUMNS=${COLUMNS:-"160"}"
 
 		# Pass down the CI env var (GitHub Actions, Jenkins, etc)
 		"--env" "CI=${CI}"                         # All CI's, hopefully
@@ -419,6 +420,16 @@ function docker_cli_prepare_launch() {
 		DOCKER_ARGS+=("--env" "GIT_INFO_ANSI=${GIT_INFO_ANSI}")
 	fi
 
+	if [[ -n "${BUILD_REPOSITORY_URL}" ]]; then
+		display_alert "Git info" "Passing down BUILD_REPOSITORY_URL as an env var..." "debug"
+		DOCKER_ARGS+=("--env" "BUILD_REPOSITORY_URL=${BUILD_REPOSITORY_URL}")
+	fi
+
+	if [[ -n "${BUILD_REPOSITORY_COMMIT}" ]]; then
+		display_alert "Git info" "Passing down BUILD_REPOSITORY_COMMIT as an env var..." "debug"
+		DOCKER_ARGS+=("--env" "BUILD_REPOSITORY_COMMIT=${BUILD_REPOSITORY_COMMIT}")
+	fi
+
 	if [[ "${DOCKER_PASS_SSH_AGENT}" == "yes" ]]; then
 		declare ssh_socket_path="${SSH_AUTH_SOCK}"
 		if [[ "${OSTYPE}" == "darwin"* ]]; then                     # but probably only Docker Inc, not Rancher...
@@ -453,14 +464,14 @@ function docker_cli_prepare_launch() {
 		if [[ -n "${OCI_TARGET_BASE}" ]]; then
 			display_alert "Detected" "OCI_TARGET_BASE: '${OCI_TARGET_BASE}'" "debug"
 			DOCKER_ARGS+=("--env" "OCI_TARGET_BASE=${OCI_TARGET_BASE}")
+		fi
 
-			# Mount the Docker config file (if it exists)
-			local docker_config_file_host="${HOME}/.docker/config.json"
-			local docker_config_file_docker="/root/.docker/config.json" # inside Docker
-			if [[ -f "${docker_config_file_host}" ]]; then
-				display_alert "Passing down to Docker" "Docker config file: '${docker_config_file_host}' -> '${docker_config_file_docker}'" "debug"
-				DOCKER_ARGS+=("--mount" "type=bind,source=${docker_config_file_host},target=${docker_config_file_docker}")
-			fi
+		# Mount the Docker config file (if it exists) -- always, even if OCI_TARGET_BASE is not set; @TODO: why only in GitHub actions?
+		local docker_config_file_host="${HOME}/.docker/config.json"
+		local docker_config_file_docker="/root/.docker/config.json" # inside Docker
+		if [[ -f "${docker_config_file_host}" ]]; then
+			display_alert "Passing down to Docker" "Docker config file: '${docker_config_file_host}' -> '${docker_config_file_docker}'" "debug"
+			DOCKER_ARGS+=("--mount" "type=bind,source=${docker_config_file_host},target=${docker_config_file_docker}")
 		fi
 	fi
 
@@ -546,7 +557,8 @@ function docker_cli_prepare_launch() {
 }
 
 function docker_cli_launch() {
-	display_alert "Showing Docker cmdline" "Docker args: '${DOCKER_ARGS[*]}'" "debug"
+	# rpardini: This debug, although useful, might include very long/multiline strings, which make it very confusing.
+	# display_alert "Showing Docker cmdline" "Docker args: '${DOCKER_ARGS[*]}'" "debug"
 
 	# Hack: if we're running on a Mac/Darwin, get rid of .DS_Store files in critical directories.
 	if [[ "${OSTYPE}" == "darwin"* ]]; then
@@ -557,16 +569,27 @@ function docker_cli_launch() {
 		run_host_command_logged find "${SRC}/userpatches" -name ".DS_Store" -type f -delete "||" true
 	fi
 
-	display_alert "Relaunching in Docker" "${*}" "debug"
+	# Produce the re-launch params.
+	declare -g ARMBIAN_CLI_FINAL_RELAUNCH_ARGS=()
+	declare -g ARMBIAN_CLI_FINAL_RELAUNCH_ENVS=()
+	produce_relaunch_parameters # produces ARMBIAN_CLI_FINAL_RELAUNCH_ARGS and ARMBIAN_CLI_FINAL_RELAUNCH_ENVS
+
+	# Add the relaunch envs to DOCKER_ARGS.
+	for env in "${ARMBIAN_CLI_FINAL_RELAUNCH_ENVS[@]}"; do
+		display_alert "Adding Docker env" "${env}" "debug"
+		DOCKER_ARGS+=("--env" "${env}")
+	done
+
 	display_alert "-----------------Relaunching in Docker after ${SECONDS}s------------------" "here comes the 🐳" "info"
 
 	local -i docker_build_result
-	if docker run "${DOCKER_ARGS[@]}" "${DOCKER_ARMBIAN_INITIAL_IMAGE_TAG}" /bin/bash "${DOCKER_ARMBIAN_TARGET_PATH}/compile.sh" "$@"; then
+	if docker run "${DOCKER_ARGS[@]}" "${DOCKER_ARMBIAN_INITIAL_IMAGE_TAG}" /bin/bash "${DOCKER_ARMBIAN_TARGET_PATH}/compile.sh" "${ARMBIAN_CLI_FINAL_RELAUNCH_ARGS[@]}"; then
 		docker_build_result=$? # capture exit code of test done in the line above.
 		display_alert "-------------Docker run finished after ${SECONDS}s------------------------" "🐳 successfull" "info"
 	else
 		docker_build_result=$? # capture exit code of test done 4 lines above.
-		display_alert "-------------Docker run failed after ${SECONDS}s--------------------------" "🐳 failed" "err"
+		# No use polluting GHA/CI with notices about Docker failure (real failure, inside Docker, generated enough errors already) skip_ci_special="yes"
+		skip_ci_special="yes" display_alert "-------------Docker run failed after ${SECONDS}s--------------------------" "🐳 failed" "err"
 	fi
 
 	# Find and show the path to the log file for the ARMBIAN_BUILD_UUID.
@@ -580,35 +603,10 @@ function docker_cli_launch() {
 		display_alert "Docker Log file for this run" "not found" "err"
 	fi
 
-	# Show and help user understand space usage in Docker volumes.
-	# This is done in a loop; `docker df` fails sometimes (for no good reason).
-	# @TODO: this is very, very slow when the volumes are full. disable.
-	# docker_cli_show_armbian_volumes_disk_usage
-
 	docker_exit_code="${docker_build_result}" # set outer scope variable -- do NOT exit with error.
 
 	# return ${docker_build_result}
 	return 0 # always exit with success. caller (CLI) will handle the exit code
-}
-
-function docker_cli_show_armbian_volumes_disk_usage() {
-	display_alert "Gathering docker volumes disk usage" "docker system df, wait..." "debug"
-	sleep_seconds="1" silent_retry="yes" do_with_retries 5 docker_cli_show_armbian_volumes_disk_usage_internal || {
-		display_alert "Could not get Docker volumes disk usage" "docker failed to report disk usage" "warn"
-		return 0 # not really a problem, just move on.
-	}
-	local docker_volume_usage
-	docker_volume_usage="$(docker system df -v | grep -e "^armbian-" | grep -v "\b0B" | tr -s " " | cut -d " " -f 1,3 | tr " " ":" | xargs echo || true)"
-	display_alert "Docker Armbian volume usage" "${docker_volume_usage}" "info"
-}
-
-function docker_cli_show_armbian_volumes_disk_usage_internal() {
-	# This fails sometimes, for no reason. Test it.
-	if docker system df -v &> /dev/null; then
-		return 0
-	else
-		return 1
-	fi
 }
 
 function docker_purge_deprecated_volumes() {

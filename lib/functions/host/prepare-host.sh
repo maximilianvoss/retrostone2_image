@@ -172,13 +172,12 @@ function prepare_host_noninteractive() {
 				if [[ "${host_arch}" != "${wanted_arch}" ]]; then
 					if [[ ! -e "/proc/sys/fs/binfmt_misc/qemu-${wanted_arch}" ]]; then
 						display_alert "Updating binfmts" "update-binfmts --enable qemu-${wanted_arch}" "debug"
-						run_host_command_logged update-binfmts --enable "qemu-${wanted_arch}" || {
-							if [[ "${host_arch}" == "aarch64" && "${wanted_arch}" == "arm" ]]; then
-								display_alert "Failed to update binfmts - this is expected: aarch64 does 32-bit sans emulation" "update-binfmts --enable qemu-${wanted_arch}" "debug"
-							else
-								display_alert "Failed to update binfmts" "update-binfmts --enable qemu-${wanted_arch}" "err"
-							fi
-						}
+						if [[ "${host_arch}" == "aarch64" && "${wanted_arch}" == "arm" ]]; then
+							display_alert "Trying to update binfmts - aarch64 (sometimes) does 32-bit sans emulation" "update-binfmts --enable qemu-${wanted_arch}" "debug"
+							run_host_command_logged update-binfmts --enable "qemu-${wanted_arch}" "&>" "/dev/null" "||" "true" # don't fail nor produce output, which can be misleading.
+						else
+							run_host_command_logged update-binfmts --enable "qemu-${wanted_arch}" || display_alert "Failed to update binfmts" "update-binfmts --enable qemu-${wanted_arch}" "err" # log & continue on failure
+						fi
 					fi
 				fi
 			done
@@ -277,12 +276,12 @@ function adaptative_prepare_host_dependencies() {
 		zlib1g-dev
 
 		# by-category below
-		file tree expect                           # logging utilities; expect is needed for 'unbuffer' command
-		colorized-logs                             # for ansi2html, ansi2txt, pipetty
-		unzip zip pigz xz-utils pbzip2 lzop zstd   # compressors et al
-		parted gdisk fdisk                         # partition tools @TODO why so many?
-		aria2 curl wget axel                       # downloaders et al
-		parallel                                   # do things in parallel (used for fast md5 hashing in initrd cache)
+		file tree expect                         # logging utilities; expect is needed for 'unbuffer' command
+		colorized-logs                           # for ansi2html, ansi2txt, pipetty
+		unzip zip pigz xz-utils pbzip2 lzop zstd # compressors et al
+		parted gdisk fdisk                       # partition tools @TODO why so many?
+		aria2 curl wget axel                     # downloaders et al
+		parallel                                 # do things in parallel (used for fast md5 hashing in initrd cache)
 	)
 
 	# @TODO: distcc -- handle in extension?
@@ -295,7 +294,7 @@ function adaptative_prepare_host_dependencies() {
 
 	# Python2 -- required for some older u-boot builds
 	# Debian 'sid'/'bookworm' and Ubuntu 'lunar' does not carry python2 anymore; in this case some u-boot's might fail to build.
-	if [[ "sid bookworm lunar" == *"${host_release}"* ]]; then
+	if [[ "sid bookworm trixie lunar" == *"${host_release}"* ]]; then
 		display_alert "Python2 not available on host release '${host_release}'" "old(er) u-boot builds might/will fail" "wrn"
 	else
 		host_dependencies+=("python2" "python2-dev")
@@ -322,8 +321,8 @@ function adaptative_prepare_host_dependencies() {
 	fi
 
 	if [[ "${wanted_arch}" == "riscv64" || "${wanted_arch}" == "all" ]]; then
-		host_dependencies+=("gcc-riscv64-linux-gnu")        # crossbuild-essential-riscv64 is not even available "yet"
-		host_dependencies+=("debian-ports-archive-keyring") # Debian Ports keyring needed, as riscv64 is not released yet
+		host_dependencies+=("gcc-riscv64-linux-gnu") # crossbuild-essential-riscv64 is not even available "yet"
+		host_dependencies+=("debian-archive-keyring")
 	fi
 
 	if [[ "${wanted_arch}" != "amd64" ]]; then
@@ -376,12 +375,25 @@ function install_host_dependencies() {
 }
 
 function check_host_has_enough_disk_space() {
-	# @TODO: check every possible mount point. Not only one. People might have different mounts / Docker volumes...
-	# check free space (basic) @TODO probably useful to refactor and implement in multiple spots.
+	declare -a dirs_to_check=("${DEST}" "${SRC}/cache")
+	for dir in "${dirs_to_check[@]}"; do
+		if [[ ! -d "${dir}" ]]; then
+			display_alert "Directory not found" "Skipping disk space check for '${dir}'" "debug"
+			continue
+		fi
+		check_dir_has_enough_disk_space "${dir}" 10 || exit_if_countdown_not_aborted 10 "Low free disk space left in '${dir}'"
+	done
+}
+
+function check_dir_has_enough_disk_space() {
+	declare target="${1}"
+	declare -i min_free_space_gib="${2:-10}"
 	declare -i free_space_bytes
-	free_space_bytes=$(findmnt --noheadings --output AVAIL --bytes --target "${SRC}" --uniq 2> /dev/null) # in bytes
-	if [[ -n "$free_space_bytes" && $((free_space_bytes / 1073741824)) -lt 10 ]]; then
-		display_alert "Low free space left" "$((free_space_bytes / 1073741824))GiB" "wrn"
-		exit_if_countdown_not_aborted 10 "Low free disk space left" # This pauses & exits if error if ENTER is not pressed in 10 seconds
+	free_space_bytes=$(findmnt --noheadings --output AVAIL --bytes --target "${target}" --uniq 2> /dev/null) # in bytes
+	if [[ -n "$free_space_bytes" && $((free_space_bytes / 1073741824)) -lt $min_free_space_gib ]]; then
+		display_alert "Low free space left" "${target}: $((free_space_bytes / 1073741824))GiB free, ${min_free_space_gib} GiB required" "wrn"
+		return 1
 	fi
+	display_alert "Free space left" "${target}: $((free_space_bytes / 1073741824))GiB" "debug"
+	return 0
 }

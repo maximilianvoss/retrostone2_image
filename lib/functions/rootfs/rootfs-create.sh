@@ -80,20 +80,6 @@ function create_new_rootfs_cache_via_debootstrap() {
 
 	deboostrap_arguments+=("--foreign") # release name
 
-	# Debian does not carry riscv64 in their main repo, needs ports, which needs a specific keyring in the host.
-	# that's done in prepare-host.sh when by adding debian-ports-archive-keyring hostdep, but there's an if anyway.
-	# debian-ports-archive-keyring is also included in-image by: config/optional/architectures/riscv64/_config/cli/_all_distributions/main/packages
-	# Revise this after bookworm release.
-	# @TODO: rpardini: this clearly shows a need for hooks for debootstrap
-	if [[ "${ARCH}" == "riscv64" ]] && [[ $DISTRIBUTION == Debian ]]; then
-		if [[ -f /usr/share/keyrings/debian-ports-archive-keyring.gpg ]]; then
-			display_alert "Adding ports keyring for Debian debootstrap" "riscv64" "info"
-			deboostrap_arguments+=("--keyring" "/usr/share/keyrings/debian-ports-archive-keyring.gpg")
-		else
-			exit_with_error "Debian debootstrap for riscv64 needs debian-ports-archive-keyring hostdep"
-		fi
-	fi
-
 	deboostrap_arguments+=("${RELEASE}" "${SDCARD}/" "${debootstrap_apt_mirror}") # release, path and mirror; always last, positional arguments.
 
 	run_host_command_logged debootstrap "${deboostrap_arguments[@]}" || {
@@ -145,8 +131,9 @@ function create_new_rootfs_cache_via_debootstrap() {
 		chroot_sdcard LC_ALL=C LANG=C setupcon --save --force
 	fi
 
-	# stage: create apt-get sources list (basic Debian/Ubuntu apt sources, no external nor PPAS)
-	create_sources_list "$RELEASE" "$SDCARD/"
+	# stage: create apt-get sources list (basic Debian/Ubuntu apt sources, no external nor PPAS).
+	# for the Armbian repo, only the components which are _not_ produced by armbian/build are included (-desktop and -utils)
+	create_sources_list_and_deploy_repo_key "root" "$RELEASE" "$SDCARD/"
 
 	# optionally add armhf arhitecture to arm64, if asked to do so.
 	if [[ "a${ARMHF_ARCH}" == "ayes" ]]; then
@@ -226,12 +213,6 @@ function create_new_rootfs_cache_via_debootstrap() {
 	local free_space
 	free_space=$(LC_ALL=C df -h)
 	display_alert "Free disk space on rootfs" "SDCARD: $(echo -e "${free_space}" | awk -v mp="${SDCARD}" '$6==mp {print $5}')" "info"
-
-	# creating xapian index that synaptic runs faster # @TODO: yes, but better done board-side on first run
-	if [[ $BUILD_DESKTOP == yes ]]; then
-		display_alert "Recreating Synaptic search index" "Please wait" "info"
-		chroot_sdcard "[[ -f /usr/sbin/update-apt-xapian-index ]] && /usr/sbin/update-apt-xapian-index -u || true"
-	fi
 
 	# this is needed for the build process later since resolvconf generated file in /run is not saved
 	run_host_command_logged rm -v "${SDCARD}"/etc/resolv.conf

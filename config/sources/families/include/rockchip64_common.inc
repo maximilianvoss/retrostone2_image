@@ -14,7 +14,7 @@ BOOTENV_FILE='rockchip64.txt'
 UBOOT_TARGET_MAP=";;idbloader.bin uboot.img trust.bin"
 BOOTDELAY=0
 OVERLAY_PREFIX='rockchip'
-SERIALCON=${SERIALCON:=$([ $BRANCH == "legacy" ] && echo "ttyFIQ0:1500000" || echo "ttyS2:1500000")}
+SERIALCON=${SERIALCON:=$([ "${BRANCH}" == "legacy" ] && echo "ttyFIQ0:1500000" || echo "ttyS2:1500000")}
 GOVERNOR="ondemand"
 ATFPATCHDIR='atf-rockchip64'
 BOOTPATCHDIR="${BOOTPATCHDIR:-"u-boot-rockchip64"}"
@@ -42,7 +42,9 @@ RKBIN_DIR="$SRC/cache/sources/rkbin-tools"
 BOOT_SOC=${BOOT_SOC:=$(expr $BOOTCONFIG : '.*\(rk[[:digit:]]\+.*\)_.*' || true)}
 
 if [[ "a${BOOT_SOC}a" == "aa" ]]; then
-	display_alert "Could not determine BOOT_SOC from BOOTCONFIG" "BOOTCONFIG: '${BOOTCONFIG}'" "warning"
+	if [[ "${BOOTCONFIG}" != "" && "${BOOTCONFIG}" != " none" ]]; then # only warn if BOOTCONFIG set and not 'none'
+		display_alert "Could not determine BOOT_SOC from BOOTCONFIG" "BOOTCONFIG: '${BOOTCONFIG}'" "warning"
+	fi
 else
 	display_alert "Determined BOOT_SOC from BOOTCONFIG" "BOOT_SOC: '${BOOT_SOC}'; BOOTCONFIG: '${BOOTCONFIG}'" "info"
 fi
@@ -67,61 +69,61 @@ elif [[ "${BOOT_SOC}" == rk3568 ]]; then
 
 fi
 
+# BOOT_SOC_MKIMAGE defaults to BOOT_SOC, but can be overriden. See rk3566
+declare -g BOOT_SOC_MKIMAGE="${BOOT_SOC}"
+
 if [[ $BOOT_SOC == rk3328 ]]; then
 
 	BOOT_SCENARIO="${BOOT_SCENARIO:=only-blobs}"
-	DDR_BLOB="${DDR_BLOB:=rk33/rk3328_ddr_333MHz_v1.16.bin}"
-	MINILOADER_BLOB='rk33/rk322xh_miniloader_v2.50.bin'
-	BL31_BLOB='rk33/rk322xh_bl31_v1.44.elf'
+	DDR_BLOB="${DDR_BLOB:-"rk33/rk3328_ddr_333MHz_v1.16.bin"}"
+	MINILOADER_BLOB="${MINILOADER_BLOB:-"rk33/rk322xh_miniloader_v2.50.bin"}"
+	BL31_BLOB="${BL31_BLOB:-"rk33/rk322xh_bl31_v1.44.elf"}"
 
 elif [[ $BOOT_SOC == rk3399 ]]; then
 
 	BOOT_SCENARIO="${BOOT_SCENARIO:=only-blobs}"
-	if [[ $BOARD_NAME == "Tinker Board 2" ]]; then
-		DDR_BLOB="${DDR_BLOB:=rk33/rk3399_ddr_800MHz_v1.27.bin}"
-	else
-		DDR_BLOB="${DDR_BLOB:=rk33/rk3399_ddr_933MHz_v1.25.bin}"
-	fi
-	MINILOADER_BLOB='rk33/rk3399_miniloader_v1.26.bin'
-	BL31_BLOB='rk33/rk3399_bl31_v1.35.elf'
+	DDR_BLOB="${DDR_BLOB:-"rk33/rk3399_ddr_933MHz_v1.25.bin"}"
+	MINILOADER_BLOB="${MINILOADER_BLOB:-"rk33/rk3399_miniloader_v1.26.bin"}"
+	BL31_BLOB="${BL31_BLOB:-"rk33/rk3399_bl31_v1.35.elf"}"
 
 elif [[ $BOOT_SOC == rk3399pro ]]; then
 
 	BOOT_SCENARIO="${BOOT_SCENARIO:=only-blobs}"
-	DDR_BLOB="${DDR_BLOB:=rk33/rk3399pro_npu_ddr_933MHz_v1.02.bin}"
-	MINILOADER_BLOB='rk33/rk3399pro_miniloader_v1.26.bin'
-	BL31_BLOB='rk33/rk3399pro_bl31_v1.35.elf'
+	DDR_BLOB="${DDR_BLOB:-"rk33/rk3399pro_npu_ddr_933MHz_v1.02.bin"}"
+	MINILOADER_BLOB="${MINILOADER_BLOB:-"rk33/rk3399pro_miniloader_v1.26.bin"}"
+	BL31_BLOB="${BL31_BLOB:-"rk33/rk3399pro_bl31_v1.35.elf"}"
 
 elif [[ $BOOT_SOC == rk3566 ]]; then
 
 	BOOT_SCENARIO="${BOOT_SCENARIO:=spl-blobs}"
-	DDR_BLOB="${DDR_BLOB:=rk35/rk3566_ddr_1056MHz_v1.10.bin}"
-	BL31_BLOB='rk35/rk3568_bl31_v1.29.elf'
+	DDR_BLOB="${DDR_BLOB:-"rk35/rk3566_ddr_1056MHz_v1.10.bin"}"
+	BL31_BLOB="${BL31_BLOB:-"rk35/rk3568_bl31_v1.29.elf"}"
+	BOOT_SOC_MKIMAGE="rk3568" # mkimage does not know about rk3566, and rk3568 works.
 
 elif [[ $BOOT_SOC == rk3568 ]]; then
 
 	BOOT_SCENARIO="${BOOT_SCENARIO:=spl-blobs}"
-	DDR_BLOB="${DDR_BLOB:=rk35/rk3568_ddr_1560MHz_v1.13.bin}"
-	BL31_BLOB='rk35/rk3568_bl31_v1.32.elf'
+	DDR_BLOB="${DDR_BLOB:-"rk35/rk3568_ddr_1560MHz_v1.13.bin"}"
+	BL31_BLOB="${BL31_BLOB:-"rk35/rk3568_bl31_v1.32.elf"}"
 
 elif [[ $BOOT_SOC == rk3588 ]]; then
 
 	BOOT_SCENARIO="${BOOT_SCENARIO:=spl-blobs}"
-	DDR_BLOB="${DDR_BLOB:=rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.08.bin}"
-	BL31_BLOB='rk35/rk3588_bl31_v1.28.elf'
+	DDR_BLOB="${DDR_BLOB:-"rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.08.bin"}"
+	BL31_BLOB="${BL31_BLOB:-"rk35/rk3588_bl31_v1.28.elf"}"
 
 elif [[ $BOARD == rockpi-s ]]; then
 
 	BOOT_SCENARIO="${BOOT_SCENARIO:=only-blobs}"
 	BOOT_SOC=rk3308
-	DDR_BLOB="${DDR_BLOB:=rk33/rk3308_ddr_589MHz_uart2_m1_v1.30.bin}"
-	MINILOADER_BLOB='rk33/rk3308_miniloader_v1.22.bin'
-	BL31_BLOB='rk33/rk3308_bl31_v2.22.elf'
+	DDR_BLOB="${DDR_BLOB:-"rk33/rk3308_ddr_589MHz_uart2_m1_v1.30.bin"}"
+	MINILOADER_BLOB="${MINILOADER_BLOB:-"rk33/rk3308_miniloader_v1.22.bin"}"
+	BL31_BLOB="${BL31_BLOB:-"rk33/rk3308_bl31_v2.22.elf"}"
 
 	if [[ ${BRANCH} == legacy ]]; then
-		DDR_BLOB='rk33/rk3308_ddr_589MHz_uart2_m0_v1.26.bin'
-		MINILOADER_BLOB='rk33/rk3308_miniloader_sd_nand_v1.13.bin'
-		BL31_BLOB='rk33/rk3308_bl31_v2.10.elf'
+		DDR_BLOB="${DDR_BLOB:-"rk33/rk3308_ddr_589MHz_uart2_m0_v1.26.bin"}"
+		MINILOADER_BLOB="${MINILOADER_BLOB:-"rk33/rk3308_miniloader_sd_nand_v1.13.bin"}"
+		BL31_BLOB="${BL31_BLOB:-"rk33/rk3308_bl31_v2.10.elf"}"
 	fi
 fi
 
@@ -129,8 +131,8 @@ case $BRANCH in
 
 	current)
 
-		declare -g KERNEL_MAJOR_MINOR="5.15" # Major and minor versions of this kernel.
-		KERNELBRANCH="branch:linux-5.15.y"
+		declare -g KERNEL_MAJOR_MINOR="6.1" # Major and minor versions of this kernel.
+		KERNELBRANCH="branch:linux-6.1.y"
 		KERNELPATCHDIR='rockchip64-'$BRANCH
 		LINUXFAMILY=rockchip64
 		LINUXCONFIG='linux-rockchip64-'$BRANCH
@@ -139,8 +141,8 @@ case $BRANCH in
 	edge)
 
 		KERNELPATCHDIR='rockchip64-'$BRANCH
-		declare -g KERNEL_MAJOR_MINOR="6.1" # Major and minor versions of this kernel.
-		KERNELBRANCH="branch:linux-6.1.y"
+		declare -g KERNEL_MAJOR_MINOR="6.5" # Major and minor versions of this kernel.
+		KERNELBRANCH="branch:linux-6.5.y"
 		LINUXFAMILY=rockchip64
 		LINUXCONFIG='linux-rockchip64-'$BRANCH
 
@@ -155,7 +157,7 @@ prepare_boot_configuration() {
 		ATFSOURCE='https://github.com/ARM-software/arm-trusted-firmware'
 		ATF_COMPILER='aarch64-linux-gnu-'
 		ATFDIR='arm-trusted-firmware'
-		ATFBRANCH='tag:v2.6'
+		ATFBRANCH='tag:lts-v2.8.8'
 		ATF_USE_GCC='> 6.3'
 		ATF_TARGET_MAP="M0_CROSS_COMPILE=arm-linux-gnueabi- PLAT=$BOOT_SOC bl31;;build/$BOOT_SOC/release/bl31/bl31.elf:bl31.elf"
 		ATF_TOOLCHAIN2="arm-linux-gnueabi-:< 10.0"
@@ -185,12 +187,13 @@ prepare_boot_configuration() {
 	if [[ $BOOT_SUPPORT_SPI == yes ]]; then
 
 		if [[ "${BOOT_SPI_RKSPI_LOADER:-"no"}" != "yes" ]]; then
-			UBOOT_TARGET_MAP="BL31=$RKBIN_DIR/$BL31_BLOB tpl/u-boot-tpl.bin spl/u-boot-spl.bin u-boot.itb ${UBOOT_TARGET_MAP} rkspi_loader.img"
+			UBOOT_TARGET_MAP="${UBOOT_TARGET_MAP} tpl/u-boot-tpl.bin spl/u-boot-spl.bin u-boot.itb rkspi_loader.img"
 		else
 			UBOOT_TARGET_MAP="${UBOOT_TARGET_MAP} rkspi_loader.img"
 		fi
 
 	fi
+
 }
 
 uboot_custom_postprocess() {
@@ -205,12 +208,13 @@ uboot_custom_postprocess() {
 		[[ ! -f "${SPL_BIN_PATH}" ]] && exit_with_error "DDR_BLOB ${SPL_BIN_PATH} does not exist for scenario ${BOOT_SCENARIO}"
 
 		display_alert "mkimage for '${BOOT_SOC}' for scenario ${BOOT_SCENARIO}" "SPL_BIN_PATH: ${SPL_BIN_PATH}" "debug"
-		run_host_command_logged tools/mkimage -n "${BOOT_SOC}" -T rksd -d "${SPL_BIN_PATH}:spl/u-boot-spl.bin" idbloader.img
+		run_host_command_logged tools/mkimage -n "${BOOT_SOC_MKIMAGE}" -T rksd -d "${SPL_BIN_PATH}:spl/u-boot-spl.bin" idbloader.img
 
 	elif [[ $BOOT_SCENARIO == "only-blobs" ]]; then
 
-		local tempfile=$(mktemp)
-		run_host_command_logged tools/mkimage -n $BOOT_SOC -T rksd -d $RKBIN_DIR/$DDR_BLOB idbloader.bin
+		local tempfile
+		tempfile=$(mktemp)
+		run_host_command_logged tools/mkimage -n "${BOOT_SOC_MKIMAGE}" -T rksd -d $RKBIN_DIR/$DDR_BLOB idbloader.bin
 		cat $RKBIN_DIR/$MINILOADER_BLOB >> idbloader.bin
 		run_host_x86_binary_logged $RKBIN_DIR/tools/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000
 		run_host_x86_binary_logged $RKBIN_DIR/tools/trust_merger --replace bl31.elf $RKBIN_DIR/$BL31_BLOB trust.ini
@@ -233,7 +237,7 @@ uboot_custom_postprocess() {
 			dd if=idbloader.img of=rkspi_loader.img seek=64 conv=notrunc
 			dd if=u-boot.itb of=rkspi_loader.img seek=16384 conv=notrunc
 		else
-			tools/mkimage -n $BOOT_SOC -T rkspi -d tpl/u-boot-tpl.bin:spl/u-boot-spl.bin rkspi_tpl_spl.img
+			tools/mkimage -n "${BOOT_SOC_MKIMAGE}" -T rkspi -d tpl/u-boot-tpl.bin:spl/u-boot-spl.bin rkspi_tpl_spl.img
 			dd if=/dev/zero of=rkspi_loader.img count=8128 status=none
 			dd if=rkspi_tpl_spl.img of=rkspi_loader.img conv=notrunc status=none
 			dd if=u-boot.itb of=rkspi_loader.img seek=768 conv=notrunc status=none
@@ -294,13 +298,13 @@ family_tweaks() {
 	if [[ -f $SDCARD/lib/systemd/system/rk3399-bluetooth.service ]]; then
 
 		# install and enable Bluetooth
-		chroot $SDCARD /bin/bash -c "apt-get -y -qq install rfkill bluetooth bluez bluez-tools"
+		chroot_sdcard_apt_get_install rfkill bluetooth bluez bluez-tools
 		chroot $SDCARD /bin/bash -c "systemctl --no-reload enable rk3399-bluetooth.service >/dev/null 2>&1"
 
 	elif [[ -f $SDCARD/lib/systemd/system/sprd-bluetooth.service ]]; then
 
 		# install and enable Bluetooth
-		chroot $SDCARD /bin/bash -c "apt-get -y -qq install rfkill bluetooth bluez bluez-tools"
+		chroot_sdcard_apt_get_install rfkill bluetooth bluez bluez-tools
 		chroot $SDCARD /bin/bash -c "systemctl --no-reload enable sprd-bluetooth.service >/dev/null 2>&1"
 
 	fi

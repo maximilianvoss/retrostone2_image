@@ -35,6 +35,11 @@ function cli_docker_run() {
 	declare -g GIT_INFO_ANSI
 	GIT_INFO_ANSI="$(prepare_ansi_git_info_log_header)"
 
+	# Same stuff for BUILD_REPOSITORY_URL and BUILD_REPOSITORY_COMMIT.
+	if [[ -d "${SRC}/.git" && "${CONFIG_DEFS_ONLY}" != "yes" ]]; then # don't waste time if only gathering config defs
+		set_git_build_repo_url_and_commit_vars "docker launcher"
+	fi
+
 	LOG_SECTION="docker_cli_prepare" do_with_logging docker_cli_prepare
 
 	# @TODO: and can be very well said that in CI, we always want FAST_DOCKER=yes, unless we're building the Docker image itself.
@@ -55,9 +60,6 @@ function cli_docker_run() {
 	ARMBIAN_CLI_RELAUNCH_PARAMS+=(["ARMBIAN_BUILD_UUID"]="${ARMBIAN_BUILD_UUID}") # pass down our uuid to the docker instance
 	ARMBIAN_CLI_RELAUNCH_PARAMS+=(["SKIP_LOG_ARCHIVE"]="yes")                     # launched docker instance will not cleanup logs.
 
-	declare -g ARMBIAN_CLI_RELAUNCH_ARGS=()
-	produce_relaunch_parameters # produces ARMBIAN_CLI_RELAUNCH_ARGS
-
 	case "${DOCKER_SUBCMD}" in
 		shell)
 			display_alert "Launching Docker shell" "docker-shell" "info"
@@ -73,7 +75,7 @@ function cli_docker_run() {
 			# this does NOT exit with the same exit code as the docker instance.
 			# instead, it sets the docker_exit_code variable.
 			declare -i docker_exit_code docker_produced_logs=0
-			docker_cli_launch "${ARMBIAN_CLI_RELAUNCH_ARGS[@]}" # MARK: this "re-launches" using the passed params.
+			docker_cli_launch # MARK: this "re-launches"
 
 			# Set globals to avoid:
 			# 1) showing the controlling host's log; we only want to show a ref to the Docker logfile, unless it didn't produce one.

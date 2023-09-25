@@ -22,12 +22,12 @@ function artifact_fake_ubuntu_advantage_tools_prepare_version() {
 
 	# get the hashes of the lib/ bash sources involved...
 	declare hash_files="undetermined"
-	calculate_hash_for_files "${SRC}"/lib/functions/compilation/packages/fake_ubuntu_advantage_tools-deb.sh
+	calculate_hash_for_bash_deb_artifact "compilation/packages/fake_ubuntu_advantage_tools-deb.sh"
 	declare bash_hash="${hash_files}"
 	declare bash_hash_short="${bash_hash:0:${short_hash_size}}"
 
 	# outer scope
-	artifact_version="${artifact_prefix_version}${fake_unchanging_base_version}-B${bash_hash_short}"
+	artifact_version="${fake_unchanging_base_version}-B${bash_hash_short}"
 
 	declare -a reasons=(
 		"Armbian fake-ubuntu-advantage-tools"
@@ -36,18 +36,12 @@ function artifact_fake_ubuntu_advantage_tools_prepare_version() {
 
 	artifact_version_reason="${reasons[*]}" # outer scope
 
-	artifact_map_packages=(
-		["fake-ubuntu-advantage-tools"]="fake-ubuntu-advantage-tools"
-	)
-
-	artifact_map_debs=(
-		["fake-ubuntu-advantage-tools"]="fake-ubuntu-advantage-tools_${artifact_version}_all.deb"
-	)
+	artifact_map_packages=(["fake-ubuntu-advantage-tools"]="fake-ubuntu-advantage-tools")
 
 	artifact_name="fake-ubuntu-advantage-tools"
 	artifact_type="deb"
-	artifact_base_dir="${DEB_STORAGE}"
-	artifact_final_file="${DEB_STORAGE}/fake-ubuntu-advantage-tools_${artifact_version}_all.deb"
+	artifact_deb_repo="global"
+	artifact_deb_arch="all"
 
 	return 0
 }
@@ -68,7 +62,7 @@ function artifact_fake_ubuntu_advantage_tools_cli_adapter_config_prep() {
 }
 
 function artifact_fake_ubuntu_advantage_tools_get_default_oci_target() {
-	artifact_oci_target_base="${GHCR_SOURCE}/armbian/cache-packages/"
+	artifact_oci_target_base="${GHCR_SOURCE}/armbian/os/"
 }
 
 function artifact_fake_ubuntu_advantage_tools_is_available_in_local_cache() {

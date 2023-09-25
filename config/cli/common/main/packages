@@ -11,6 +11,7 @@ dialog
 debconf-utils
 debsums
 device-tree-compiler
+dosfstools
 ethtool
 fake-hwclock
 fdisk
@@ -19,6 +20,7 @@ htop
 inetutils-ping
 init
 initramfs-tools
+iw
 jq
 logrotate
 less
