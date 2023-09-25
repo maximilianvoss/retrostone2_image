@@ -15,6 +15,7 @@ to only change as minimal as possible on the existing Armbian distribution to al
 ### What you need to have installed on your latest Ubuntu (22.04.1 LTS)
 ```bash
 apt-get install ntpdate jq aria2 pv binfmt-support ccache gcc-11 aptly bison build-essential debian-archive-keyring debian-keyring device-tree-compiler dwarves flex gcc-arm-linux-gnueabi gcc-aarch64-linux-gnu libbison-dev libc6-dev-armhf-cross libcrypto++-dev libelf-dev libfdt-dev libfile-fcntllock-perl libfl-dev liblz4-tool libncurses-dev libpython2.7-dev libssl-dev libusb-1.0-0-dev patchutils pixz pkg-config python3-distutils qemu-user-static swig u-boot-tools uuid-dev zlib1g-dev lib32ncurses-dev lib32stdc++6 libc6-i386 python2 apt-cacher-ng
+sudo apt-get install g++-arm-linux-gnueabihf
 ```
 
 ### Command to execute build
