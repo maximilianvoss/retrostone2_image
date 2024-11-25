@@ -129,6 +129,7 @@ function create_new_rootfs_cache_via_debootstrap() {
 	mkdir -p $SDCARD/bin
 	mkdir -p $SDCARD/usr/bin
   cp /usr/bin/qemu-arm-static $SDCARD/usr/bin/
+  cp /usr/bin/env $SDCARD/usr/bin/
   cp -r /usr/libexec/qemu-binfmt $SDCARD/usr/libexec
 
 	declare -g -a if_error_find_files_sdcard=("debootstrap.log") # if command fails, go look for this file and show it's contents during error processing
