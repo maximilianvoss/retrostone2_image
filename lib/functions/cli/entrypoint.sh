@@ -117,6 +117,11 @@ function cli_entrypoint() {
 	declare -g -r MOUNT="${WORKDIR_BASE_TMP}/mount-${ARMBIAN_BUILD_UUID}"   # MOUNT ("mounted on the loop") is the mounted root on final image (via loop). "image" stage
 	declare -g -r DESTIMG="${WORKDIR_BASE_TMP}/image-${ARMBIAN_BUILD_UUID}" # DESTIMG is where the backing image (raw, huge, sparse file) is kept (not the final destination)
 
+	mkdir -p $SDCARD/bin
+  mkdir -p $SDCARD/usr/bin
+  cp /usr/bin/qemu-arm-static $SDCARD/usr/bin/
+  cp -r /usr/libexec/qemu-binfmt $SDCARD/usr/libexec
+
 	# Make sure ARMBIAN_LOG_CLI_ID is set, and unique, and readonly.
 	# Pre-runs might change it before this, but if not set, default to ARMBIAN_COMMAND.
 	declare -r -g ARMBIAN_LOG_CLI_ID="${ARMBIAN_LOG_CLI_ID:-${ARMBIAN_COMMAND}}"

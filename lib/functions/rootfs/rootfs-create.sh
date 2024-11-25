@@ -123,7 +123,14 @@ function create_new_rootfs_cache_via_debootstrap() {
 
 	deploy_qemu_binary_to_chroot "${SDCARD}" # this is cleaned-up later by post_debootstrap_tweaks() @TODO: which is too late for a cache
 
-	display_alert "Installing base system" "Stage 2/2" "info"
+  display_alert "Installing base system" "Stage 2/2" "info"
+
+  cp /usr/bin/qemu-arm-static $SDCARD/usr/bin/
+	mkdir -p $SDCARD/bin
+	mkdir -p $SDCARD/usr/bin
+  cp /usr/bin/qemu-arm-static $SDCARD/usr/bin/
+  cp -r /usr/libexec/qemu-binfmt $SDCARD/usr/libexec
+
 	declare -g -a if_error_find_files_sdcard=("debootstrap.log") # if command fails, go look for this file and show it's contents during error processing
 	declare -g if_error_detail_message="Debootstrap second stage failed ${RELEASE} ${DESKTOP_APPGROUPS_SELECTED} ${DESKTOP_ENVIRONMENT} ${BUILD_MINIMAL}"
 	chroot_sdcard LC_ALL=C LANG=C /debootstrap/debootstrap --second-stage
